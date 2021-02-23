@@ -47,7 +47,7 @@ namespace WeigthIndicator.Dialogs
         }
 
         protected override void CloseDialogOnOk(IDialogParameters parameters)
-        {
+        { 
             Result = ButtonResult.OK;
             _reestrSettingProvider.ReestrSetting = ReestrSetting;
             base.CloseDialogOnOk(parameters);
