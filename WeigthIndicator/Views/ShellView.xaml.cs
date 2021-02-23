@@ -18,11 +18,7 @@ namespace WeigthIndicator.Views
                 this.WhenAnyValue(x => x.DataContext)
                     .BindTo(this, x => x.ViewModel);
 
-                //this.OneWayBind(ViewModel, vm => vm.RecipesCollection, v => v.RecipeCmb.ItemsSource)
-                //    .DisposeWith(disposabled);
 
-                //this.Bind(ViewModel, vm => vm.SelectedRecipe, v => v.RecipeCmb.SelectedItem)
-                //    .DisposeWith(disposabled);
                 this.BindCommand(ViewModel, vm => vm.OpenReestrSettingCommand, v => v.ReestrSetting);
             });
 
