@@ -25,6 +25,7 @@ namespace WeigthIndicator.ViewModels
         [Reactive] public bool RecipeView { get; set; }
         [Reactive] public bool MainView { get; set; }
         [Reactive] public bool SettingView { get; set; }
+        [Reactive] public bool BarellView { get; set; }
 
         public MainViewModel(IRegionManager regionManager,
             IUnityContainer unityContainer)
@@ -41,6 +42,10 @@ namespace WeigthIndicator.ViewModels
 
             this.WhenAnyValue(x => x.SettingView)
                 .Where(x => SettingView)
+                .Subscribe(x => GoToSettingView());
+
+            this.WhenAnyValue(x => x.BarellView)
+                .Where(x => BarellView)
                 .Subscribe(x => GoToSettingView());
         }
 

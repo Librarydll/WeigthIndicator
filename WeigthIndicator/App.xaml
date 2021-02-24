@@ -9,7 +9,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ui:ThemeResources />
                 <ui:XamlControlsResources />
-                <!-- Other merged dictionaries here -->
+                <ui:ResourceDictionaryEx/>
+                <ResourceDictionary Source="Dictionaries/ListView.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <!-- Other app resources here -->
         </ResourceDictionary>

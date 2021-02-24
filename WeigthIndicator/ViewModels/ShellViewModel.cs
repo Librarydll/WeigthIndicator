@@ -5,8 +5,10 @@ using Splat;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,14 +19,14 @@ using WeigthIndicator.Views;
 
 namespace WeigthIndicator.ViewModels
 {
-    public class ShellViewModel:ReactiveObject
+    public class ShellViewModel : ReactiveObject
     {
         private readonly IComPortProvider _comPortProvider;
         private readonly IRecipeDataService _recipeDataService;
         private readonly IReestrDataService _reestrDataService;
         private readonly IReestrSettingProvider _reestrSettingProvider;
         private readonly IDialogService _dialogService;
-        public ReactiveCommand<Unit,Unit> OpenReestrSettingCommand { get; }
+        public ReactiveCommand<Unit, Unit> OpenReestrSettingCommand { get; }
 
         private ObservableCollection<Reestr> _reestrsCollection;
 
@@ -34,8 +36,12 @@ namespace WeigthIndicator.ViewModels
             set { _reestrsCollection = value; }
         }
 
-        //private readonly ObservableAsPropertyHelper<ObservableCollection<Reestr>> _reestrsCollection;
-        //public ObservableCollection<Reestr> ReestrsCollection => _reestrsCollection.Value;
+       [Reactive] public int ProgressValue { get; set; }
+       [Reactive] public int MaxProgressValue { get; set; }
+
+        //[Reactive] public double ItemWeigth { get; set; }
+        private readonly ObservableAsPropertyHelper<double> _itemWeight;
+        public double ItemWeigth => _itemWeight.Value;
         public ShellViewModel(IComPortProvider comPortProvider,
             IRecipeDataService recipeDataService,
             IReestrDataService reestrDataService,
@@ -49,32 +55,61 @@ namespace WeigthIndicator.ViewModels
             _dialogService = dialogService;
             OpenReestrSettingCommand = ReactiveCommand.Create(ExecuteOpenReestrSettingCommand);
             ReestrsCollection = new ObservableCollection<Reestr>();
-            this.WhenAnyValue(x => x._comPortProvider.ComPortConnector.IsAvailable,x=>x._comPortProvider.ComPortConnector.ParsedValue)
-                .Where(x=>x.Item1 && x.Item2>0)
-                .SelectMany(InsertToDataBase)
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(InsertToCollection);
+            var parsedValue = this.WhenAnyValue(x => x._comPortProvider.ComPortConnector.ParsedValue);
+
+            parsedValue.ObserveOnDispatcher()
+                        .Subscribe(x=>Proggress(x));
+
+            Observable.Timer(TimeSpan.FromSeconds(1.5), TimeSpan.FromSeconds(1))
+                .ObserveOnDispatcher()
+                .Subscribe(Progress2);
+
+            parsedValue.Throttle(TimeSpan.FromSeconds(3))
+                        .Where(x => x > 0)
+                        .SelectMany(InsertToDataBase)
+                        .ObserveOn(RxApp.MainThreadScheduler)
+                        .Subscribe(InsertToCollection);
+
+            _itemWeight = parsedValue.Select(x => x)
+                                     .ObserveOn(RxApp.MainThreadScheduler)
+                                     .ToProperty(this, x => x.ItemWeigth);
+
+
+            MaxProgressValue = 3;
             ExecuteOpenReestrSettingCommand();
         }
 
-   
-        private async Task<(bool,Reestr)> InsertToDataBase((bool ,double ) args)
+        private void Progress2(long obj)
         {
-            var net = args.Item2 - _reestrSettingProvider.ReestrSetting.TaraBarrel;
+            if(MaxProgressValue!=ProgressValue)
+                ProgressValue += 1;
+
+        }
+
+        private double Proggress(double value)
+        {
+            ProgressValue = 0;
+
+            return value;
+        }
+
+        private async Task<Reestr> InsertToDataBase(double value)
+        {
+            var net = value - _reestrSettingProvider.ReestrSetting.TaraBarrel;
             var reestr = CreateReestr(net);
             if (reestr.RecipeId > 0)
             {
                 await _reestrDataService.CreateReestr(reestr);
-                return (true, reestr);
+                return reestr;
             }
-            return (false, null);
+            return null;
         }
 
-        private void InsertToCollection((bool,Reestr) args)
+        private void InsertToCollection(Reestr reestr)
         {
-            if (args.Item1)
+            if (reestr != null)
             {
-                ReestrsCollection.Add(args.Item2);
+                ReestrsCollection.Add(reestr);
             }
         }
 
@@ -87,10 +122,10 @@ namespace WeigthIndicator.ViewModels
                 Buyer = _reestrSettingProvider.ReestrSetting.BuyerName,
                 RecipeId = _reestrSettingProvider.ReestrSetting.CurrentRecipe.Id,
                 Recipe = _reestrSettingProvider.ReestrSetting.CurrentRecipe,
-                TareBarrel =_reestrSettingProvider.ReestrSetting.TaraBarrelWithLid,
-                TareBarrelWithLid =_reestrSettingProvider.ReestrSetting.TaraBarrelWithLid,
+                TareBarrel = _reestrSettingProvider.ReestrSetting.TaraBarrelWithLid,
+                TareBarrelWithLid = _reestrSettingProvider.ReestrSetting.TaraBarrelWithLid,
                 PackingDate = DateTime.Now,
-                ReestrState =true,
+                ReestrState = true,
                 Net = net,
             };
         }
@@ -105,7 +140,6 @@ namespace WeigthIndicator.ViewModels
                 }
             });
         }
-
-      
     }
+
 }

@@ -29,8 +29,7 @@ namespace WeigthIndicator.Models
             _serialPort = new SerialPort();
 
             _isAvailable = this.WhenAnyValue(x => x.ParsedValue)
-                .Throttle(TimeSpan.FromSeconds(3))
-                .Select(x => x > 0)
+                .Select(x => x >= 0)
                 .ToProperty(this, x => x.IsAvailable);
         }
 
@@ -58,6 +57,8 @@ namespace WeigthIndicator.Models
             Task.Run(async () =>
             {
                 await Imitation();
+                await Task.Delay(2500);
+                ParsedValue = 125;
             });
           //  ParsedValue = 250;
         }

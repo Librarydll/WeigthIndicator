@@ -23,9 +23,13 @@ namespace WeigthIndicator.Views
                     v => v.ReestrsCollection.ItemsSource)
                     .DisposeWith(disposables);
 
+                this.Bind(ViewModel, vm => vm.ItemWeigth, v => v.ItemWeigth.Text);
+                this.Bind(ViewModel, vm => vm.ProgressValue, v => v.ProgressBar.Value);
+                this.Bind(ViewModel, vm => vm.MaxProgressValue, v => v.ProgressBar.Maximum);
                 this.BindCommand(ViewModel, vm => vm.OpenReestrSettingCommand, v => v.ReestrSetting);
             });
 
         }
+
     }
 }

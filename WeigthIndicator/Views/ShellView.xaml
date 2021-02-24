@@ -55,9 +55,16 @@
                     HorizontalAlignment="Center" VerticalAlignment="Center"
                     FontSize="50"
                     Text="Вес"/>
-                <TextBlock Grid.Column="1" Text="150"
+                <TextBlock Grid.Column="1" 
+                           x:Name="ItemWeigth"
                            HorizontalAlignment="Center" VerticalAlignment="Center"
                            FontSize="180"/>
+
+                <ui:ProgressBar  x:Name="ProgressBar" HorizontalAlignment="Center" Width="200" Height="50"> 
+                    
+                </ui:ProgressBar>
+
+             
         
             </ui:SimpleStackPanel>
 
@@ -95,13 +102,16 @@
                 <Grid Grid.Column="5" x:Name="col6"/>
             </Grid>
 
-            <ListView           x:Name="ReestrsCollection"
-                              Grid.Column="1" Background="Transparent" BorderThickness="0"
-                               
+            <ListView  x:Name="ReestrsCollection"
+                              Grid.Column="1" Background="Transparent" BorderThickness="0"                  
                               Margin="10 0 0 5">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ReestrState}" Value="False">
+                                <Setter Property="Background" Value="#FFB33434"/>
+                            </DataTrigger>
+                        </Style.Triggers>
                     </Style>
                 </ListView.ItemContainerStyle>
                 
@@ -172,14 +182,14 @@
                         <GridViewColumn   Header="Грузить/Не грузить">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="15" Text="{Binding Path=ReestrState}"/>
+                                    <CheckBox FontSize="15" IsChecked="{Binding Path=ReestrState}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn   Header="примечание">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="15" Text="{Binding Path=Note}"/>
+                                    <TextBox FontSize="15" Text="{Binding Path=Note}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

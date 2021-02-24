@@ -30,7 +30,14 @@
             IsBackButtonVisible="Collapsed">
             <ui:NavigationView.MenuItems>
                 <ui:NavigationViewItem Cursor="Hand" Icon="Home" x:Name="SecondView" Content="Главная" />
-                <ui:NavigationViewItem Cursor="Hand" x:Name="RecipeView" Icon="Add" Content="Создать новый рецепт"/>
+                <ui:NavigationViewItem Cursor="Hand" x:Name="RecipeView" Icon="List" Content="Рецепты"/>
+
+                <ui:NavigationViewItem Cursor="Hand"  x:Name="GoodsView" >
+                    <ui:SimpleStackPanel Spacing="3" Orientation="Horizontal" x:Name="BarellView">
+                        <Image Width="30" Height="25" Source="/Resources/barrel.png"/>
+                        <TextBlock Text="Бочки" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </ui:SimpleStackPanel>
+                </ui:NavigationViewItem>
             </ui:NavigationView.MenuItems>
             <ui:NavigationView.FooterMenuItems>
                 <ui:NavigationViewItem Cursor="Hand" Icon="Setting" x:Name="SettingView" Content="Параметры" />
