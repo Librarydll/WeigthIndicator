@@ -18,16 +18,15 @@ namespace WeigthIndicator.Dapper.Services
             _factory = factory;
         }
 
-        public async Task<bool> CreateRecipe(Recipe recipe)
+        public async Task<Recipe> CreateRecipe(Recipe recipe)
         {
             using (var connection = _factory.CreateConnection())
             {
-                string query = "INSERT INTO Recipes (`ShortName`, `LongName`, `Brix`, `StorageCondition`, `TransportationCondition`, `Сarbohydrates`, `VitaminC`, `EnergyValue`, `DryContent`) VALUES " +
-                    "(@ShortName,@LongName,@Brix,@StorageCondition,@TransportationCondition,@Сarbohydrates,@VitaminC,@EnergyValue,@DryContent)";
+                //string query = "INSERT INTO Recipes (`ShortName`, `LongName`, `Brix`, `StorageCondition`, `TransportationCondition`, `Сarbohydrates`, `VitaminC`, `EnergyValue`, `DryContent`) VALUES " +
+                //    "(@ShortName,@LongName,@Brix,@StorageCondition,@TransportationCondition,@Сarbohydrates,@VitaminC,@EnergyValue,@DryContent)";
 
-                var affectedRow = await connection.ExecuteAsync(query, recipe);
-
-                return affectedRow == 1;
+                await connection.InsertAsync(recipe);
+                return recipe;
             }    
         }
 

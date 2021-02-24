@@ -20,11 +20,11 @@ namespace WeigthIndicator.ViewModels
         private readonly IUnityContainer _unityContainer;
         private ShellView _shellView;
         private RecipeView _recipeView;
+        private SettingView _settingView;
         public RoutingState Router { get; private set; }
-
-        public ReactiveCommand<Unit, Unit> GoRecipeView { get; }
         [Reactive] public bool RecipeView { get; set; }
         [Reactive] public bool MainView { get; set; }
+        [Reactive] public bool SettingView { get; set; }
 
         public MainViewModel(IRegionManager regionManager,
             IUnityContainer unityContainer)
@@ -38,9 +38,18 @@ namespace WeigthIndicator.ViewModels
             this.WhenAnyValue(x => x.MainView)
                 .Where(x => MainView)
                 .Subscribe(x => GoToMainView());
+
+            this.WhenAnyValue(x => x.SettingView)
+                .Where(x => SettingView)
+                .Subscribe(x => GoToSettingView());
         }
 
-     
+        void GoToSettingView()
+        {
+            _settingView = _settingView ?? _unityContainer.Resolve<SettingView>();
+            NavigateToView(_settingView, nameof(SettingView));
+        }
+
         void GoToRecipeView()
         {
             _recipeView = _recipeView ?? _unityContainer.Resolve<RecipeView>();
@@ -56,7 +65,8 @@ namespace WeigthIndicator.ViewModels
 
         public  void NavigateToView(object view, string viewName, string regionName = "MainRegion")
         {
-            if (view == null) return;
+            if (view == null)
+                throw new NullReferenceException("view is null");
 
             if (!_regionManager.Regions[regionName].Views.Contains(view))
             {

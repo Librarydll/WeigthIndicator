@@ -14,23 +14,30 @@
         Title="MainWindow" Height="450" Width="800">
     <!--x:TypeArguments="viewmodels:AppBootstrapper"-->
     <Grid >
-        <Grid.ColumnDefinitions>
+        <!--<Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-
+        </Grid.ColumnDefinitions>-->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <ui:NavigationView IsPaneOpen="True"
+                           PaneDisplayMode="Top"
+                           IsSettingsVisible="False"
                            x:Name="NavigationView"
-                           PaneDisplayMode="Left"   
                            IsPaneToggleButtonVisible="False"
             IsBackButtonVisible="Collapsed">
             <ui:NavigationView.MenuItems>
                 <ui:NavigationViewItem Cursor="Hand" Icon="Home" x:Name="SecondView" Content="Sample Item 1" />
-                <ui:NavigationViewItem Cursor="Hand" x:Name="RecipeView" Icon="Add" Content="Создать новый рецепт" />
+                <ui:NavigationViewItem Cursor="Hand" x:Name="RecipeView" Icon="Add" Content="Создать новый рецепт"/>
             </ui:NavigationView.MenuItems>
+            <ui:NavigationView.FooterMenuItems>
+                <ui:NavigationViewItem Cursor="Hand" Icon="Setting" x:Name="SettingView" Content="Параметры" />
+            </ui:NavigationView.FooterMenuItems>
         </ui:NavigationView>
 
-        <ContentControl Grid.Column="1" 
+        <ContentControl Grid.Row="1" 
                         HorizontalContentAlignment="Stretch"   
                         VerticalContentAlignment="Stretch" 
                         prism:RegionManager.RegionName="MainRegion"/>

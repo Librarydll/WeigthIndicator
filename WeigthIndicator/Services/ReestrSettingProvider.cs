@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Models;
 
 namespace WeigthIndicator.Services
@@ -12,8 +13,10 @@ namespace WeigthIndicator.Services
         public ReestrSetting ReestrSetting { get; set; }
         public ReestrSettingProvider()
         {
-            ReestrSetting = new ReestrSetting();
-            ReestrSetting.CurrentRecipe = new Domain.Models.Recipe();
+            ReestrSetting = new ReestrSetting
+            {
+                CurrentRecipe = new Recipe()
+            };
         }
     }
 }

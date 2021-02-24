@@ -94,79 +94,92 @@
                 <Grid Grid.Column="4" x:Name="col5"/>
                 <Grid Grid.Column="5" x:Name="col6"/>
             </Grid>
-            
-            <ListView ItemsSource="{Binding ServiceItemsCollection}" 
+
+            <ListView           x:Name="ReestrsCollection"
                               Grid.Column="1" Background="Transparent" BorderThickness="0"
+                               
                               Margin="10 0 0 5">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="N бочки">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="15" Text="{Binding Title}"/>
+                                    <TextBlock  FontSize="15" Text="{Binding  Path=BarrelNumber}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn   Header="Наименование продукта">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="15" Text="{Binding Price}"/>
+                                    <TextBlock FontSize="15" Text="{Binding Path=Recipe.ShortName}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn   Header="Номер партии">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="15" Text="{Binding Price}"/>
+                                    <TextBlock FontSize="15" Text="{Binding Path=BatchNumber}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn   Header="Дата фасовки">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="15" Text="{Binding Price}"/>
+                                    <StackPanel>
+                                        <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=PackingDate, StringFormat={}{0:dd/MM/yyyy}}"/>
+                                        <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=PackingDate, StringFormat={}{0:HH:mm:ss}}"/>
+                                    </StackPanel>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn   Header="Дата производства">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="15" Text="{Binding Price}"/>
+                                    <StackPanel>
+                                        <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=ProductionDate, StringFormat={}{0:dd/MM/yyyy}}"/>
+                                        <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=ProductionDate, StringFormat={}{0:HH:mm:ss}}"/>
+                                    </StackPanel>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn   Header="Покупатель">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="15" Text="{Binding Price}"/>
+                                    <TextBlock FontSize="15" Text="{Binding Path=Buyer}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn   Header="Вес нетто">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="15" Text="{Binding Price}"/>
+                                    <TextBlock FontSize="15" Text="{Binding Path=Net}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn   Header="Тарра">
+                        <GridViewColumn   Header="Вес самой бочки">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="15" Text="{Binding Price}"/>
+                                    <TextBlock FontSize="15" Text="{Binding Path=TareBarrel}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn   Header="Грузить/Не грузить">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="15" Text="{Binding Price}"/>
+                                    <TextBlock FontSize="15" Text="{Binding Path=ReestrState}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn   Header="примечание">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="15" Text="{Binding Price}"/>
+                                    <TextBlock FontSize="15" Text="{Binding Path=Note}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

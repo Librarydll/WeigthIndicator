@@ -96,6 +96,8 @@
     <Compile Include="Factory\ApplicationContextFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\RecipeDataService.cs" />
+    <Compile Include="Services\ReestrDataService.cs" />
+    <Compile Include="Services\ReestrSettingDataService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

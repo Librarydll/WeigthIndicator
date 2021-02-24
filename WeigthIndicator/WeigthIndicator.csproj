@@ -66,10 +66,14 @@
     </Compile>
     <Compile Include="Dialogs\Common\DialogViewModelBase.cs" />
     <Compile Include="Dialogs\ReestrSettingViewModel.cs" />
-    <Compile Include="Models\ReestrSetting.cs" />
+    <Compile Include="Models\ComPortConnector.cs" />
+    <Compile Include="Models\ComPortConnectorSetting.cs" />
+    <Compile Include="Services\ComPortProvider.cs" />
+    <Compile Include="Services\IComPortProvider.cs" />
     <Compile Include="Services\IReestrSettingProvider.cs" />
     <Compile Include="Services\ReestrSettingProvider.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\SettingViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="ViewModels\RecipeViewModel.cs" />
     <Compile Include="Views\MainView.xaml.cs">
@@ -80,6 +84,9 @@
     </Compile>
     <Compile Include="Views\ReestrSettingView.xaml.cs">
       <DependentUpon>ReestrSettingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingView.xaml.cs">
+      <DependentUpon>SettingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
@@ -125,6 +132,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\SettingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ShellView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -133,6 +144,9 @@
   <ItemGroup>
     <PackageReference Include="ModernWpfUI">
       <Version>0.9.3</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.3</Version>
     </PackageReference>
     <PackageReference Include="Prism.Core">
       <Version>8.0.0.1909</Version>

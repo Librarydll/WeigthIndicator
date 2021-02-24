@@ -54,7 +54,10 @@ namespace WeigthIndicator
             });
 
             containerRegistry.RegisterSingleton<IRecipeDataService, RecipeDataService>();
+            containerRegistry.RegisterSingleton<IReestrDataService, ReestrDataService>();
+            containerRegistry.RegisterSingleton<IReestrSettingDataService, ReestrSettingDataService>();
             containerRegistry.RegisterSingleton<IReestrSettingProvider, ReestrSettingProvider>();
+            containerRegistry.RegisterSingleton<IComPortProvider, ComPortProvider>();
 
             containerRegistry.RegisterDialog<ReestrSettingView, ReestrSettingViewModel>();
 

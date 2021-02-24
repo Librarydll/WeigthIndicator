@@ -7,10 +7,8 @@ using WeigthIndicator.Domain.Models;
 
 namespace WeigthIndicator.Domain.Services
 {
-    public interface IRecipeDataService
+    public interface IReestrDataService
     {
-        Task<Recipe> CreateRecipe(Recipe recipe);
-
-        Task<IEnumerable<Recipe>> GetRecipes();
+        Task<Reestr> CreateReestr(Reestr reestr);
     }
 }

@@ -33,6 +33,9 @@ namespace WeigthIndicator.Views
                 this.Bind(ViewModel, vm => vm.MainView, view => view.SecondView.IsSelected)
                     .DisposeWith(disposables);
 
+                this.Bind(ViewModel, vm => vm.SettingView, view => view.SettingView.IsSelected)
+                    .DisposeWith(disposables);
+
             });
         }
     }

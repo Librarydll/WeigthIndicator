@@ -14,23 +14,33 @@ using WeigthIndicator.Services;
 
 namespace WeigthIndicator.Dialogs
 {
-    public class ReestrSettingViewModel: DialogViewModelBase
+    public class ReestrSettingViewModel : DialogViewModelBase
     {
         private readonly IReestrSettingProvider _reestrSettingProvider;
+        private readonly IReestrSettingDataService _reestrSettingDataService;
         private readonly IRecipeDataService _recipeDataService;
-        [Reactive] public ObservableCollection<Recipe> RecipesCollection { get; set; }
+
+        private ObservableCollection<Recipe> _recipesCollection;
+        public ObservableCollection<Recipe> RecipesCollection
+        {
+            get { return _recipesCollection; }
+            set {  _recipesCollection = value; this.RaisePropertyChanged(); }
+        }
+
         [Reactive] public Recipe SelectedRecipe { get; set; }
 
         public ReestrSetting ReestrSetting { get; set; } = new ReestrSetting();
         public ReestrSettingViewModel(
             IReestrSettingProvider reestrSettingProvider,
+            IReestrSettingDataService reestrSettingDataService,
             IRecipeDataService recipeDataService)
         {
             Title = "Настройки реестра";
             _reestrSettingProvider = reestrSettingProvider;
+            _reestrSettingDataService = reestrSettingDataService;
             _recipeDataService = recipeDataService;
 
-            InitializeCollection();
+              InitializeCollection();
         }
 
 
@@ -38,19 +48,34 @@ namespace WeigthIndicator.Dialogs
         {
             var recipes = await _recipeDataService.GetRecipes();
             RecipesCollection = new ObservableCollection<Recipe>(recipes);
-            SelectedRecipe = RecipesCollection.FirstOrDefault();
         }
 
         public override void OnDialogOpened(IDialogParameters parameters)
         {
-            ReestrSetting =(ReestrSetting)_reestrSettingProvider.ReestrSetting.Clone();
+           Task.Run(async () =>
+           {
+               ReestrSetting = await _reestrSettingDataService.GetReestrSetting() ?? new ReestrSetting();
+               _reestrSettingProvider.ReestrSetting = (ReestrSetting)ReestrSetting.Clone();
+               SelectedRecipe = RecipesCollection.FirstOrDefault(x=>x.Id == ReestrSetting.RecipeId);
+           });
         }
 
-        protected override void CloseDialogOnOk(IDialogParameters parameters)
-        { 
+        protected override async void CloseDialogOnOk(IDialogParameters parameters)
+        {
             Result = ButtonResult.OK;
-            _reestrSettingProvider.ReestrSetting = ReestrSetting;
+            ReestrSetting.RecipeId = SelectedRecipe.Id;
+            ReestrSetting.CurrentRecipe = SelectedRecipe;
+            if (ReestrSetting.Id == 0)
+            {
+                await _reestrSettingDataService.CreateReestrSetting(ReestrSetting);
+            }
+            else
+            {
+                await _reestrSettingDataService.UpdateReestrSetting(ReestrSetting);
+            }
+            _reestrSettingProvider.ReestrSetting = (ReestrSetting)ReestrSetting.Clone();
             base.CloseDialogOnOk(parameters);
         }
+      
     }
 }

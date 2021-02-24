@@ -34,8 +34,27 @@ namespace WeigthIndicator.Views
 
                 this.Bind(ViewModel, vm => vm.ReestrSetting.BuyerName, v => v.BuyerName.Text)
                     .DisposeWith(disposables);
+
                 this.Bind(ViewModel, vm => vm.ReestrSetting.BatchNumber, v => v.BatchNumber.Text)
                     .DisposeWith(disposables);
+
+                this.Bind(ViewModel, vm => vm.ReestrSetting.Seconds, v => v.Time.Text)
+                    .DisposeWith(disposables);
+
+                this.Bind(ViewModel, 
+                    vm => vm.ReestrSetting.TaraBarrel,
+                    v => v.TarraBarrel.Text,
+                    x => x.ToString(),
+                    x => ConvertToDouble(x))
+                    .DisposeWith(disposables);
+
+                this.Bind(ViewModel,
+                    vm => vm.ReestrSetting.TaraBarrelWithLid,
+                    v => v.TarraBarrelWithLid.Text,
+                    x => x.ToString(),
+                    x => ConvertToDouble(x))
+                    .DisposeWith(disposables);
+
                 this.Bind(ViewModel, vm => vm.ReestrSetting.CurrentRecipe, v => v.RecipesCmb.SelectedItem)
                     .DisposeWith(disposables);
 
@@ -45,6 +64,16 @@ namespace WeigthIndicator.Views
                 this.Bind(ViewModel, vm => vm.SelectedRecipe, v => v.RecipesCmb.SelectedItem)
                     .DisposeWith(disposables);
             });
+        }
+
+        private double ConvertToDouble(string value)
+        {
+            if (double.TryParse(value.Replace(".",","), out double result))
+            {
+                return result;
+            }
+
+            return 0;
         }
     }
 }
