@@ -7,18 +7,44 @@ using WeigthIndicator.Domain.Models.Common;
 
 namespace WeigthIndicator.Domain.Models
 {
-    public class Recipe : BaseEntity
+    public class Recipe : BaseEntity, ICloneable
     {
-        public string ShortName { get; set; }
-        public string LongName { get; set; }
-        public double Brix { get; set; }
-        public string StorageCondition { get; set; }
-        public string TransportationCondition { get; set; }
+        private string shortName;
+        private string longName;
+        private double brix;
+        private string storageCondition;
+        private string transportationCondition;
+        private double сarbohydrates;
+        private double vitaminC;
+        private double energyValue;
+        private double dryContent;
 
-        public double Сarbohydrates { get; set; }
-        public double VitaminC { get; set; }
-        public double EnergyValue { get; set; }
-        public double DryContent { get; set; }
+        public string ShortName { get => shortName; set => SetProperty(ref shortName, value); }
+        public string LongName { get => longName; set => SetProperty(ref longName, value); }
+        public double Brix { get => brix; set => SetProperty(ref brix, value); }
+        public string StorageCondition { get => storageCondition; set => SetProperty(ref storageCondition, value); }
+        public string TransportationCondition { get => transportationCondition; set => SetProperty(ref transportationCondition, value); }
 
+        public double Сarbohydrates { get => сarbohydrates; set => SetProperty(ref сarbohydrates, value); }
+        public double VitaminC { get => vitaminC; set => SetProperty(ref vitaminC, value); }
+        public double EnergyValue { get => energyValue; set => SetProperty(ref energyValue, value); }
+        public double DryContent { get => dryContent; set => SetProperty(ref dryContent, value); }
+
+        public object Clone()
+        {
+            return new Recipe
+            {
+                Brix = Brix,
+                DryContent = DryContent,
+                EnergyValue = EnergyValue,
+                Id = Id,
+                LongName = LongName,
+                ShortName = ShortName,
+                StorageCondition = StorageCondition,
+                TransportationCondition = TransportationCondition,
+                VitaminC = VitaminC,
+                Сarbohydrates = Сarbohydrates
+            };
+        }
     }
 }

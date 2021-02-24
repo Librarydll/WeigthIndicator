@@ -1,7 +1,8 @@
 ﻿using ReactiveUI;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using WeigthIndicator.ViewModels;
-
+using System;
 namespace WeigthIndicator.Views
 {
     /// <summary>
@@ -38,6 +39,14 @@ namespace WeigthIndicator.Views
 
                 this.BindCommand(ViewModel, vm => vm.CreateRecipe, v => v.SaveButton)
                     .DisposeWith(disposables);
+
+                this.OneWayBind(ViewModel, vm => vm.RecipesCollection, v => v.RecipesCollection.ItemsSource);
+
+                this.WhenAnyValue(x => x.ViewModel)
+                    .SelectMany(x => x.GetRecipesAsync())
+                    .SubscribeOn(RxApp.MainThreadScheduler)
+                    .Subscribe(x => ViewModel.InitializeCollection(x));
+                    
             });
         }
     }

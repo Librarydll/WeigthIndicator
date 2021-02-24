@@ -10,12 +10,16 @@
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d">
-    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+    <Grid Margin="50 20 50 0">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         <Grid.Resources>
             <Style TargetType="{x:Type TextBlock}" >
                 <Setter Property="HorizontalAlignment" Value="Left" />
@@ -138,11 +142,96 @@
         </Grid>
 
         <Button Grid.Row="2"
+                VerticalAlignment="Top"
+                Cursor="Hand"
                 x:Name="SaveButton"
                 HorizontalAlignment="Right" 
                 Margin="5"
                 Content="Создать">
             
         </Button>
+
+        <Grid Grid.Column="1" Grid.RowSpan="4">
+            <ListView           x:Name="RecipesCollection"
+                              Grid.Column="1" Background="Transparent" BorderThickness="0"
+                              Margin="10 0 0 5">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                    </Style>
+
+                </ListView.ItemContainerStyle>
+
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Код продукта" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock  FontSize="15" Text="{Binding  Path=ShortName}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn   Header="Наименование продукта">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="15" Text="{Binding Path=LongName}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn   Header="Условия хранения">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="15" Text="{Binding Path=StorageCondition}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn   Header="Условия трансопртировки">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="15" Text="{Binding Path=TransportationCondition}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn   Header="Брикс">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock FontSize="15" Text="{Binding Path=Brix}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn   Header="Углевооды">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="15" Text="{Binding Path=Сarbohydrates}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn   Header="Витамин С">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="15" Text="{Binding Path=VitaminC}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn   Header="Энер. ценность">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="15" Text="{Binding Path=EnergyValue}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn   Header="Содержание сухих в-тв">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="15" Text="{Binding Path=DryContent}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
     </Grid>
 </reactiveui:ReactiveUserControl>

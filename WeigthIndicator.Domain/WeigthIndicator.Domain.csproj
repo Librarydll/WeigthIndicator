@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Common\BaseEntity.cs" />
+    <Compile Include="Models\Common\NotifyEntity.cs" />
     <Compile Include="Models\Reestr.cs" />
     <Compile Include="Models\Recipe.cs" />
     <Compile Include="Models\ReestrSetting.cs" />

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WeigthIndicator.Domain.Models.Common
 {
-    public class BaseEntity
+    public class BaseEntity : NotifyEntity
     {
         public int Id { get; set; }
     }
