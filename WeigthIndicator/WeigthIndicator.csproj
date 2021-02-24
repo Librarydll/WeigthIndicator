@@ -72,10 +72,14 @@
     <Compile Include="Services\IComPortProvider.cs" />
     <Compile Include="Services\IReestrSettingProvider.cs" />
     <Compile Include="Services\ReestrSettingProvider.cs" />
+    <Compile Include="ViewModels\BarellViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\SettingViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="ViewModels\RecipeViewModel.cs" />
+    <Compile Include="Views\BarellView.xaml.cs">
+      <DependentUpon>BarellView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
@@ -120,6 +124,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Dictionaries\ListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BarellView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

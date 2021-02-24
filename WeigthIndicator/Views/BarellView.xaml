@@ -1,0 +1,151 @@
+﻿<reactiveui:ReactiveUserControl     
+             x:Class="WeigthIndicator.Views.BarellView"
+             x:TypeArguments="viewmodels:BarellViewModel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:viewmodels="clr-namespace:WeigthIndicator.ViewModels"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:reactiveui="http://reactiveui.net"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True">
+
+    <Grid Margin="50 20 50 0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.Resources>
+            <Style TargetType="{x:Type TextBlock}" >
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="FontSize" Value="20" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="Margin" Value="0 10" />
+            </Style>
+            <Style TargetType="{x:Type TextBox}" x:Key="long" BasedOn="{StaticResource DefaultTextBoxStyle}">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="Padding" Value="5" />
+                <Setter Property="Margin" Value="5" />
+                <Setter Property="Width" Value="150" />
+            </Style>
+
+        </Grid.Resources>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Выберите рецепт" 
+                           FontSize="20" 
+                           FontWeight="Bold" />
+
+            <ComboBox HorizontalAlignment="Left"
+                x:Name="RecipesCmb"
+                Grid.Column="1"
+                DisplayMemberPath="ShortName"
+                Width="150"
+                Margin="5">
+
+            </ComboBox>
+
+            <TextBlock Grid.Row="1"
+            Text="Дата производства"/>
+            <DatePicker Grid.Row="1" Grid.Column="1"
+                        Margin="5"
+                        Padding="5"
+                        FontSize="16"
+                        x:Name="ProductionDate"
+                        Width="150"
+                  />
+
+            <TextBlock Grid.Row="2"
+            Text="Обеъм"/>
+            <TextBox Grid.Row="2" Grid.Column="1"
+                      x:Name="TotalWeigth"
+                 Style="{StaticResource long}" />
+
+
+
+        </Grid>
+
+
+
+        <Button Grid.Row="2"
+                VerticalAlignment="Top"
+                Cursor="Hand"
+                x:Name="SaveButton"
+                HorizontalAlignment="Right" 
+                Margin="5"
+                Content="Создать">
+
+        </Button>
+
+        <Grid Grid.Column="1" Grid.RowSpan="4">
+            <ListView           x:Name="BarellStoragesCollection"
+                              Grid.Column="1"  BorderThickness="0"
+                              Margin="10 0 0 5">
+                
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsEmpty}" Value="True">
+                                <Setter Property="Background" Value="#FFB33434"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.View>
+                    
+                    <GridView>
+                        <GridViewColumn Header="Рецепт код" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock  FontSize="15" Text="{Binding  Path=Recipe.ShortName}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn   Header="Дата производства">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock  FontSize="15" Text="{Binding  Path=ProductionDate,StringFormat={}{0:dd/MM/yyyy}}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn   Header="Объем">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="15" Text="{Binding Path=TotalWeight}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn> 
+                        <GridViewColumn   Header="Потрачено">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="15" Text="{Binding Path=ConsumptionWeight}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn   Header="Осталось">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="15" Text="{Binding Path=HasWeigthValue}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+    </Grid>
+</reactiveui:ReactiveUserControl>

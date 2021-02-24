@@ -16,7 +16,6 @@ namespace WeigthIndicator.Domain.Models
         public string BatchNumber { get; set; }
         public string Buyer { get; set; }
         public DateTime PackingDate { get; set; }
-        public DateTime ProductionDate { get; set; }
         /// <summary>
         /// 0-грузить,1-не грузить
         /// </summary>
@@ -36,8 +35,11 @@ namespace WeigthIndicator.Domain.Models
         public string Note { get; set; }
 
         public int RecipeId { get; set; }
+        public int BarellStorageId { get; set; }
         [Computed]
         public Recipe Recipe { get; set; }
+        [Computed]
+        public BarellStorage BarellStorage { get; set; }
 
     }
 

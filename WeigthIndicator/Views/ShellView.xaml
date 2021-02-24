@@ -152,8 +152,8 @@
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel>
-                                        <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=ProductionDate, StringFormat={}{0:dd/MM/yyyy}}"/>
-                                        <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=ProductionDate, StringFormat={}{0:HH:mm:ss}}"/>
+                                        <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=BarellStorage.ProductionDate, StringFormat={}{0:dd/MM/yyyy}}"/>
+                                        <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=BarellStorage.ProductionDate, StringFormat={}{0:HH:mm:ss}}"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>

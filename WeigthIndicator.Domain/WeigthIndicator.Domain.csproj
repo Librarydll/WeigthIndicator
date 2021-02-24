@@ -47,12 +47,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\BarellStorageEmptyException.cs" />
+    <Compile Include="Exceptions\BarellStorageNotEnoughException.cs" />
+    <Compile Include="Models\BarellStorage.cs" />
     <Compile Include="Models\Common\BaseEntity.cs" />
     <Compile Include="Models\Common\NotifyEntity.cs" />
     <Compile Include="Models\Reestr.cs" />
     <Compile Include="Models\Recipe.cs" />
     <Compile Include="Models\ReestrSetting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IBarellStorageDataService.cs" />
     <Compile Include="Services\IRecipeDataService.cs" />
     <Compile Include="Services\IReestrDataService.cs" />
     <Compile Include="Services\IReestrSettingDataService.cs" />

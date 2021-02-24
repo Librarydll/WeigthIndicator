@@ -44,7 +44,7 @@ namespace WeigthIndicator.Views
 
                 this.WhenAnyValue(x => x.ViewModel)
                     .SelectMany(x => x.GetRecipesAsync())
-                    .SubscribeOn(RxApp.MainThreadScheduler)
+                    .SubscribeOnDispatcher()
                     .Subscribe(x => ViewModel.InitializeCollection(x));
                     
             });

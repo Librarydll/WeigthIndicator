@@ -12,6 +12,8 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using WeigthIndicator.Domain.Exceptions;
 using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Domain.Services;
 using WeigthIndicator.Services;
@@ -63,10 +65,12 @@ namespace WeigthIndicator.ViewModels
             Observable.Timer(TimeSpan.FromSeconds(1.5), TimeSpan.FromSeconds(1))
                 .ObserveOnDispatcher()
                 .Subscribe(Progress2);
-
             parsedValue.Throttle(TimeSpan.FromSeconds(3))
                         .Where(x => x > 0)
                         .SelectMany(InsertToDataBase)
+                        .Catch((Func<Exception, IObservable<Reestr>>)HandleException)
+                        .Where(x=>x!=null)
+                        .Select(x=>x)
                         .ObserveOn(RxApp.MainThreadScheduler)
                         .Subscribe(InsertToCollection);
 
@@ -77,6 +81,18 @@ namespace WeigthIndicator.ViewModels
 
             MaxProgressValue = 3;
             ExecuteOpenReestrSettingCommand();
+        }
+
+    
+
+        private IObservable<Reestr> HandleException(Exception exception)
+        {
+            if(exception is BarellStorageEmptyException ex)
+            {
+               MessageBox.Show("Test");
+            }
+
+            return Observable.Return<Reestr>(null);
         }
 
         private void Progress2(long obj)
@@ -99,7 +115,7 @@ namespace WeigthIndicator.ViewModels
             var reestr = CreateReestr(net);
             if (reestr.RecipeId > 0)
             {
-                await _reestrDataService.CreateReestr(reestr);
+                await _reestrDataService.CreateReestrAndUpdateBarellStorage(reestr);
                 return reestr;
             }
             return null;

@@ -7,10 +7,9 @@ using WeigthIndicator.Domain.Models;
 
 namespace WeigthIndicator.Domain.Services
 {
-    public interface IReestrDataService
+    public interface IBarellStorageDataService
     {
-        Task<Reestr> CreateReestr(Reestr reestr);
-        Task<Reestr> CreateReestrAndUpdateBarellStorage(Reestr recipe);
-
+        Task<BarellStorage> CreateBarellStorage(BarellStorage barellStorage);
+        Task<IEnumerable<BarellStorage>> GetBarellStorages();
     }
 }

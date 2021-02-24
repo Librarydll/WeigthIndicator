@@ -48,8 +48,7 @@ namespace WeigthIndicator.ViewModels
         }
         public void AddRecipe(Recipe recipe)
         {
-            recipe = (Recipe)Recipe.Clone();
-            RecipesCollection.Add(recipe);
+            RecipesCollection.Add((Recipe)recipe.Clone());
             Recipe = new Recipe();
         }
     }

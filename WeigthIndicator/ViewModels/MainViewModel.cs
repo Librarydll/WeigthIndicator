@@ -21,6 +21,7 @@ namespace WeigthIndicator.ViewModels
         private ShellView _shellView;
         private RecipeView _recipeView;
         private SettingView _settingView;
+        private BarellView _barellView;
         public RoutingState Router { get; private set; }
         [Reactive] public bool RecipeView { get; set; }
         [Reactive] public bool MainView { get; set; }
@@ -46,7 +47,13 @@ namespace WeigthIndicator.ViewModels
 
             this.WhenAnyValue(x => x.BarellView)
                 .Where(x => BarellView)
-                .Subscribe(x => GoToSettingView());
+                .Subscribe(x => GoToBarellView());
+        }
+
+        private void GoToBarellView()
+        {
+            _barellView = _barellView ?? _unityContainer.Resolve<BarellView>();
+            NavigateToView(_barellView, nameof(BarellView));
         }
 
         void GoToSettingView()

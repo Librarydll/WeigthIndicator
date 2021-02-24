@@ -24,12 +24,12 @@ namespace WeigthIndicator.Dialogs
         public ObservableCollection<Recipe> RecipesCollection
         {
             get { return _recipesCollection; }
-            set {  _recipesCollection = value; this.RaisePropertyChanged(); }
+            set {  _recipesCollection = value; RaisePropertyChanged(); }
         }
 
         [Reactive] public Recipe SelectedRecipe { get; set; }
 
-        public ReestrSetting ReestrSetting { get; set; } = new ReestrSetting();
+        [Reactive] public ReestrSetting ReestrSetting { get; set; } = new ReestrSetting();
         public ReestrSettingViewModel(
             IReestrSettingProvider reestrSettingProvider,
             IReestrSettingDataService reestrSettingDataService,
@@ -39,25 +39,34 @@ namespace WeigthIndicator.Dialogs
             _reestrSettingProvider = reestrSettingProvider;
             _reestrSettingDataService = reestrSettingDataService;
             _recipeDataService = recipeDataService;
-
-              InitializeCollection();
+            Initialize();
         }
 
-
-        public async Task InitializeCollection()
+        public async Task Initialize()
         {
             var recipes = await _recipeDataService.GetRecipes();
             RecipesCollection = new ObservableCollection<Recipe>(recipes);
+            ReestrSetting = await _reestrSettingDataService.GetReestrSetting() ?? new ReestrSetting();
+            _reestrSettingProvider.ReestrSetting = (ReestrSetting)ReestrSetting.Clone();
+            SelectedRecipe = RecipesCollection.FirstOrDefault(x => x.Id == ReestrSetting.RecipeId);
+
+        }
+
+        public async Task<IEnumerable<Recipe>> GetRecipesAsync()
+        {
+
+            return await _recipeDataService.GetRecipes();
+        }
+
+        public void InitializeCollection(IEnumerable<Recipe> recipes)
+        {
+
+
         }
 
         public override void OnDialogOpened(IDialogParameters parameters)
         {
-           Task.Run(async () =>
-           {
-               ReestrSetting = await _reestrSettingDataService.GetReestrSetting() ?? new ReestrSetting();
-               _reestrSettingProvider.ReestrSetting = (ReestrSetting)ReestrSetting.Clone();
-               SelectedRecipe = RecipesCollection.FirstOrDefault(x=>x.Id == ReestrSetting.RecipeId);
-           });
+           
         }
 
         protected override async void CloseDialogOnOk(IDialogParameters parameters)
