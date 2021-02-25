@@ -69,13 +69,19 @@
             </ui:SimpleStackPanel>
 
             <ui:SimpleStackPanel Spacing="2"  Grid.Row="2"  VerticalAlignment="Bottom">
+                <Button Content="Записать" HorizontalAlignment="Center"
+                        x:Name="SaveBtn"
+                    FontSize="22" 
+                    Margin="10">
+                    
+                </Button>
                 <TextBlock Text="Автоматический режим" 
                            FontSize="40" 
                            Margin="10"
                            HorizontalAlignment="Center"
                           
                            Style="{StaticResource HeaderTextBlockStyle}"/>
-                <ui:ToggleSwitch FontSize="30" IsOn="True" Grid.Column="2" HorizontalAlignment="Center">
+                <ui:ToggleSwitch x:Name="switch" FontSize="30" IsOn="True" Grid.Column="2" HorizontalAlignment="Center">
 
                 </ui:ToggleSwitch>
             </ui:SimpleStackPanel>
@@ -102,9 +108,17 @@
                 <Grid Grid.Column="5" x:Name="col6"/>
             </Grid>
 
-            <ListView  x:Name="ReestrsCollection"
+            <ListView x:Name="ReestrsCollection"
                               Grid.Column="1" Background="Transparent" BorderThickness="0"                  
                               Margin="10 0 0 5">
+                <!--<ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Remove"
+            Command="{Binding RemoveItem}"
+            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
+                    </ContextMenu>
+                </ListView.ContextMenu>-->
+                
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Style.Triggers>
@@ -179,7 +193,7 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn   Header="Грузить/Не грузить">
+                        <GridViewColumn   Header="Г/Нг" Width="70">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <CheckBox FontSize="15" IsChecked="{Binding Path=ReestrState}"/>

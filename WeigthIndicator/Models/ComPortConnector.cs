@@ -21,16 +21,11 @@ namespace WeigthIndicator.Models
         [Reactive] public string CurrentValue { get; set; }
         [Reactive] public double ParsedValue { get; set; }
 
-        private readonly ObservableAsPropertyHelper<bool> _isAvailable;
-        public bool IsAvailable => _isAvailable.Value;
+
 
         public ComPortConnector()
         {
             _serialPort = new SerialPort();
-
-            _isAvailable = this.WhenAnyValue(x => x.ParsedValue)
-                .Select(x => x >= 0)
-                .ToProperty(this, x => x.IsAvailable);
         }
 
         public void InitializeSerialPort(ComPortConnectorSetting setting)
@@ -69,7 +64,6 @@ namespace WeigthIndicator.Models
             {
                 await Task.Delay(500);
                 ParsedValue = i*12;
-                Console.WriteLine(ParsedValue);
             }
         }
 

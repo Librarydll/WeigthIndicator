@@ -30,7 +30,21 @@ namespace WeigthIndicator.Views
                 this.Bind(ViewModel, vm => vm.ReestrSetting.Seconds, v => v.Time.Text)
                     .DisposeWith(disposables);
 
-                this.Bind(ViewModel, 
+                this.Bind(ViewModel,
+                    vm => vm.ReestrSetting.MinWeight,
+                    v => v.MinWeight.Text,
+                    x => x.ToString(),
+                    x => ConvertToDouble(x))
+                    .DisposeWith(disposables);
+
+                this.Bind(ViewModel,
+                    vm => vm.ReestrSetting.MaxWeight,
+                    v => v.MaxWeight.Text,
+                    x => x.ToString(),
+                    x => ConvertToDouble(x))
+                   .DisposeWith(disposables);
+
+                this.Bind(ViewModel,
                     vm => vm.ReestrSetting.TaraBarrel,
                     v => v.TarraBarrel.Text,
                     x => x.ToString(),
@@ -44,8 +58,6 @@ namespace WeigthIndicator.Views
                     x => ConvertToDouble(x))
                     .DisposeWith(disposables);
 
-                this.Bind(ViewModel, vm => vm.ReestrSetting.CurrentRecipe, v => v.RecipesCmb.SelectedItem)
-                    .DisposeWith(disposables);
 
                 this.OneWayBind(ViewModel, vm => vm.RecipesCollection, v => v.RecipesCmb.ItemsSource)
                     .DisposeWith(disposables);
@@ -54,16 +66,16 @@ namespace WeigthIndicator.Views
                     .DisposeWith(disposables);
 
 
-                //this.WhenAnyValue(x => x.ViewModel)
-                //    .SelectMany(x => x.GetRecipesAsync())
-                //    .SubscribeOnDispatcher()
-                //    .Subscribe(x => ViewModel.InitializeCollection(x));
+                this.WhenAnyValue(x => x.ViewModel)
+                    .SelectMany(x => x.GetAsync())
+                    .ObserveOnDispatcher()
+                    .Subscribe(x => ViewModel.Initialize(x));
             });
         }
 
         private double ConvertToDouble(string value)
         {
-            if (double.TryParse(value.Replace(".",","), out double result))
+            if (double.TryParse(value.Replace(".", ","), out double result))
             {
                 return result;
             }

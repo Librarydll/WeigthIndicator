@@ -9,7 +9,7 @@
         xmlns:viewmodels="clr-namespace:WeigthIndicator.Dialogs"
         xmlns:rx="http://reactiveui.net"
         mc:Ignorable="d"
-        Height="400" Width="700">
+        Height="500" Width="700">
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -89,6 +89,8 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="300"/>
@@ -116,6 +118,20 @@
                  x:Name="Time"  
                  Style="{StaticResource short}" />
             <TextBlock Grid.Row="3" Grid.Column="2" Text="секунд"/>
+
+            <TextBlock Grid.Row="4"
+            Text="Минимальный вес"/>
+            <TextBox Grid.Row="4" Grid.Column="1"
+                    x:Name="MinWeight"
+                 Style="{StaticResource short}" />
+            <TextBlock Grid.Row="4" Grid.Column="2" Text="кг"/>
+
+            <TextBlock Grid.Row="5"
+            Text="Максимальный вес"/>
+            <TextBox Grid.Row="5" Grid.Column="1"
+                   x:Name="MaxWeight"
+                 Style="{StaticResource short}" />
+            <TextBlock Grid.Row="5" Grid.Column="2" Text="кг"/>
 
         </Grid>
 

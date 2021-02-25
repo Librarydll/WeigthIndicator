@@ -40,10 +40,15 @@ namespace WeigthIndicator.ViewModels
 
        [Reactive] public int ProgressValue { get; set; }
        [Reactive] public int MaxProgressValue { get; set; }
+       [Reactive] public bool IsAutoMode { get; set; }
 
-        //[Reactive] public double ItemWeigth { get; set; }
+
         private readonly ObservableAsPropertyHelper<double> _itemWeight;
         public double ItemWeigth => _itemWeight.Value;
+
+
+        public ReactiveCommand<Unit,Reestr> SaveCommand { get; set; }
+
         public ShellViewModel(IComPortProvider comPortProvider,
             IRecipeDataService recipeDataService,
             IReestrDataService reestrDataService,
@@ -65,8 +70,10 @@ namespace WeigthIndicator.ViewModels
             Observable.Timer(TimeSpan.FromSeconds(1.5), TimeSpan.FromSeconds(1))
                 .ObserveOnDispatcher()
                 .Subscribe(Progress2);
+
             parsedValue.Throttle(TimeSpan.FromSeconds(3))
-                        .Where(x => x > 0)
+                        .Where(ValidateParsedValue)
+                        .Where(x=> IsAutoMode)
                         .SelectMany(InsertToDataBase)
                         .Catch((Func<Exception, IObservable<Reestr>>)HandleException)
                         .Where(x=>x!=null)
@@ -78,12 +85,38 @@ namespace WeigthIndicator.ViewModels
                                      .ObserveOn(RxApp.MainThreadScheduler)
                                      .ToProperty(this, x => x.ItemWeigth);
 
-
             MaxProgressValue = 3;
+            IsAutoMode = true;
+
+            var canExecute = this
+               .WhenAnyValue(x => x.IsAutoMode,
+               isAutoMode => isAutoMode  == false);
+
+       
+            SaveCommand = ReactiveCommand.CreateFromTask(ExecuteSaveCommand, canExecute);
+            SaveCommand
+                .Catch((Func<Exception, IObservable<Reestr>>)HandleException)
+                .Where(x => x != null)
+                .Select(x => x)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(InsertToCollection);
             ExecuteOpenReestrSettingCommand();
         }
 
-    
+        private async Task<Reestr> ExecuteSaveCommand()
+        {
+            if (ValidateParsedValue(_comPortProvider.ComPortConnector.ParsedValue))
+            {
+                var net = _comPortProvider.ComPortConnector.ParsedValue - _reestrSettingProvider.ReestrSetting.TaraBarrel;
+                var reestr = CreateReestr(net);
+                if (reestr.RecipeId > 0)
+                {
+                    await _reestrDataService.CreateReestrAndUpdateBarellStorage(reestr);
+                    return reestr;
+                }
+            }
+            return null;
+        }
 
         private IObservable<Reestr> HandleException(Exception exception)
         {
@@ -144,6 +177,16 @@ namespace WeigthIndicator.ViewModels
                 ReestrState = true,
                 Net = net,
             };
+        }
+
+        private bool ValidateParsedValue(double value)
+        {
+            if (value <= 0)
+                return false;
+
+            if (value < _reestrSettingProvider.ReestrSetting.MaxWeight && value > _reestrSettingProvider.ReestrSetting.MinWeight)
+                return true;
+            return false;
         }
 
         private void ExecuteOpenReestrSettingCommand()

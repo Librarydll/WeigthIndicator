@@ -1,4 +1,5 @@
 ﻿using Prism.Services.Dialogs;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace WeigthIndicator.Dialogs
         public ObservableCollection<Recipe> RecipesCollection
         {
             get { return _recipesCollection; }
-            set {  _recipesCollection = value; RaisePropertyChanged(); }
+            set { this.RaiseAndSetIfChanged(ref _recipesCollection, value); }
         }
 
         [Reactive] public Recipe SelectedRecipe { get; set; }
@@ -39,34 +40,25 @@ namespace WeigthIndicator.Dialogs
             _reestrSettingProvider = reestrSettingProvider;
             _reestrSettingDataService = reestrSettingDataService;
             _recipeDataService = recipeDataService;
-            Initialize();
+
         }
 
-        public async Task Initialize()
+
+        public async Task<(IEnumerable<Recipe>, ReestrSetting)> GetAsync()
         {
-            var recipes = await _recipeDataService.GetRecipes();
-            RecipesCollection = new ObservableCollection<Recipe>(recipes);
-            ReestrSetting = await _reestrSettingDataService.GetReestrSetting() ?? new ReestrSetting();
+            var rs = await _reestrSettingDataService.GetReestrSetting();
+            var collection = await _recipeDataService.GetRecipes();
+
+            return (collection, rs);
+        }
+
+        public void Initialize((IEnumerable<Recipe>, ReestrSetting) args)
+        {
+            RecipesCollection = new ObservableCollection<Recipe>(args.Item1);
+            ReestrSetting = args.Item2 ?? new ReestrSetting();
             _reestrSettingProvider.ReestrSetting = (ReestrSetting)ReestrSetting.Clone();
             SelectedRecipe = RecipesCollection.FirstOrDefault(x => x.Id == ReestrSetting.RecipeId);
 
-        }
-
-        public async Task<IEnumerable<Recipe>> GetRecipesAsync()
-        {
-
-            return await _recipeDataService.GetRecipes();
-        }
-
-        public void InitializeCollection(IEnumerable<Recipe> recipes)
-        {
-
-
-        }
-
-        public override void OnDialogOpened(IDialogParameters parameters)
-        {
-           
         }
 
         protected override async void CloseDialogOnOk(IDialogParameters parameters)
@@ -85,6 +77,6 @@ namespace WeigthIndicator.Dialogs
             _reestrSettingProvider.ReestrSetting = (ReestrSetting)ReestrSetting.Clone();
             base.CloseDialogOnOk(parameters);
         }
-      
+
     }
 }

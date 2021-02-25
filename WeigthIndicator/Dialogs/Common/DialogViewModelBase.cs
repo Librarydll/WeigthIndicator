@@ -1,12 +1,13 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
+using ReactiveUI;
 using System;
 
 
 namespace WeigthIndicator.Dialogs.Common
 {
-    public class DialogViewModelBase : BindableBase, IDialogAware
+    public class DialogViewModelBase : ReactiveObject, IDialogAware
 	{
 		public event Action<IDialogResult> RequestClose;
 
@@ -15,7 +16,7 @@ namespace WeigthIndicator.Dialogs.Common
 		public string Title
 		{
 			get { return _title; }
-			set { SetProperty(ref _title, value); }
+			set { this.RaiseAndSetIfChanged(ref _title, value); }
 		}
 		public DelegateCommand<IDialogParameters> CloseDialogCancelCommand =>
 			new DelegateCommand<IDialogParameters>(CloseDialogOnCancel);
