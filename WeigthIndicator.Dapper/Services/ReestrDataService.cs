@@ -45,7 +45,7 @@ namespace WeigthIndicator.Dapper.Services
         {
             using (var connection = _factory.CreateConnection())
             {
-
+                bool isNextBarellExist = true;
                 string barellQuery = "SELECT *FROM BarellStorages where isEmpty = false and recipeId =@recipeId";
 
                 var barellStorage = await connection.QueryFirstOrDefaultAsync<BarellStorage>(barellQuery, new { recipeId = reestr.RecipeId });
@@ -54,28 +54,33 @@ namespace WeigthIndicator.Dapper.Services
                 {
                     throw new BarellStorageEmptyException();
                 }
-                string emptyUpdateQuery = "UPDATE BarellStorages Set isEmpty = true WHERE id =@id";
 
                 if (barellStorage.ConsumptionWeight + reestr.Net > barellStorage.TotalWeight)
                 {
-                    await connection.QueryAsync(emptyUpdateQuery, new { id = barellStorage.Id });
 
                     barellQuery += " and id != @id";
+
                     var nextBarell = await connection.QueryFirstOrDefaultAsync<BarellStorage>(barellQuery, new { recipeId = reestr.RecipeId, id = barellStorage.Id });
-                    if (nextBarell == null)
+                    if (nextBarell != null)
                     {
-                        throw new BarellStorageEmptyException();
+                        var reminder = barellStorage.TotalWeight - barellStorage.ConsumptionWeight;
+                        nextBarell.TotalWeight += reminder;
+                        barellStorage.TotalWeight -= reminder;
+
+                        string emptyUpdateQuery = "UPDATE BarellStorages Set isEmpty,totalWeight =@TotalWeight = true WHERE id =@id";
+                        await connection.QueryAsync(emptyUpdateQuery, new { id = barellStorage.Id, totalWeight = barellStorage.TotalWeight });
+                        barellStorage = nextBarell;
                     }
-                    nextBarell.TotalWeight += barellStorage.TotalWeight - barellStorage.ConsumptionWeight;
-                    barellStorage = nextBarell;
-                }
+                    else
+                    {
+                        isNextBarellExist = false;
+                    }
 
-                barellStorage.ConsumptionWeight += reestr.Net;
 
-                if (barellStorage.ConsumptionWeight == barellStorage.TotalWeight)
-                {
-                    barellStorage.IsEmpty = true;
                 }
+                if(isNextBarellExist)
+                    barellStorage.ConsumptionWeight += reestr.Net;
+
 
                 await connection.UpdateAsync(barellStorage);
 
