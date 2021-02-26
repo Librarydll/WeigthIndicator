@@ -1,7 +1,7 @@
 ﻿using ReactiveUI;
 using System.Reactive.Disposables;
 using WeigthIndicator.ViewModels;
-
+using System;
 namespace WeigthIndicator.Views
 {
     /// <summary>
@@ -38,6 +38,9 @@ namespace WeigthIndicator.Views
 
                 this.Bind(ViewModel, vm => vm.BarellView, view => view.BarellView.IsSelected)
                     .DisposeWith(disposables);
+
+                this.WhenAnyValue(x => x.ViewModel)
+                   .Subscribe(x => x.GoToStatusView());
 
             });
         }

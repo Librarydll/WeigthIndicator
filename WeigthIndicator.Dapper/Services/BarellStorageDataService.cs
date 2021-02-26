@@ -42,5 +42,16 @@ namespace WeigthIndicator.Dapper.Services
 
             }
         }
+
+        public async Task<double> GetBarrelStorageRemainderByRecipe(int recipeId)
+        {
+            using (var connection = _factory.CreateConnection())
+            {
+                string query = "SELECT SUM(b.TotalWeight-B.ConsumptionWeight) FROM barellstorages as b where IsEmpty = false and recipeid =@recipeId ";
+
+                var reminder =await connection.QueryFirstOrDefaultAsync<double?>(query,new { recipeId });
+                return reminder ?? 0;
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Prism.Services.Dialogs;
+﻿using Prism.Events;
+using Prism.Services.Dialogs;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -17,6 +18,7 @@ using WeigthIndicator.Dapper.Services;
 using WeigthIndicator.Domain.Exceptions;
 using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Domain.Services;
+using WeigthIndicator.Events;
 using WeigthIndicator.Services;
 using WeigthIndicator.Views;
 
@@ -108,8 +110,9 @@ namespace WeigthIndicator.ViewModels
 
         public async Task<ReestrSetting> InitializeReesterSetting()
         {
-           ReestrSetting = await _reestrSettingDataService.GetReestrSetting();
-           return ReestrSetting;
+            ReestrSetting = await _reestrSettingDataService.GetReestrSetting();
+            MessageBus.Current.SendMessage(ReestrSetting.CurrentRecipe);
+            return ReestrSetting;
         }
 
         private void ValueDropped(double value)
@@ -205,12 +208,13 @@ namespace WeigthIndicator.ViewModels
                 if (x.Result == ButtonResult.OK)
                 {
                     ReestrSetting = x.Parameters.GetValue<ReestrSetting>("model");
+                    MessageBus.Current.SendMessage(ReestrSetting.CurrentRecipe);
+
                 }
-                _comPortProvider.Start();
 
                 if (!_comPortProvider.ComPortConnector.IsOpen)
                 {
-                   // _comPortProvider.Start();
+                    _comPortProvider.Start();
                 }
             });
         }

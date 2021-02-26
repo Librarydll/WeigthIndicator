@@ -21,6 +21,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <ui:NavigationView IsPaneOpen="True"
                            PaneDisplayMode="Top"
@@ -55,6 +56,10 @@
             VerticalContentAlignment="Stretch" />-->
 
         <!--<Button Click="bb_Click" Grid.Column="1" Panel.ZIndex="5" HorizontalAlignment="Center" VerticalAlignment="Center" Content="asd" x:Name="bb"/>-->
+        <ContentControl Grid.Row="2"
+                         HorizontalContentAlignment="Stretch"   
+                        VerticalContentAlignment="Stretch" 
+                        prism:RegionManager.RegionName="StatusBarRegion"/>
 
     </Grid>
 </rx:ReactiveWindow>

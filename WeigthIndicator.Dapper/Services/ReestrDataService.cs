@@ -67,7 +67,7 @@ namespace WeigthIndicator.Dapper.Services
                         nextBarell.TotalWeight += reminder;
                         barellStorage.TotalWeight -= reminder;
 
-                        string emptyUpdateQuery = "UPDATE BarellStorages Set isEmpty,totalWeight =@TotalWeight = true WHERE id =@id";
+                        string emptyUpdateQuery = "UPDATE BarellStorages Set isEmpty= true,totalWeight = @TotalWeight  WHERE id =@id";
                         await connection.QueryAsync(emptyUpdateQuery, new { id = barellStorage.Id, totalWeight = barellStorage.TotalWeight });
                         barellStorage = nextBarell;
                     }

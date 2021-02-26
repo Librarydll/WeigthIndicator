@@ -11,5 +11,7 @@ namespace WeigthIndicator.Domain.Services
     {
         Task<BarellStorage> CreateBarellStorage(BarellStorage barellStorage);
         Task<IEnumerable<BarellStorage>> GetBarellStorages();
+
+        Task<double> GetBarrelStorageRemainderByRecipe(int recipeId);
     }
 }
