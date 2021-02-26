@@ -39,12 +39,15 @@ namespace WeigthIndicator.Views
                     .DisposeWith(disposables);
                 this.Bind(ViewModel, vm => vm.SelectedRecipe, v => v.RecipesCmb.SelectedItem)
                     .DisposeWith(disposables);
-               
+
+                this.Bind(ViewModel, vm => vm.SelectedRecipeForFilter, v => v.RecipeCmbForFilter.SelectedItem)
+                    .DisposeWith(disposables);
 
                 this.BindCommand(ViewModel, vm => vm.CreateRecipe, v => v.SaveButton)
                     .DisposeWith(disposables);
 
                 this.OneWayBind(ViewModel, vm => vm.BarellStoragesCollection, v => v.BarellStoragesCollection.ItemsSource);
+                this.OneWayBind(ViewModel, vm => vm.RecipesCollection, v => v.RecipeCmbForFilter.ItemsSource);
 
                 this.OneWayBind(ViewModel, vm => vm.RecipesCollection, v => v.RecipesCmb.ItemsSource)
                     .DisposeWith(disposables);

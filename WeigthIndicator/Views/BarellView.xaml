@@ -17,7 +17,7 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.Resources>
             <Style TargetType="{x:Type TextBlock}" >
@@ -79,8 +79,6 @@
 
         </Grid>
 
-
-
         <Button Grid.Row="2"
                 VerticalAlignment="Top"
                 Cursor="Hand"
@@ -91,11 +89,22 @@
 
         </Button>
 
-        <Grid Grid.Column="1" Grid.RowSpan="4">
-            <ListView           x:Name="BarellStoragesCollection"
-                              Grid.Column="1"  BorderThickness="0"
-                              Margin="10 0 0 5">
-                
+        <Grid Grid.Column="1" Grid.RowSpan="3" HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <ComboBox Grid.Row="0" Margin="10 10 0 10"
+                         DisplayMemberPath="ShortName"
+                        Width="150"
+                      x:Name="RecipeCmbForFilter">
+
+            </ComboBox>
+            <ListView   x:Name="BarellStoragesCollection"
+                        Grid.Row="1"
+                        FontSize="20"
+                             Margin="10 0 0 5">
+
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Style.Triggers>
@@ -106,46 +115,47 @@
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.View>
-                    
+
                     <GridView>
                         <GridViewColumn Header="Рецепт код" >
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock  FontSize="15" Text="{Binding  Path=Recipe.ShortName}"/>
+                                    <TextBlock  Text="{Binding  Path=Recipe.ShortName}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn   Header="Дата производства">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock  FontSize="15" Text="{Binding  Path=ProductionDate,StringFormat={}{0:dd/MM/yyyy}}"/>
+                                    <TextBlock  Text="{Binding  Path=ProductionDate,StringFormat={}{0:dd/MM/yyyy}}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn   Header="Объем">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="15" Text="{Binding Path=TotalWeight}"/>
+                                    <TextBlock  Text="{Binding Path=TotalWeight}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
-                        </GridViewColumn> 
+                        </GridViewColumn>
                         <GridViewColumn   Header="Потрачено">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="15" Text="{Binding Path=ConsumptionWeight}"/>
+                                    <TextBlock  Text="{Binding Path=ConsumptionWeight}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn   Header="Осталось">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="15" Text="{Binding Path=HasWeigthValue}"/>
+                                    <TextBlock Text="{Binding Path=HasWeigthValue}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>
+
         </Grid>
     </Grid>
 </reactiveui:ReactiveUserControl>
