@@ -31,6 +31,13 @@ namespace WeigthIndicator.Views
                     .DisposeWith(disposables);
 
                 this.Bind(ViewModel,
+                    vm => vm.ReestrSetting.MinDefaultWeigth,
+                    v => v.DefaultWeight.Text,
+                    x => x.ToString(),
+                    x => ConvertToDouble(x))
+                    .DisposeWith(disposables);
+
+                this.Bind(ViewModel,
                     vm => vm.ReestrSetting.MinWeight,
                     v => v.MinWeight.Text,
                     x => x.ToString(),

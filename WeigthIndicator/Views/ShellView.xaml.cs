@@ -1,5 +1,7 @@
 ﻿using ReactiveUI;
+using System;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using WeigthIndicator.ViewModels;
 
 namespace WeigthIndicator.Views
@@ -29,6 +31,11 @@ namespace WeigthIndicator.Views
                 this.Bind(ViewModel, vm => vm.IsAutoMode, v => v.@switch.IsOn);
                 this.BindCommand(ViewModel, vm => vm.OpenReestrSettingCommand, v => v.ReestrSetting);
                 this.BindCommand(ViewModel, vm => vm.SaveCommand, v => v.SaveBtn);
+
+
+                this.WhenAnyValue(x => x.ViewModel)
+                    .SelectMany(x => x.InitializeReesterSetting())
+                    .Subscribe();
             });
 
         }

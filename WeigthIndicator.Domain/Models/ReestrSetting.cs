@@ -56,6 +56,13 @@ namespace WeigthIndicator.Domain.Models
             set { SetProperty(ref _maxWeight, value); }
         }
 
+        private double _minDefaultWeigth;
+        public double MinDefaultWeigth
+        {
+            get { return _minDefaultWeigth; }
+            set { SetProperty(ref _minDefaultWeigth, value); }
+        }
+
         public int RecipeId { get; set; }
         [Computed]
         public Recipe CurrentRecipe { get; set; }
@@ -78,6 +85,7 @@ namespace WeigthIndicator.Domain.Models
                 TaraBarrelWithLid = TaraBarrelWithLid,
                 MaxWeight =MaxWeight,
                 MinWeight =MinWeight,
+                MinDefaultWeigth = MinDefaultWeigth,
                 Id =Id,
                 RecipeId =RecipeId
             };

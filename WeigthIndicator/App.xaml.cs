@@ -57,7 +57,7 @@ namespace WeigthIndicator
             containerRegistry.RegisterSingleton<IReestrDataService, ReestrDataService>();
             containerRegistry.RegisterSingleton<IBarellStorageDataService, BarellStorageDataService>();
             containerRegistry.RegisterSingleton<IReestrSettingDataService, ReestrSettingDataService>();
-            containerRegistry.RegisterSingleton<IReestrSettingProvider, ReestrSettingProvider>();
+           // containerRegistry.RegisterSingleton<IReestrSettingProvider, ReestrSettingProvider>();
             containerRegistry.RegisterSingleton<IComPortProvider, ComPortProvider>();
 
             containerRegistry.RegisterDialog<ReestrSettingView, ReestrSettingViewModel>();

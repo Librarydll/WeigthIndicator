@@ -17,7 +17,6 @@ namespace WeigthIndicator.Dialogs
 {
     public class ReestrSettingViewModel : DialogViewModelBase
     {
-        private readonly IReestrSettingProvider _reestrSettingProvider;
         private readonly IReestrSettingDataService _reestrSettingDataService;
         private readonly IRecipeDataService _recipeDataService;
 
@@ -32,12 +31,10 @@ namespace WeigthIndicator.Dialogs
 
         [Reactive] public ReestrSetting ReestrSetting { get; set; } = new ReestrSetting();
         public ReestrSettingViewModel(
-            IReestrSettingProvider reestrSettingProvider,
             IReestrSettingDataService reestrSettingDataService,
             IRecipeDataService recipeDataService)
         {
             Title = "Настройки реестра";
-            _reestrSettingProvider = reestrSettingProvider;
             _reestrSettingDataService = reestrSettingDataService;
             _recipeDataService = recipeDataService;
 
@@ -56,7 +53,6 @@ namespace WeigthIndicator.Dialogs
         {
             RecipesCollection = new ObservableCollection<Recipe>(args.Item1);
             ReestrSetting = args.Item2 ?? new ReestrSetting();
-            _reestrSettingProvider.ReestrSetting = (ReestrSetting)ReestrSetting.Clone();
             SelectedRecipe = RecipesCollection.FirstOrDefault(x => x.Id == ReestrSetting.RecipeId);
 
         }
@@ -74,7 +70,12 @@ namespace WeigthIndicator.Dialogs
             {
                 await _reestrSettingDataService.UpdateReestrSetting(ReestrSetting);
             }
-            _reestrSettingProvider.ReestrSetting = (ReestrSetting)ReestrSetting.Clone();
+
+            parameters = new DialogParameters
+            {
+                { "model", (ReestrSetting)ReestrSetting.Clone() }
+            };
+
             base.CloseDialogOnOk(parameters);
         }
 

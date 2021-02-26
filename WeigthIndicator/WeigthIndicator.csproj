@@ -70,8 +70,6 @@
     <Compile Include="Models\ComPortConnectorSetting.cs" />
     <Compile Include="Services\ComPortProvider.cs" />
     <Compile Include="Services\IComPortProvider.cs" />
-    <Compile Include="Services\IReestrSettingProvider.cs" />
-    <Compile Include="Services\ReestrSettingProvider.cs" />
     <Compile Include="ViewModels\BarellViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\SettingViewModel.cs" />

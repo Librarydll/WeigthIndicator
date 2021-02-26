@@ -48,7 +48,7 @@ namespace WeigthIndicator.Dialogs.Common
 		{
 		}
 
-		public  void CloseDialog(IDialogParameters parameters)
+		public void CloseDialog(IDialogParameters parameters)
 		{
 			RequestClose?.Invoke(new DialogResult(Result, parameters));
 		}
