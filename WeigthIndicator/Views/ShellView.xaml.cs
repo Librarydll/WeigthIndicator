@@ -31,11 +31,16 @@ namespace WeigthIndicator.Views
                 this.Bind(ViewModel, vm => vm.IsAutoMode, v => v.@switch.IsOn);
                 this.BindCommand(ViewModel, vm => vm.OpenReestrSettingCommand, v => v.ReestrSetting);
                 this.BindCommand(ViewModel, vm => vm.SaveCommand, v => v.SaveBtn);
+                this.BindCommand(ViewModel, vm => vm.EditCommand, v => v.EditCommand,x=>x.SelectedReestr);
+                this.BindCommand(ViewModel, vm => vm.PrintCommand, v => v.PrintCommand,x=>x.SelectedReestr);
 
+                this.Bind(ViewModel, vm => vm.SelectedReestr, v => v.ReestrsCollection.SelectedItem);
 
                 this.WhenAnyValue(x => x.ViewModel)
-                    .SelectMany(x => x.InitializeReesterSetting())
-                    .Subscribe();
+                    .SelectMany(x => x.Initialize())
+                    .ObserveOnDispatcher()
+                    .Subscribe(x => ViewModel.FillCollection(x))
+                    .DisposeWith(disposables);
             });
 
         }

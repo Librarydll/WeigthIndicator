@@ -21,14 +21,11 @@ namespace WeigthIndicator.Views
                 this.WhenAnyValue(x => x.DataContext)
                     .BindTo(this, x => x.ViewModel);
 
-                this.Bind(ViewModel, vm => vm.ReestrSetting.BuyerName, v => v.BuyerName.Text)
-                    .DisposeWith(disposables);
-
                 this.Bind(ViewModel, vm => vm.ReestrSetting.BatchNumber, v => v.BatchNumber.Text)
                     .DisposeWith(disposables);
 
-                this.Bind(ViewModel, vm => vm.ReestrSetting.Seconds, v => v.Time.Text)
-                    .DisposeWith(disposables);
+                //this.Bind(ViewModel, vm => vm.ReestrSetting.Seconds, v => v.Time.Text)
+                //    .DisposeWith(disposables);
 
                 this.Bind(ViewModel,
                     vm => vm.ReestrSetting.MinDefaultWeigth,
@@ -72,6 +69,11 @@ namespace WeigthIndicator.Views
                 this.Bind(ViewModel, vm => vm.SelectedRecipe, v => v.RecipesCmb.SelectedItem)
                     .DisposeWith(disposables);
 
+                this.OneWayBind(ViewModel, vm => vm.CustomersCollection, v => v.CustomerCmb.ItemsSource)
+                   .DisposeWith(disposables);
+
+                this.Bind(ViewModel, vm => vm.SelectedCustomer, v => v.CustomerCmb.SelectedItem)
+                    .DisposeWith(disposables);
 
                 this.WhenAnyValue(x => x.ViewModel)
                     .SelectMany(x => x.GetAsync())

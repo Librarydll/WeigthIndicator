@@ -39,6 +39,8 @@
                         <TextBlock Text="Бочки" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </ui:SimpleStackPanel>
                 </ui:NavigationViewItem>
+                <ui:NavigationViewItem Cursor="Hand" x:Name="CustomerView" Icon="People" Content="Покупатели"/>
+
             </ui:NavigationView.MenuItems>
             <ui:NavigationView.FooterMenuItems>
                 <ui:NavigationViewItem Cursor="Hand" Icon="Setting" x:Name="SettingView" Content="Параметры" />

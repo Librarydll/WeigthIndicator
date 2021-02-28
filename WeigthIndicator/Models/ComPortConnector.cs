@@ -49,12 +49,12 @@ namespace WeigthIndicator.Models
                 _serialPort.DataReceived += SerialPort_DataReceived;
                 _serialPort.ErrorReceived += SerialPort_ErrorReceived;
             }
-            Task.Run(async () =>
-            {
-                await Imitation();
-                await Task.Delay(2500);
-                ParsedValue = 125;
-            });
+            //Task.Run(async () =>
+            //{
+            //    await Imitation();
+            //    await Task.Delay(2500);
+            //    ParsedValue = 125;
+            //});
           //  ParsedValue = 250;
         }
 
@@ -74,10 +74,10 @@ namespace WeigthIndicator.Models
 
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            CurrentValue = _serialPort.ReadExisting();
-            if (string.IsNullOrWhiteSpace(CurrentValue))
+            CurrentValue = _serialPort.ReadLine();
+            if (!string.IsNullOrWhiteSpace(CurrentValue))
             {
-                ParsedValue = ParseSerialPortData(CurrentValue);
+                ParsedValue = ParseSerialPortData(CurrentValue.Trim('\r'));
             }
         }
 

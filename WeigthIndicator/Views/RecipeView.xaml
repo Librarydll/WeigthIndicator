@@ -65,20 +65,26 @@
                  Style="{StaticResource long}" />
 
             <TextBlock Grid.Row="1"
-            Text="Наименование продукта"/>
+            Text="Наименование продукта рус"/>
             <TextBox Grid.Row="1" Grid.Column="1"
-                      x:Name="LongName"
+                      x:Name="LongNameRu"
                  Style="{StaticResource long}" />
 
             <TextBlock Grid.Row="2"
-            Text="Условия хранения"/>
+            Text="Наименование продукта кз"/>
             <TextBox Grid.Row="2" Grid.Column="1"
-                      x:Name="StorageCondition"
+                      x:Name="LongNameKz"
                  Style="{StaticResource long}" />
 
             <TextBlock Grid.Row="3"
-            Text="Условия транспартировки"/>
+            Text="Условия хранения"/>
             <TextBox Grid.Row="3" Grid.Column="1"
+                      x:Name="StorageCondition"
+                 Style="{StaticResource long}" />
+
+            <TextBlock Grid.Row="4"
+            Text="Условия транспартировки"/>
+            <TextBox Grid.Row="4" Grid.Column="1"
                       x:Name="TransportationCondition"
                  Style="{StaticResource long}"/>
 
@@ -171,10 +177,17 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn   Header="Наименование продукта">
+                        <GridViewColumn   Header="Наименование продукта рус">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="15" Text="{Binding Path=LongName}"/>
+                                    <TextBlock FontSize="15" Text="{Binding Path=LongNameRu}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn   Header="Наименование продукта кз">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="15" Text="{Binding Path=LongNameKz}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

@@ -40,6 +40,18 @@ namespace WeigthIndicator
         //    //services.AddSingleton<ReestrSettingViewModel>();
 
         //}
+        public App()
+        {
+            Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
+
+        }
+
+        private void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+           MessageBox.Show(e.Exception.Message);
+           MessageBox.Show(e.Exception.InnerException?.Message);
+        }
+
         protected override Window CreateShell()
         {
             return Container.Resolve<MainView>();
@@ -47,6 +59,7 @@ namespace WeigthIndicator
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+
             containerRegistry.RegisterSingleton<ApplicationContextFactory>(_ =>
             {
                 return new ApplicationContextFactory("Data Source=127.0.0.1;port=3306;Database=indicatordb;Uid=root;Pwd=root");
@@ -55,12 +68,14 @@ namespace WeigthIndicator
 
             containerRegistry.RegisterSingleton<IRecipeDataService, RecipeDataService>();
             containerRegistry.RegisterSingleton<IReestrDataService, ReestrDataService>();
+            containerRegistry.RegisterSingleton<ICustomerDataService, CustomerDataService>();
             containerRegistry.RegisterSingleton<IBarellStorageDataService, BarellStorageDataService>();
             containerRegistry.RegisterSingleton<IReestrSettingDataService, ReestrSettingDataService>();
            // containerRegistry.RegisterSingleton<IReestrSettingProvider, ReestrSettingProvider>();
             containerRegistry.RegisterSingleton<IComPortProvider, ComPortProvider>();
 
             containerRegistry.RegisterDialog<ReestrSettingView, ReestrSettingViewModel>();
+            containerRegistry.RegisterDialog<ReestrEditView, ReestrEditViewModel>();
 
         }
     }

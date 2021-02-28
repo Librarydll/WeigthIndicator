@@ -69,17 +69,24 @@
 
             </ComboBox>
 
-            <TextBlock Grid.Row="1"
-            Text="Номер партии"/>
-            <TextBox Grid.Row="1" Grid.Column="1"
-                      x:Name="BatchNumber"
-                 Style="{StaticResource long}" />
 
-            <TextBlock Grid.Row="2"
+            <TextBlock Grid.Row="1"
             Text="Покупатель"/>
+            <ComboBox HorizontalAlignment="Left"
+                x:Name="CustomerCmb"
+                Grid.Column="1"
+                Grid.Row="1"
+                DisplayMemberPath="ShortName"
+                Width="150"
+                Margin="5">
+
+            </ComboBox>
+            <TextBlock Grid.Row="2"
+            Text="Номер партии"/>
             <TextBox Grid.Row="2" Grid.Column="1"
-                      x:Name="BuyerName"
-                 Style="{StaticResource long}" />
+                      x:Name="BatchNumber"
+                 Style="{StaticResource short}" />
+
             
 
 
@@ -114,12 +121,12 @@
             <TextBlock Grid.Row="2" Grid.Column="2" Text="для этикетки"/>
 
 
-            <TextBlock Grid.Row="3"
+            <!--<TextBlock Grid.Row="3"
             Text="Время для принятии решния"/>
             <TextBox Grid.Row="3" Grid.Column="1"
                  x:Name="Time"  
                  Style="{StaticResource short}" />
-            <TextBlock Grid.Row="3" Grid.Column="2" Text="секунд"/>
+            <TextBlock Grid.Row="3" Grid.Column="2" Text="секунд"/>-->
 
             <TextBlock Grid.Row="4"
             Text="Минимальный вес"/>

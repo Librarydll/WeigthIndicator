@@ -10,7 +10,8 @@ namespace WeigthIndicator.Domain.Models
     public class Recipe : BaseEntity, ICloneable
     {
         private string shortName;
-        private string longName;
+        private string longNameRu;
+        private string longNameKz;
         private double brix;
         private string storageCondition;
         private string transportationCondition;
@@ -20,7 +21,8 @@ namespace WeigthIndicator.Domain.Models
         private double dryContent;
 
         public string ShortName { get => shortName; set => SetProperty(ref shortName, value); }
-        public string LongName { get => longName; set => SetProperty(ref longName, value); }
+        public string LongNameRu { get => longNameRu; set => SetProperty(ref longNameRu, value); }
+        public string LongNameKz { get => longNameKz; set => SetProperty(ref longNameKz, value); }
         public double Brix { get => brix; set => SetProperty(ref brix, value); }
         public string StorageCondition { get => storageCondition; set => SetProperty(ref storageCondition, value); }
         public string TransportationCondition { get => transportationCondition; set => SetProperty(ref transportationCondition, value); }
@@ -38,7 +40,7 @@ namespace WeigthIndicator.Domain.Models
                 DryContent = DryContent,
                 EnergyValue = EnergyValue,
                 Id = Id,
-                LongName = LongName,
+                LongNameRu = LongNameRu,
                 ShortName = ShortName,
                 StorageCondition = StorageCondition,
                 TransportationCondition = TransportationCondition,

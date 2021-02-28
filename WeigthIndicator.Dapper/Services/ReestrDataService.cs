@@ -41,6 +41,34 @@ namespace WeigthIndicator.Dapper.Services
             }
         }
 
+        public async Task<IEnumerable<Reestr>> GetReestrsByDate(DateTime dateTime)
+        {
+            using (var connection = _factory.CreateConnection())
+            {
+                string query = @"SELECT *FROM Reestrs as reestr " +
+                                "Left join Recipes as recipe " +
+                                "on recipe.id = reestr.recipeid " +
+                                "Left join BarellStorages as br " +
+                                "on reestr.barellStorageId =br.id " +
+                                "Left join Customers as c " +
+                                "on reestr.customerid =c.id " +
+                                "where date(reestr.packingDate) =@date";
+
+               return await connection.QueryAsync<Reestr,Recipe,BarellStorage,Customer,Reestr>(query,
+                   (reestr, recipe, br,c) =>
+                   {
+                       reestr.Recipe = recipe;
+                       reestr.BarellStorage = br;
+                       reestr.Customer = c;
+                       return reestr;
+                   }
+                   ,new 
+                   { 
+                       date = dateTime.Date
+                   });
+            }
+        }
+
         public async Task<Reestr> CreateReestrAndUpdateBarellStorage(Reestr reestr)
         {
             using (var connection = _factory.CreateConnection())
@@ -101,6 +129,16 @@ namespace WeigthIndicator.Dapper.Services
                 await connection.InsertAsync(reestr);
                 return reestr;
 
+            }
+        }
+
+
+        public async Task<bool> UpdateReestr(Reestr reestr)
+        {
+            using (var connection = _factory.CreateConnection())
+            {
+                var isSuccess = await connection.UpdateAsync(reestr);
+                return isSuccess;
             }
         }
     }

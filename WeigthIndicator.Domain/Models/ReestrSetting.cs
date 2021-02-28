@@ -13,13 +13,6 @@ namespace WeigthIndicator.Domain.Models
             set { SetProperty(ref _batchNumber, value); }
         }
 
-        private string _buyerName;
-        public string BuyerName
-        {
-            get { return _buyerName; }
-            set { SetProperty(ref _buyerName, value); }
-        }
-
         private double _taraBarrel;
         public double TaraBarrel
         {
@@ -63,9 +56,12 @@ namespace WeigthIndicator.Domain.Models
             set { SetProperty(ref _minDefaultWeigth, value); }
         }
 
+        public int CustomerId { get; set; }
         public int RecipeId { get; set; }
         [Computed]
         public Recipe CurrentRecipe { get; set; }
+        [Computed]
+        public Customer Customer { get; set; }
 
         public object Clone()
         {
@@ -79,7 +75,6 @@ namespace WeigthIndicator.Domain.Models
             {
                 BatchNumber = BatchNumber,
                 CurrentRecipe = recipe,
-                BuyerName = BuyerName,
                 TaraBarrel = TaraBarrel,
                 Seconds = Seconds,
                 TaraBarrelWithLid = TaraBarrelWithLid,
@@ -87,7 +82,9 @@ namespace WeigthIndicator.Domain.Models
                 MinWeight =MinWeight,
                 MinDefaultWeigth = MinDefaultWeigth,
                 Id =Id,
-                RecipeId =RecipeId
+                RecipeId =RecipeId,
+                CustomerId=CustomerId,
+                Customer =(Customer)Customer?.Clone()
             };
         }
     }

@@ -48,6 +48,7 @@
             </ui:SimpleStackPanel>-->
 
             <ui:SimpleStackPanel Grid.Row="1"
+                                 Width="407"
                                  HorizontalAlignment="Center" VerticalAlignment="Center"
                                  Margin="10 0">
               
@@ -68,7 +69,7 @@
         
             </ui:SimpleStackPanel>
 
-            <ui:SimpleStackPanel Spacing="2"  Grid.Row="2"  VerticalAlignment="Bottom">
+            <ui:SimpleStackPanel Spacing="2"  Grid.Row="2" HorizontalAlignment="Center"  VerticalAlignment="Bottom">
                 <Button Content="Записать" HorizontalAlignment="Center"
                         x:Name="SaveBtn"
                     FontSize="22" 
@@ -81,7 +82,7 @@
                            HorizontalAlignment="Center"
                           
                            Style="{StaticResource HeaderTextBlockStyle}"/>
-                <ui:ToggleSwitch x:Name="switch" FontSize="30" IsOn="True" Grid.Column="2" HorizontalAlignment="Center">
+                <ui:ToggleSwitch x:Name="switch" FontSize="30" IsOn="True"   HorizontalAlignment="Center">
 
                 </ui:ToggleSwitch>
             </ui:SimpleStackPanel>
@@ -91,7 +92,11 @@
         </Grid>
     
         <Grid Grid.Column="1">
-
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
             <Grid Visibility="Hidden">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -108,8 +113,22 @@
                 <Grid Grid.Column="5" x:Name="col6"/>
             </Grid>
 
-            <ListView x:Name="ReestrsCollection"
-                              Grid.Column="1" Background="Transparent" BorderThickness="0"                  
+            <ui:SimpleStackPanel Margin="5 5 0 5" Orientation="Horizontal" Spacing="5">
+                <Button x:Name="EditCommand">
+                    <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal">
+                        <ui:SymbolIcon Symbol="Edit" />
+                        <TextBlock Text="Изменить"/>
+                    </ui:SimpleStackPanel>
+                </Button>
+                <Button x:Name="PrintCommand">
+                    <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal">
+                        <ui:SymbolIcon Symbol="Print" />
+                        <TextBlock Text="Печатать"/>
+                    </ui:SimpleStackPanel>
+                </Button>
+            </ui:SimpleStackPanel>
+            <ListView x:Name="ReestrsCollection" Grid.Row="1"
+                              Background="Transparent" BorderThickness="0"                  
                               Margin="10 0 0 5">
                 <!--<ListView.ContextMenu>
                     <ContextMenu>
@@ -138,7 +157,7 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn   Header="Наименование продукта">
+                        <GridViewColumn   Header="Наименование">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock FontSize="15" Text="{Binding Path=Recipe.ShortName}"/>
@@ -175,7 +194,7 @@
                         <GridViewColumn   Header="Покупатель">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="15" Text="{Binding Path=Buyer}"/>
+                                    <TextBlock FontSize="15" Text="{Binding Path=Customer.ShortName}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -200,10 +219,10 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn   Header="примечание">
+                        <GridViewColumn   Header="примечание" Width="150">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox FontSize="15" Text="{Binding Path=Note}"/>
+                                    <TextBlock FontSize="15" Width="120" Text="{Binding Path=Note}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

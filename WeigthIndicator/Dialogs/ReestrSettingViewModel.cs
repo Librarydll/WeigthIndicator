@@ -19,6 +19,7 @@ namespace WeigthIndicator.Dialogs
     {
         private readonly IReestrSettingDataService _reestrSettingDataService;
         private readonly IRecipeDataService _recipeDataService;
+        private readonly ICustomerDataService _customerDataService;
 
         private ObservableCollection<Recipe> _recipesCollection;
         public ObservableCollection<Recipe> RecipesCollection
@@ -27,34 +28,44 @@ namespace WeigthIndicator.Dialogs
             set { this.RaiseAndSetIfChanged(ref _recipesCollection, value); }
         }
 
+        private ObservableCollection<Customer> _customers;
+        public ObservableCollection<Customer> CustomersCollection
+        {
+            get { return _customers; }
+            set { this.RaiseAndSetIfChanged(ref _customers, value); }
+        }
+
         [Reactive] public Recipe SelectedRecipe { get; set; }
+        [Reactive] public Customer SelectedCustomer { get; set; }
 
         [Reactive] public ReestrSetting ReestrSetting { get; set; } = new ReestrSetting();
         public ReestrSettingViewModel(
             IReestrSettingDataService reestrSettingDataService,
-            IRecipeDataService recipeDataService)
+            IRecipeDataService recipeDataService, 
+            ICustomerDataService customerDataService)
         {
             Title = "Настройки реестра";
             _reestrSettingDataService = reestrSettingDataService;
             _recipeDataService = recipeDataService;
-
+            _customerDataService = customerDataService;
         }
 
 
-        public async Task<(IEnumerable<Recipe>, ReestrSetting)> GetAsync()
+        public async Task<(IEnumerable<Recipe>,IEnumerable<Customer> ,ReestrSetting)> GetAsync()
         {
             var rs = await _reestrSettingDataService.GetReestrSetting();
             var collection = await _recipeDataService.GetRecipes();
-
-            return (collection, rs);
+            var customers = await _customerDataService.GetCustomers();
+            return (collection, customers, rs);
         }
 
-        public void Initialize((IEnumerable<Recipe>, ReestrSetting) args)
+        public void Initialize((IEnumerable<Recipe>,IEnumerable<Customer> ,ReestrSetting) args)
         {
             RecipesCollection = new ObservableCollection<Recipe>(args.Item1);
-            ReestrSetting = args.Item2 ?? new ReestrSetting();
+            CustomersCollection = new ObservableCollection<Customer>(args.Item2);
+            ReestrSetting = args.Item3 ?? new ReestrSetting();
             SelectedRecipe = RecipesCollection.FirstOrDefault(x => x.Id == ReestrSetting.RecipeId);
-
+            SelectedCustomer = CustomersCollection.FirstOrDefault(x => x.Id == ReestrSetting.CustomerId);
         }
 
         protected override async void CloseDialogOnOk(IDialogParameters parameters)
@@ -62,6 +73,8 @@ namespace WeigthIndicator.Dialogs
             Result = ButtonResult.OK;
             ReestrSetting.RecipeId = SelectedRecipe.Id;
             ReestrSetting.CurrentRecipe = SelectedRecipe;
+            ReestrSetting.Customer = SelectedCustomer;
+            ReestrSetting.CustomerId = SelectedCustomer.Id;
             if (ReestrSetting.Id == 0)
             {
                 await _reestrSettingDataService.CreateReestrSetting(ReestrSetting);

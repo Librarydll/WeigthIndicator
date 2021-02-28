@@ -18,14 +18,6 @@ namespace WeigthIndicator.Views
                 this.WhenAnyValue(x => x.DataContext)
                     .BindTo(this, x => x.ViewModel);
 
-                //this.OneWayBind(ViewModel,vm => vm.SelectedItem,v => v.NavigationView.SelectedItem)
-                //    .DisposeWith(disposables);
-                //this.OneWayBind(ViewModel, vm => vm.Router, v => v.RoutedViewHost.Router)
-                //    .DisposeWith(disposables);
-
-                //this.Bind(ViewModel, vm => vm.SelectedItem, view => view.NavigationView.SelectedItem)
-                //    .DisposeWith(disposables);
-
                 this.Bind(ViewModel, vm => vm.RecipeView, view => view.RecipeView.IsSelected)
                     .DisposeWith(disposables);
 
@@ -37,6 +29,9 @@ namespace WeigthIndicator.Views
                     .DisposeWith(disposables);
 
                 this.Bind(ViewModel, vm => vm.BarellView, view => view.BarellView.IsSelected)
+                    .DisposeWith(disposables);
+
+                this.Bind(ViewModel, vm => vm.CustomerView, view => view.CustomerView.IsSelected)
                     .DisposeWith(disposables);
 
                 this.WhenAnyValue(x => x.ViewModel)

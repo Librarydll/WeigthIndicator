@@ -11,6 +11,9 @@ namespace WeigthIndicator.Domain.Services
     {
         Task<Reestr> CreateReestr(Reestr reestr);
         Task<Reestr> CreateReestrAndUpdateBarellStorage(Reestr recipe);
+        Task<bool> UpdateReestr(Reestr reestr);
+
+        Task<IEnumerable<Reestr>> GetReestrsByDate(DateTime dateTime);
 
     }
 }

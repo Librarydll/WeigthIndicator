@@ -31,12 +31,16 @@ namespace WeigthIndicator.Dapper.Services
         {
             using (var connection = _applicationContextFactory.CreateConnection())
             {
-                string query = "SELECT *FROM ReestrSettings as rs LEFT JOIN Recipes as r on rs.RecipeId = r.Id LIMIT 1";
+                string query = "SELECT *FROM ReestrSettings as rs " +
+                    "LEFT JOIN Recipes as r on rs.RecipeId = r.Id  " +
+                    "LEFT JOIN Customers as c on rs.customerid =c.id " +
+                    "LIMIT 1";
 
-               var  reesters = await connection.QueryAsync<ReestrSetting,Recipe,ReestrSetting>(query,
-                   (rs,r)=> 
+               var  reesters = await connection.QueryAsync<ReestrSetting,Recipe,Customer,ReestrSetting>(query,
+                   (rs,r,c)=> 
                    {
                        rs.CurrentRecipe = r;
+                       rs.Customer = c;
                        return rs;
                    });
                 return reesters.FirstOrDefault();

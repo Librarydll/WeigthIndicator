@@ -8,22 +8,24 @@ using WeigthIndicator.Domain.Models.Common;
 
 namespace WeigthIndicator.Domain.Models
 {
-    public class Reestr : BaseEntity
+    public class Reestr : BaseEntity, ICloneable
     {
         private bool reestrState;
+        private double net;
+        private string note;
+        private Customer customer;
 
         public int BarrelNumber { get; set; }
         public string BatchNumber { get; set; }
-        public string Buyer { get; set; }
         public DateTime PackingDate { get; set; }
         /// <summary>
         /// 0-грузить,1-не грузить
         /// </summary>
-        public bool ReestrState { get => reestrState; set => SetProperty(ref reestrState , value); }
+        public bool ReestrState { get => reestrState; set => SetProperty(ref reestrState, value); }
         /// <summary>
         /// Чистый вес
         /// </summary>
-        public double Net { get; set; }
+        public double Net { get => net; set => SetProperty(ref net, value); }
         /// <summary>
         /// Вес самой бочки 
         /// </summary>
@@ -32,15 +34,39 @@ namespace WeigthIndicator.Domain.Models
         /// Вес самой бочки с крышкой
         /// </summary>
         public double TareBarrelWithLid { get; set; }
-        public string Note { get; set; }
+        public string Note { get => note; set => SetProperty(ref note, value); }
 
         public int RecipeId { get; set; }
         public int BarellStorageId { get; set; }
+        public int CustomerId { get; set; }
         [Computed]
         public Recipe Recipe { get; set; }
         [Computed]
         public BarellStorage BarellStorage { get; set; }
+        [Computed]
+        public Customer Customer { get => customer; set => SetProperty(ref customer, value); }
 
+        public object Clone()
+        {
+            return new Reestr
+            {
+                BarellStorageId = BarellStorageId,
+                BarrelNumber = BarrelNumber,
+                BatchNumber = BatchNumber,
+                Id = Id,
+                Net = Net,
+                Note = Note,
+                PackingDate = PackingDate,
+                RecipeId = RecipeId,
+                ReestrState = ReestrState,
+                TareBarrel = TareBarrel,
+                TareBarrelWithLid = TareBarrelWithLid,
+                BarellStorage = (BarellStorage)BarellStorage?.Clone(),
+                Recipe = (Recipe)Recipe?.Clone(),
+                Customer = (Customer)Customer?.Clone(),
+                CustomerId = CustomerId
+            };
+        }
     }
 
 

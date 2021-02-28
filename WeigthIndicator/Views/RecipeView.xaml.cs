@@ -20,8 +20,10 @@ namespace WeigthIndicator.Views
 
                 this.Bind(ViewModel, vm => vm.Recipe.ShortName, v => v.ShortName.Text)
                     .DisposeWith(disposables);
-                this.Bind(ViewModel, vm => vm.Recipe.LongName, v => v.LongName.Text)
+                this.Bind(ViewModel, vm => vm.Recipe.LongNameRu, v => v.LongNameRu.Text)
                     .DisposeWith(disposables);
+                this.Bind(ViewModel, vm => vm.Recipe.LongNameKz, v => v.LongNameKz.Text)
+                 .DisposeWith(disposables);
                 this.Bind(ViewModel, vm => vm.Recipe.Brix, v => v.Brix.Text)
                     .DisposeWith(disposables);
                 this.Bind(ViewModel, vm => vm.Recipe.StorageCondition, v => v.StorageCondition.Text)

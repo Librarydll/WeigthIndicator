@@ -14,7 +14,7 @@ using WeigthIndicator.Views;
 
 namespace WeigthIndicator.ViewModels
 {
-    public class MainViewModel : ReactiveObject, IScreen
+    public class MainViewModel : ReactiveObject
     {
         private readonly IRegionManager _regionManager;
         private readonly IUnityContainer _unityContainer;
@@ -23,11 +23,12 @@ namespace WeigthIndicator.ViewModels
         private SettingView _settingView;
         private BarellView _barellView;
         private StatusView _statusView;
-        public RoutingState Router { get; private set; }
+        private CustomerView _customerView;
         [Reactive] public bool RecipeView { get; set; }
         [Reactive] public bool MainView { get; set; }
         [Reactive] public bool SettingView { get; set; }
         [Reactive] public bool BarellView { get; set; }
+        [Reactive] public bool CustomerView { get; set; }
 
         public MainViewModel(IRegionManager regionManager,
             IUnityContainer unityContainer)
@@ -36,7 +37,7 @@ namespace WeigthIndicator.ViewModels
             _unityContainer = unityContainer;
             this.WhenAnyValue(x => x.RecipeView)
                 .Where(x => RecipeView)
-                .Subscribe(x=> GoToRecipeView());
+                .Subscribe(x => GoToRecipeView());
 
             this.WhenAnyValue(x => x.MainView)
                 .Where(x => MainView)
@@ -49,13 +50,27 @@ namespace WeigthIndicator.ViewModels
             this.WhenAnyValue(x => x.BarellView)
                 .Where(x => BarellView)
                 .Subscribe(x => GoToBarellView());
+
+            this.WhenAnyValue(x => x.CustomerView)
+              .Where(x => CustomerView)
+              .Subscribe(x => GoToCustomerView());
+
+
         }
+
+      
 
         public void GoToStatusView()
         {
             _statusView = _statusView ?? _unityContainer.Resolve<StatusView>();
             NavigateToView(_statusView, nameof(StatusView), "StatusBarRegion");
 
+        }
+
+        private void GoToCustomerView()
+        {
+            _customerView = _customerView ?? _unityContainer.Resolve<CustomerView>();
+            NavigateToView(_customerView, nameof(CustomerView));
         }
 
         private void GoToBarellView()
@@ -83,7 +98,7 @@ namespace WeigthIndicator.ViewModels
         }
 
 
-        public  void NavigateToView(object view, string viewName, string regionName = "MainRegion")
+        public void NavigateToView(object view, string viewName, string regionName = "MainRegion")
         {
             if (view == null)
                 throw new NullReferenceException("view is null");
@@ -92,7 +107,7 @@ namespace WeigthIndicator.ViewModels
             {
                 _regionManager.Regions[regionName].Add(view, viewName);
             }
-           _regionManager.Regions[regionName].Activate(view);
+            _regionManager.Regions[regionName].Activate(view);
         }
 
     }
