@@ -17,14 +17,16 @@ namespace WeigthIndicator.ViewModels
 {
     public class StatusViewModel:ReactiveObject
     {
-        private readonly IBarellStorageDataService _barellStorageDataService;
+        IObservable<long> timer = Observable.Interval(TimeSpan.FromMilliseconds(200.0));
+
+        private readonly IBarrelStorageDataService _barrelStorageDataService;
         private Recipe _currentRecipe;
 
         [Reactive] public RecipeReminder RecipeReminder { get; set; }
 
-        public StatusViewModel(IBarellStorageDataService barellStorageDataService)
+        public StatusViewModel(IBarrelStorageDataService barrelStorageDataService)
         {
-            _barellStorageDataService = barellStorageDataService;
+            _barrelStorageDataService = barrelStorageDataService;
             RecipeReminder = new RecipeReminder();
             _currentRecipe = new Recipe();
 
@@ -38,7 +40,7 @@ namespace WeigthIndicator.ViewModels
 
         public async Task<Unit> CalculateReminder(Recipe recipe)
         {
-            var reminder = await _barellStorageDataService.GetBarrelStorageRemainderByRecipe(recipe.Id);
+            var reminder = await _barrelStorageDataService.GetBarrelStorageRemainderByRecipe(recipe.Id);
             RecipeReminder.Remainder = reminder;
             RecipeReminder.RecipeShortName = recipe.ShortName;
             if (reminder < 10000)

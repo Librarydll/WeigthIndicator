@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace WeigthIndicator.Domain.Exceptions
 {
-    public class BarellStorageEmptyException : Exception
+    public class BarrelStorageEmptyException : Exception
     {
-        public BarellStorageEmptyException(string message):base(message)
+        public BarrelStorageEmptyException(string message):base(message)
         {
         }
-        public BarellStorageEmptyException()
+        public BarrelStorageEmptyException()
         {}
     }
 }

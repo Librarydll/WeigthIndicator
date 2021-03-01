@@ -21,14 +21,16 @@ namespace WeigthIndicator.ViewModels
         private ShellView _shellView;
         private RecipeView _recipeView;
         private SettingView _settingView;
-        private BarellView _barellView;
+        private BarrelView _barrelView;
         private StatusView _statusView;
         private CustomerView _customerView;
+        private ReestrView _reestrView;
         [Reactive] public bool RecipeView { get; set; }
         [Reactive] public bool MainView { get; set; }
         [Reactive] public bool SettingView { get; set; }
-        [Reactive] public bool BarellView { get; set; }
+        [Reactive] public bool BarrelView { get; set; }
         [Reactive] public bool CustomerView { get; set; }
+        [Reactive] public bool ReestrView { get; set; }
 
         public MainViewModel(IRegionManager regionManager,
             IUnityContainer unityContainer)
@@ -47,18 +49,21 @@ namespace WeigthIndicator.ViewModels
                 .Where(x => SettingView)
                 .Subscribe(x => GoToSettingView());
 
-            this.WhenAnyValue(x => x.BarellView)
-                .Where(x => BarellView)
-                .Subscribe(x => GoToBarellView());
+            this.WhenAnyValue(x => x.BarrelView)
+                .Where(x => BarrelView)
+                .Subscribe(x => GoToBarrelView());
 
             this.WhenAnyValue(x => x.CustomerView)
-              .Where(x => CustomerView)
-              .Subscribe(x => GoToCustomerView());
+                .Where(x => CustomerView)
+                .Subscribe(x => GoToCustomerView());
 
 
+            this.WhenAnyValue(x => x.ReestrView)
+                .Where(x => ReestrView)
+                .Subscribe(x => GoToReestrView());
         }
 
-      
+
 
         public void GoToStatusView()
         {
@@ -67,16 +72,22 @@ namespace WeigthIndicator.ViewModels
 
         }
 
+        private void GoToReestrView()
+        {
+            _reestrView = _reestrView ?? _unityContainer.Resolve<ReestrView>();
+            NavigateToView(_reestrView, nameof(ReestrView));
+        }
+
         private void GoToCustomerView()
         {
             _customerView = _customerView ?? _unityContainer.Resolve<CustomerView>();
             NavigateToView(_customerView, nameof(CustomerView));
         }
 
-        private void GoToBarellView()
+        private void GoToBarrelView()
         {
-            _barellView = _barellView ?? _unityContainer.Resolve<BarellView>();
-            NavigateToView(_barellView, nameof(BarellView));
+            _barrelView = _barrelView ?? _unityContainer.Resolve<BarrelView>();
+            NavigateToView(_barrelView, nameof(BarrelView));
         }
 
         void GoToSettingView()

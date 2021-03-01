@@ -8,7 +8,7 @@ using WeigthIndicator.Domain.Models.Common;
 
 namespace WeigthIndicator.Domain.Models
 {
-    public class BarellStorage : BaseEntity,ICloneable
+    public class BarrelStorage : BaseEntity,ICloneable
     {
         private DateTime _productionDate;
 
@@ -43,7 +43,7 @@ namespace WeigthIndicator.Domain.Models
 
         public object Clone()
         {
-            return new BarellStorage
+            return new BarrelStorage
             {
                 Recipe = (Recipe)Recipe?.Clone(),
                 ConsumptionWeight = ConsumptionWeight,

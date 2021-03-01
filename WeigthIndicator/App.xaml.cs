@@ -69,7 +69,7 @@ namespace WeigthIndicator
             containerRegistry.RegisterSingleton<IRecipeDataService, RecipeDataService>();
             containerRegistry.RegisterSingleton<IReestrDataService, ReestrDataService>();
             containerRegistry.RegisterSingleton<ICustomerDataService, CustomerDataService>();
-            containerRegistry.RegisterSingleton<IBarellStorageDataService, BarellStorageDataService>();
+            containerRegistry.RegisterSingleton<IBarrelStorageDataService, BarrelStorageDataService>();
             containerRegistry.RegisterSingleton<IReestrSettingDataService, ReestrSettingDataService>();
            // containerRegistry.RegisterSingleton<IReestrSettingProvider, ReestrSettingProvider>();
             containerRegistry.RegisterSingleton<IComPortProvider, ComPortProvider>();

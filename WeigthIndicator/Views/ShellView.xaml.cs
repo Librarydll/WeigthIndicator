@@ -2,6 +2,7 @@
 using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using WeigthIndicator.Factory;
 using WeigthIndicator.ViewModels;
 
 namespace WeigthIndicator.Views
@@ -14,12 +15,10 @@ namespace WeigthIndicator.Views
         public ShellView()
         {
             InitializeComponent();
-
+            ViewModel = DataContext as ShellViewModel;
             this.WhenActivated(disposables =>
             {
-                this.WhenAnyValue(x => x.DataContext)
-                    .BindTo(this, x => x.ViewModel);
-
+      
                 this.OneWayBind(ViewModel,
                     vm => vm.ReestrsCollection,
                     v => v.ReestrsCollection.ItemsSource)
@@ -36,18 +35,18 @@ namespace WeigthIndicator.Views
 
                 this.Bind(ViewModel, vm => vm.SelectedReestr, v => v.ReestrsCollection.SelectedItem);
 
-                this.WhenAnyValue(x => x.ViewModel)
-                    .SelectMany(x => x.Initialize())
-                    .ObserveOnDispatcher()
-                    .Subscribe(x => ViewModel.FillCollection(x))
+
+                this.Bind(ViewModel, vm => vm.SelectedPrintViewType,v => v.PrintViewTypeCmb.SelectedIndex)
                     .DisposeWith(disposables);
+
+
             });
 
+            this.WhenAnyValue(x => x.ViewModel)
+                     .SelectMany(x => x.Initialize())
+                     .Subscribe(x => ViewModel.FillCollection(x));
         }
 
-        private void ReestrsCollection_MouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-
-        }
+       
     }
 }

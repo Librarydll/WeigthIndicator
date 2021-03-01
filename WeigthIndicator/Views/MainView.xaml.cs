@@ -28,11 +28,14 @@ namespace WeigthIndicator.Views
                 this.Bind(ViewModel, vm => vm.SettingView, view => view.SettingView.IsSelected)
                     .DisposeWith(disposables);
 
-                this.Bind(ViewModel, vm => vm.BarellView, view => view.BarellView.IsSelected)
+                this.Bind(ViewModel, vm => vm.BarrelView, view => view.BarrelView.IsSelected)
                     .DisposeWith(disposables);
 
                 this.Bind(ViewModel, vm => vm.CustomerView, view => view.CustomerView.IsSelected)
                     .DisposeWith(disposables);
+
+                this.Bind(ViewModel, vm => vm.ReestrView, view => view.ReestrView.IsSelected)
+                   .DisposeWith(disposables);
 
                 this.WhenAnyValue(x => x.ViewModel)
                    .Subscribe(x => x.GoToStatusView());

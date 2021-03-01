@@ -7,10 +7,10 @@ using WeigthIndicator.Domain.Models;
 
 namespace WeigthIndicator.Domain.Services
 {
-    public interface IBarellStorageDataService
+    public interface IBarrelStorageDataService
     {
-        Task<BarellStorage> CreateBarellStorage(BarellStorage barellStorage);
-        Task<IEnumerable<BarellStorage>> GetBarellStorages();
+        Task<BarrelStorage> CreateBarrelStorage(BarrelStorage barrelStorage);
+        Task<IEnumerable<BarrelStorage>> GetBarrelStorages();
 
         Task<double> GetBarrelStorageRemainderByRecipe(int recipeId);
     }

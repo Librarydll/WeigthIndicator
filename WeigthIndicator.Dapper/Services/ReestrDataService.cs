@@ -13,6 +13,14 @@ namespace WeigthIndicator.Dapper.Services
 {
     public class ReestrDataService : IReestrDataService
     {
+        private string reestrSelectQuery = @"SELECT *FROM Reestrs as reestr " +
+                                "Left join Recipes as recipe " +
+                                "on recipe.id = reestr.recipeid " +
+                                "Left join BarrelStorages as br " +
+                                "on reestr.barrelStorageId =br.id " +
+                                "Left join Customers as c " +
+                                "on reestr.customerid =c.id ";
+
         private readonly ApplicationContextFactory _factory;
 
         public ReestrDataService(ApplicationContextFactory applicationContextFactory)
@@ -45,75 +53,68 @@ namespace WeigthIndicator.Dapper.Services
         {
             using (var connection = _factory.CreateConnection())
             {
-                string query = @"SELECT *FROM Reestrs as reestr " +
-                                "Left join Recipes as recipe " +
-                                "on recipe.id = reestr.recipeid " +
-                                "Left join BarellStorages as br " +
-                                "on reestr.barellStorageId =br.id " +
-                                "Left join Customers as c " +
-                                "on reestr.customerid =c.id " +
-                                "where date(reestr.packingDate) =@date";
+                string query = reestrSelectQuery + "where date(reestr.packingDate) =@date";
 
-               return await connection.QueryAsync<Reestr,Recipe,BarellStorage,Customer,Reestr>(query,
-                   (reestr, recipe, br,c) =>
-                   {
-                       reestr.Recipe = recipe;
-                       reestr.BarellStorage = br;
-                       reestr.Customer = c;
-                       return reestr;
-                   }
-                   ,new 
-                   { 
-                       date = dateTime.Date
-                   });
+                return await connection.QueryAsync<Reestr, Recipe, BarrelStorage, Customer, Reestr>(query,
+                    (reestr, recipe, br, c) =>
+                    {
+                        reestr.Recipe = recipe;
+                        reestr.BarrelStorage = br;
+                        reestr.Customer = c;
+                        return reestr;
+                    }
+                    , new
+                    {
+                        date = dateTime.Date
+                    });
             }
         }
 
-        public async Task<Reestr> CreateReestrAndUpdateBarellStorage(Reestr reestr)
+        public async Task<Reestr> CreateReestrAndUpdateBarrelStorage(Reestr reestr)
         {
             using (var connection = _factory.CreateConnection())
             {
-                bool isNextBarellExist = true;
-                string barellQuery = "SELECT *FROM BarellStorages where isEmpty = false and recipeId =@recipeId";
+                bool isNextBarrelExist = true;
+                string barrelQuery = "SELECT *FROM BarrelStorages where isEmpty = false and recipeId =@recipeId";
 
-                var barellStorage = await connection.QueryFirstOrDefaultAsync<BarellStorage>(barellQuery, new { recipeId = reestr.RecipeId });
+                var barrelStorage = await connection.QueryFirstOrDefaultAsync<BarrelStorage>(barrelQuery, new { recipeId = reestr.RecipeId });
 
-                if (barellStorage == null)
+                if (barrelStorage == null)
                 {
-                    throw new BarellStorageEmptyException();
+                    throw new BarrelStorageEmptyException();
                 }
 
-                if (barellStorage.ConsumptionWeight + reestr.Net > barellStorage.TotalWeight)
+                if (barrelStorage.ConsumptionWeight + reestr.Net > barrelStorage.TotalWeight)
                 {
 
-                    barellQuery += " and id != @id";
+                    barrelQuery += " and id != @id";
 
-                    var nextBarell = await connection.QueryFirstOrDefaultAsync<BarellStorage>(barellQuery, new { recipeId = reestr.RecipeId, id = barellStorage.Id });
-                    if (nextBarell != null)
+                    var nextBarrel = await connection.QueryFirstOrDefaultAsync<BarrelStorage>(barrelQuery, new { recipeId = reestr.RecipeId, id = barrelStorage.Id });
+                    if (nextBarrel != null)
                     {
-                        var reminder = barellStorage.TotalWeight - barellStorage.ConsumptionWeight;
-                        nextBarell.TotalWeight += reminder;
-                        barellStorage.TotalWeight -= reminder;
+                        var reminder = barrelStorage.TotalWeight - barrelStorage.ConsumptionWeight;
+                        nextBarrel.TotalWeight += reminder;
+                        barrelStorage.TotalWeight -= reminder;
 
-                        string emptyUpdateQuery = "UPDATE BarellStorages Set isEmpty= true,totalWeight = @TotalWeight  WHERE id =@id";
-                        await connection.QueryAsync(emptyUpdateQuery, new { id = barellStorage.Id, totalWeight = barellStorage.TotalWeight });
-                        barellStorage = nextBarell;
+                        string emptyUpdateQuery = "UPDATE BarrelStorages Set isEmpty= true,totalWeight = @TotalWeight  WHERE id =@id";
+                        await connection.QueryAsync(emptyUpdateQuery, new { id = barrelStorage.Id, totalWeight = barrelStorage.TotalWeight });
+                        barrelStorage = nextBarrel;
                     }
                     else
                     {
-                        isNextBarellExist = false;
+                        isNextBarrelExist = false;
                     }
 
 
                 }
-                if(isNextBarellExist)
-                    barellStorage.ConsumptionWeight += reestr.Net;
+                if (isNextBarrelExist)
+                    barrelStorage.ConsumptionWeight += reestr.Net;
 
 
-                await connection.UpdateAsync(barellStorage);
+                await connection.UpdateAsync(barrelStorage);
 
-                reestr.BarellStorageId = barellStorage.Id;
-                reestr.BarellStorage = barellStorage;
+                reestr.BarrelStorageId = barrelStorage.Id;
+                reestr.BarrelStorage = barrelStorage;
 
 
                 int barrelNumber = 1;
@@ -139,6 +140,71 @@ namespace WeigthIndicator.Dapper.Services
             {
                 var isSuccess = await connection.UpdateAsync(reestr);
                 return isSuccess;
+            }
+        }
+
+        public async Task<IEnumerable<Reestr>> GetReestrsByDates(DateTime fromDate, DateTime toDate)
+        {
+            using (var connection = _factory.CreateConnection())
+            {
+                string query = reestrSelectQuery + "where date(reestr.packingDate) >=@fromDate and date(reestr.packingDate) <=@toDate";
+
+                return await connection.QueryAsync<Reestr, Recipe, BarrelStorage, Customer, Reestr>(query,
+                    (reestr, recipe, br, c) =>
+                    {
+                        reestr.Recipe = recipe;
+                        reestr.BarrelStorage = br;
+                        reestr.Customer = c;
+                        return reestr;
+                    }
+                    , new
+                    {
+                        fromDate = fromDate.Date,
+                        toDate = toDate.Date
+                    });
+            }
+        }
+
+        public async Task<IEnumerable<Reestr>> GetReestrsByBatchNumber(string batchNumber)
+        {
+            using (var connection = _factory.CreateConnection())
+            {
+                string query = reestrSelectQuery + "where reestr.batchNumber=@batchNumber";
+
+                return await connection.QueryAsync<Reestr, Recipe, BarrelStorage, Customer, Reestr>(query,
+                    (reestr, recipe, br, c) =>
+                    {
+                        reestr.Recipe = recipe;
+                        reestr.BarrelStorage = br;
+                        reestr.Customer = c;
+                        return reestr;
+                    }
+                    , new
+                    {
+                        batchNumber
+                    });
+            }
+        }
+
+        public async Task<IEnumerable<Reestr>> GetReestrsByBarrelNumbers(int from, int to)
+        {
+            using (var connection = _factory.CreateConnection())
+            {
+                string query = reestrSelectQuery + "where reestr.barrelNumber >=@from and reestr.barrelNumber <=@to";
+
+                return await connection.QueryAsync<Reestr, Recipe, BarrelStorage, Customer, Reestr>(query,
+                    (reestr, recipe, br, c) =>
+                    {
+                        reestr.Recipe = recipe;
+                        reestr.BarrelStorage = br;
+                        reestr.Customer = c;
+                        return reestr;
+                    }
+                    , new
+                    {
+                        from ,
+                        to 
+                    });
             }
         }
     }

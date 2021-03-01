@@ -8,37 +8,37 @@ using WeigthIndicator.Domain.Services;
 
 namespace WeigthIndicator.Dapper.Services
 {
-    public class BarellStorageDataService : IBarellStorageDataService
+    public class BarrelStorageDataService : IBarrelStorageDataService
     {
         private readonly ApplicationContextFactory _factory;
 
-        public BarellStorageDataService(ApplicationContextFactory factory)
+        public BarrelStorageDataService(ApplicationContextFactory factory)
         {
             _factory = factory;
         }
-        public async Task<BarellStorage> CreateBarellStorage(BarellStorage barellStorage)
+        public async Task<BarrelStorage> CreateBarrelStorage(BarrelStorage barrelStorage)
         {
             using (var connection =_factory.CreateConnection())
             {
-                await connection.InsertAsync(barellStorage);
-                return barellStorage;
+                await connection.InsertAsync(barrelStorage);
+                return barrelStorage;
             }
         }
 
-        public async Task<IEnumerable<BarellStorage>> GetBarellStorages()
+        public async Task<IEnumerable<BarrelStorage>> GetBarrelStorages()
         {
             using (var connection = _factory.CreateConnection())
             {
-                string query = "SELECT *FROM BarellStorages as bs LEFT JOIN Recipes as r on bs.RecipeId = r.Id";
+                string query = "SELECT *FROM barrelStorages as bs LEFT JOIN Recipes as r on bs.RecipeId = r.Id";
 
-                var barellStorages = await connection.QueryAsync<BarellStorage, Recipe, BarellStorage>(query,
+                var barrelStorages = await connection.QueryAsync<BarrelStorage, Recipe, BarrelStorage>(query,
                     (rs, r) =>
                     {
                         rs.Recipe = r;
                         return rs;
                     });
 
-                return barellStorages;
+                return barrelStorages;
 
             }
         }
@@ -47,7 +47,7 @@ namespace WeigthIndicator.Dapper.Services
         {
             using (var connection = _factory.CreateConnection())
             {
-                string query = "SELECT SUM(b.TotalWeight-B.ConsumptionWeight) FROM barellstorages as b where IsEmpty = false and recipeid =@recipeId ";
+                string query = "SELECT SUM(b.TotalWeight-B.ConsumptionWeight) FROM barrelstorages as b where IsEmpty = false and recipeid =@recipeId ";
 
                 var reminder =await connection.QueryFirstOrDefaultAsync<double?>(query,new { recipeId });
                 return reminder ?? 0;

@@ -1,13 +1,14 @@
-﻿<Window x:Class="WeigthIndicator.Views.PrintPreviewView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WeigthIndicator.Views"
-             Height="383.6" Width="576" ResizeMode="NoResize" FontFamily="Arial" WindowStyle="None" WindowStartupLocation="CenterScreen">
+﻿<Window x:Class="WeigthIndicator.Views.PrintPreviewViewComposition"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WeigthIndicator.Views"
+        mc:Ignorable="d"    
+        Height="383.6" Width="576" ResizeMode="NoResize" FontFamily="Arial" WindowStyle="None" WindowStartupLocation="CenterScreen">
     <Grid>
         <FlowDocumentPageViewer Margin="0" >
-            <FlowDocument x:Name="FD" LineHeight="10" PagePadding="5 40 0 0" >
+            <FlowDocument x:Name="FD" LineHeight="10" PagePadding="5 22 0 0" >
                 <FlowDocument.Resources>
                     <Style TargetType="Run">
                         <Setter Property="FontSize" Value="12.5" />
@@ -84,7 +85,7 @@
                         </TableRow>
                     </TableRowGroup>
                 </Table>
-                
+
                 <Table LineHeight="1">
                     <Table.Columns>
                         <TableColumn Width="320"/>
@@ -106,7 +107,7 @@
                         </TableRow>
                     </TableRowGroup>
                 </Table>
-                
+
                 <Table LineHeight="1">
                     <Table.Columns>
                         <TableColumn Width="320"/>
@@ -134,7 +135,7 @@
                         </TableRow>
                     </TableRowGroup>
                 </Table>
- 
+
                 <Paragraph LineHeight="1">
                     <Run Text="Условия хранения/Сақтау шарттары:"/>
                 </Paragraph>
@@ -198,22 +199,88 @@
                 <Paragraph LineHeight="1">
                     <Run Text="Республика Узбекистан, Самаркандская область, Самаркандский район, п Гулобод"/>
                 </Paragraph>
-                <Paragraph LineHeight="1">
+                <Paragraph LineHeight="1" TextAlignment="Center">
+                    <Run Text="Пищевая ценность"/>
+                </Paragraph>
+                <Table LineHeight="1" TextAlignment="Center"  CellSpacing="1">
+                    <Table.Resources>
+                        <Style TargetType="TableCell">
+                            <Setter Property="BorderBrush" Value="Black" />
+                            <Setter Property="BorderThickness" Value="1" />
+                        </Style>
+                    </Table.Resources>
+                    <Table.Columns>
+                        <TableColumn Width="80"/>
+                        <TableColumn Width="120"/>
+                        <TableColumn Width="50"/>
+                        <TableColumn Width="160"/>
+                        <TableColumn Width="50"/>
+                        <TableColumn />
+                    </Table.Columns>
 
-                </Paragraph>
-                <Paragraph LineHeight="1">
-                    <Run Text="Импортер/Aлушы:"/>
-                    <Run x:Name="CustomerShortName"/>
-                </Paragraph>
-                <Paragraph LineHeight="1">
-                    <Run x:Name="AddressRu" />
-                </Paragraph>
-                <Paragraph LineHeight="1">
-                    <Run x:Name="AddressKz"/>
-                </Paragraph>
+                    <TableRowGroup >
+                        <TableRow>
+                            <TableCell BorderBrush="Black" BorderThickness="0">
+                                <Paragraph >
+                                    <Run Text=""/>
+                                </Paragraph>
+                            </TableCell>
+                            <TableCell TextAlignment="Right" Padding="0 2 4 2">
+                                <Paragraph >
+                                    <Run  Text="углеводы г."/>
+                                </Paragraph>
+                            </TableCell>
+                            <TableCell TextAlignment="Left" Padding="2 2 2 0">
+                                <Paragraph >
+                                    <Run x:Name="Carbo"/>
+                                </Paragraph>
+                            </TableCell>
+                            <TableCell TextAlignment="Left" Padding="2 2 2 0">
+                                <Paragraph >
+                                    <Run Text="энер.ценность "/>
+                                    <Run Text="ккал"/>
+                                </Paragraph>
+                            </TableCell>
+                            <TableCell TextAlignment="Left" Padding="2 2 0 2">
+                                <Paragraph >
+                                    <Run x:Name="EnergyBalue" />
+                                </Paragraph>
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell BorderBrush="Black" BorderThickness="0">
+                                <Paragraph >
+                                    <Run Text=""/>
+                                </Paragraph>
+                            </TableCell>
+                            <TableCell TextAlignment="Right" Padding="0 2 4 2">
+                                <Paragraph >
+                                    <Run  Text="Витами С мг."/>
+                                </Paragraph>
+                            </TableCell>
+                            <TableCell TextAlignment="Left" Padding="2 2 2 0">
+                                <Paragraph >
+                                    <Run x:Name="VitaminC" />
+                                </Paragraph>
+                            </TableCell>
+                            <TableCell TextAlignment="Left" Padding="2 2 2 0">
+                                <Paragraph >
+                                    <Run Text="Содержание сухих в-тв."/>
+                                </Paragraph>
+                            </TableCell>
+                            <TableCell TextAlignment="Left" Padding="2 2 2 0">
+                                <Paragraph >
+                                    <Run x:Name="DryContent"/>
+                                    <Run  Text="%"/>
+                                </Paragraph>
+                            </TableCell>
+                        </TableRow>
+
+                    </TableRowGroup>
+                </Table>
+
+
             </FlowDocument>
         </FlowDocumentPageViewer>
     </Grid>
-
-
 </Window>

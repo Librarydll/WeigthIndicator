@@ -37,12 +37,12 @@ namespace WeigthIndicator.Domain.Models
         public string Note { get => note; set => SetProperty(ref note, value); }
 
         public int RecipeId { get; set; }
-        public int BarellStorageId { get; set; }
+        public int BarrelStorageId { get; set; }
         public int CustomerId { get; set; }
         [Computed]
         public Recipe Recipe { get; set; }
         [Computed]
-        public BarellStorage BarellStorage { get; set; }
+        public BarrelStorage BarrelStorage { get; set; }
         [Computed]
         public Customer Customer { get => customer; set => SetProperty(ref customer, value); }
 
@@ -50,7 +50,7 @@ namespace WeigthIndicator.Domain.Models
         {
             return new Reestr
             {
-                BarellStorageId = BarellStorageId,
+                BarrelStorageId = BarrelStorageId,
                 BarrelNumber = BarrelNumber,
                 BatchNumber = BatchNumber,
                 Id = Id,
@@ -61,7 +61,7 @@ namespace WeigthIndicator.Domain.Models
                 ReestrState = ReestrState,
                 TareBarrel = TareBarrel,
                 TareBarrelWithLid = TareBarrelWithLid,
-                BarellStorage = (BarellStorage)BarellStorage?.Clone(),
+                BarrelStorage = (BarrelStorage)BarrelStorage?.Clone(),
                 Recipe = (Recipe)Recipe?.Clone(),
                 Customer = (Customer)Customer?.Clone(),
                 CustomerId = CustomerId

@@ -13,6 +13,7 @@ namespace WeigthIndicator.Views
         public RecipeView()
         {
             InitializeComponent();
+
             this.WhenActivated(disposables =>
             {
                 this.WhenAnyValue(x => x.DataContext)

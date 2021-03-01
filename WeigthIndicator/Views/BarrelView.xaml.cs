@@ -20,11 +20,11 @@ using WeigthIndicator.ViewModels;
 namespace WeigthIndicator.Views
 {
     /// <summary>
-    /// Interaction logic for BarellView.xaml
+    /// Interaction logic for BarrelView.xaml
     /// </summary>
-    public partial class BarellView : ReactiveUserControl<BarellViewModel>
+    public partial class BarrelView : ReactiveUserControl<BarrelViewModel>
     {
-        public BarellView()
+        public BarrelView()
         {
             InitializeComponent();
 
@@ -33,9 +33,9 @@ namespace WeigthIndicator.Views
                 this.WhenAnyValue(x => x.DataContext)
                   .BindTo(this, x => x.ViewModel);
 
-                this.Bind(ViewModel, vm => vm.BarellStorage.TotalWeight, v => v.TotalWeigth.Text)
+                this.Bind(ViewModel, vm => vm.BarrelStorage.TotalWeight, v => v.TotalWeigth.Text)
                     .DisposeWith(disposables);
-                this.Bind(ViewModel, vm => vm.BarellStorage.ProductionDate, v => v.ProductionDate.SelectedDate)
+                this.Bind(ViewModel, vm => vm.BarrelStorage.ProductionDate, v => v.ProductionDate.SelectedDate)
                     .DisposeWith(disposables);
                 this.Bind(ViewModel, vm => vm.SelectedRecipe, v => v.RecipesCmb.SelectedItem)
                     .DisposeWith(disposables);
@@ -46,7 +46,7 @@ namespace WeigthIndicator.Views
                 this.BindCommand(ViewModel, vm => vm.CreateRecipe, v => v.SaveButton)
                     .DisposeWith(disposables);
 
-                this.OneWayBind(ViewModel, vm => vm.BarellStoragesCollection, v => v.BarellStoragesCollection.ItemsSource);
+                this.OneWayBind(ViewModel, vm => vm.BarrelStoragesCollection, v => v.BarrelStoragesCollection.ItemsSource);
                 this.OneWayBind(ViewModel, vm => vm.RecipesCollection, v => v.RecipeCmbForFilter.ItemsSource);
 
                 this.OneWayBind(ViewModel, vm => vm.RecipesCollection, v => v.RecipesCmb.ItemsSource)

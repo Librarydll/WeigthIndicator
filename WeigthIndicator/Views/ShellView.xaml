@@ -126,6 +126,15 @@
                         <TextBlock Text="Печатать"/>
                     </ui:SimpleStackPanel>
                 </Button>
+                <ComboBox  x:Name="PrintViewTypeCmb"
+                           DisplayMemberPath=".">
+                    <ComboBoxItem>
+                        С адрессом
+                    </ComboBoxItem>
+                    <ComboBoxItem>
+                        С пищ ценностью
+                    </ComboBoxItem>
+                </ComboBox>
             </ui:SimpleStackPanel>
             <ListView x:Name="ReestrsCollection" Grid.Row="1"
                               Background="Transparent" BorderThickness="0"                  
@@ -185,8 +194,8 @@
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel>
-                                        <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=BarellStorage.ProductionDate, StringFormat={}{0:dd/MM/yyyy}}"/>
-                                        <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=BarellStorage.ProductionDate, StringFormat={}{0:HH:mm:ss}}"/>
+                                        <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=BarrelStorage.ProductionDate, StringFormat={}{0:dd/MM/yyyy}}"/>
+                                        <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=BarrelStorage.ProductionDate, StringFormat={}{0:HH:mm:ss}}"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
@@ -209,13 +218,6 @@
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock FontSize="15" Text="{Binding Path=TareBarrel}"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn   Header="Г/Нг" Width="70">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox FontSize="15" IsChecked="{Binding Path=ReestrState}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

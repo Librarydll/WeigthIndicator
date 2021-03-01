@@ -1,28 +1,22 @@
 ﻿using DynamicData;
-using DynamicData.Binding;
-using Prism.Events;
 using Prism.Services.Dialogs;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using Splat;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using WeigthIndicator.Core.Print;
-using WeigthIndicator.Dapper.Services;
 using WeigthIndicator.Domain.Exceptions;
 using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Domain.Services;
-using WeigthIndicator.Events;
+using WeigthIndicator.Factory;
 using WeigthIndicator.Services;
 using WeigthIndicator.Views;
 
@@ -46,12 +40,14 @@ namespace WeigthIndicator.ViewModels
             set { this.RaiseAndSetIfChanged(ref _reestrsCollection, value); }
         }
 
+
         public ReestrSetting ReestrSetting { get; set; }
 
         [Reactive] public int ProgressValue { get; set; }
         [Reactive] public int MaxProgressValue { get; set; }
         [Reactive] public bool IsAutoMode { get; set; }
         [Reactive] public Reestr SelectedReestr { get; set; }
+        [Reactive] public int SelectedPrintViewType { get; set; }
 
         private readonly ObservableAsPropertyHelper<double> _itemWeight;
         public double ItemWeigth => _itemWeight.Value;
@@ -80,10 +76,9 @@ namespace WeigthIndicator.ViewModels
             parsedValue.ObserveOnDispatcher()
                         .Subscribe(x => Proggress(x));
 
-            Observable.Timer(TimeSpan.FromSeconds(1.5), TimeSpan.FromSeconds(1))
+            Observable.Interval(TimeSpan.FromSeconds(1.3))
                 .ObserveOnDispatcher()
                 .Subscribe(Progress2);
-
 
             parsedValue.Throttle(TimeSpan.FromSeconds(3))
                         .Where(x => IsAutoMode)
@@ -104,7 +99,6 @@ namespace WeigthIndicator.ViewModels
                .WhenAnyValue(x => x.IsAutoMode,
                isAutoMode => isAutoMode == false);
 
-
             SaveCommand = ReactiveCommand.CreateFromTask(ExecuteSaveCommand, canExecute);
             SaveCommand
                 .Catch((Func<Exception, IObservable<Reestr>>)HandleException)
@@ -113,8 +107,14 @@ namespace WeigthIndicator.ViewModels
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(InsertToCollection);
 
-            EditCommand = ReactiveCommand.Create<Reestr>(ExecuteEditViewCommand);
-            PrintCommand = ReactiveCommand.Create<Reestr>(ExecutePrintViewCommand);
+
+            var canEditAndCanPrint = this
+                .WhenAnyValue(x => x.SelectedReestr)
+                .Select(x => x != null);
+
+
+            EditCommand = ReactiveCommand.Create<Reestr>(ExecuteEditViewCommand, canEditAndCanPrint);
+            PrintCommand = ReactiveCommand.Create<Reestr>(ExecutePrintViewCommand, canEditAndCanPrint);
             ExecuteOpenReestrSettingCommand();
 
         }
@@ -157,12 +157,12 @@ namespace WeigthIndicator.ViewModels
 
         private void ExecutePrintViewCommand(Reestr reestr)
         {
+            var printViewType = (PrintViewType)Enum.Parse(typeof(PrintViewType), SelectedPrintViewType.ToString());
+            var printInitialize = PrintPreviewFactory.GetPrintView(printViewType);
 
-            PrintPreviewView printPreviewView = new PrintPreviewView();
+            FlowDocument flowDoc = printInitialize.InitializeFlow(reestr);
 
-            FlowDocument flowDoc = printPreviewView.InitializeFlowDocument(reestr);
-
-            PrintHelper.Prints(flowDoc);
+            PrintHelper.Prints(flowDoc, reestr.PackingDate.ToString("dd.MM.yyyy"));
         }
 
 
@@ -199,7 +199,7 @@ namespace WeigthIndicator.ViewModels
             {
                 var net = _comPortProvider.ComPortConnector.ParsedValue - ReestrSetting.TaraBarrel;
                 var reestr = CreateReestr(net);
-                return await _reestrDataService.CreateReestrAndUpdateBarellStorage(reestr);
+                return await _reestrDataService.CreateReestrAndUpdateBarrelStorage(reestr);
             }
 
             return null;
@@ -207,7 +207,7 @@ namespace WeigthIndicator.ViewModels
 
         private IObservable<Reestr> HandleException(Exception exception)
         {
-            if (exception is BarellStorageEmptyException ex)
+            if (exception is BarrelStorageEmptyException ex)
             {
                 MessageBox.Show("Test");
             }
@@ -232,7 +232,7 @@ namespace WeigthIndicator.ViewModels
         {
             var net = value - ReestrSetting.TaraBarrel;
             var reestr = CreateReestr(net);
-            return await _reestrDataService.CreateReestrAndUpdateBarellStorage(reestr);
+            return await _reestrDataService.CreateReestrAndUpdateBarrelStorage(reestr);
         }
 
         private void InsertToCollection(Reestr reestr)

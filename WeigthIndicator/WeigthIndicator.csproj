@@ -83,26 +83,29 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Core\Print\PrintHelper.cs" />
-    <Compile Include="Core\Print\ReportPage.cs" />
     <Compile Include="Dialogs\Common\DialogViewModelBase.cs" />
     <Compile Include="Dialogs\ReestrEditViewModel.cs" />
     <Compile Include="Dialogs\ReestrSettingViewModel.cs" />
     <Compile Include="Events\RecipeChangedEvent.cs" />
+    <Compile Include="Factory\IPrintInitialize.cs" />
+    <Compile Include="Factory\PrintPreviewFactory.cs" />
     <Compile Include="Models\ComPortConnector.cs" />
     <Compile Include="Models\ComPortConnectorSetting.cs" />
+    <Compile Include="Models\FilterModel.cs" />
     <Compile Include="Models\PrintModel.cs" />
     <Compile Include="Models\RecipeReminder.cs" />
     <Compile Include="Services\ComPortProvider.cs" />
     <Compile Include="Services\IComPortProvider.cs" />
-    <Compile Include="ViewModels\BarellViewModel.cs" />
+    <Compile Include="ViewModels\BarrelViewModel.cs" />
     <Compile Include="ViewModels\CustomerViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\ReestrViewModel.cs" />
     <Compile Include="ViewModels\SettingViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="ViewModels\RecipeViewModel.cs" />
     <Compile Include="ViewModels\StatusViewModel.cs" />
-    <Compile Include="Views\BarellView.xaml.cs">
-      <DependentUpon>BarellView.xaml</DependentUpon>
+    <Compile Include="Views\BarrelView.xaml.cs">
+      <DependentUpon>BarrelView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CustomerView.xaml.cs">
       <DependentUpon>CustomerView.xaml</DependentUpon>
@@ -113,6 +116,9 @@
     <Compile Include="Views\PrintPreviewView.xaml.cs">
       <DependentUpon>PrintPreviewView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\PrintPreviewViewComposition.xaml.cs">
+      <DependentUpon>PrintPreviewViewComposition.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\RecipeView.xaml.cs">
       <DependentUpon>RecipeView.xaml</DependentUpon>
     </Compile>
@@ -121,6 +127,9 @@
     </Compile>
     <Compile Include="Views\ReestrSettingView.xaml.cs">
       <DependentUpon>ReestrSettingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReestrView.xaml.cs">
+      <DependentUpon>ReestrView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingView.xaml.cs">
       <DependentUpon>SettingView.xaml</DependentUpon>
@@ -163,7 +172,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\BarellView.xaml">
+    <Page Include="Views\BarrelView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -179,6 +188,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\PrintPreviewViewComposition.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\RecipeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -188,6 +201,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ReestrSettingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReestrView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -232,9 +249,6 @@
     <PackageReference Include="ReactiveUI.WPF">
       <Version>13.1.1</Version>
     </PackageReference>
-    <PackageReference Include="SimpleWPFReporting">
-      <Version>1.1.0</Version>
-    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WeigthIndicator.Dapper\WeigthIndicator.Dapper.csproj">
@@ -263,6 +277,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\logoprint.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\reestr.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
