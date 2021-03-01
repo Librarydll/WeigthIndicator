@@ -34,6 +34,7 @@ namespace WeigthIndicator.Views
                 this.BindCommand(ViewModel, vm => vm.PrintCommand, v => v.PrintCommand,x=>x.SelectedReestr);
 
                 this.Bind(ViewModel, vm => vm.SelectedReestr, v => v.ReestrsCollection.SelectedItem);
+                this.Bind(ViewModel, vm => vm.ReestrCount, v => v.ReestrCount.Text);
 
 
                 this.Bind(ViewModel, vm => vm.SelectedPrintViewType,v => v.PrintViewTypeCmb.SelectedIndex)

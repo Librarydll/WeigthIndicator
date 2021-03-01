@@ -57,6 +57,9 @@ namespace WeigthIndicator.ViewModels
         public ReactiveCommand<Reestr, Unit> EditCommand { get; set; }
         public ReactiveCommand<Reestr, Unit> PrintCommand { get; set; }
 
+        private readonly ObservableAsPropertyHelper<int> _reestrCount;
+        public int ReestrCount => _reestrCount.Value;
+
         public ShellViewModel(IComPortProvider comPortProvider,
             IReestrSettingDataService reestrSettingDataService,
             IRecipeDataService recipeDataService,
@@ -76,7 +79,7 @@ namespace WeigthIndicator.ViewModels
             parsedValue.ObserveOnDispatcher()
                         .Subscribe(x => Proggress(x));
 
-            Observable.Interval(TimeSpan.FromSeconds(1.3))
+            Observable.Interval(TimeSpan.FromSeconds(1))
                 .ObserveOnDispatcher()
                 .Subscribe(Progress2);
 
@@ -89,6 +92,10 @@ namespace WeigthIndicator.ViewModels
                         .Select(x => x)
                         .ObserveOn(RxApp.MainThreadScheduler)
                         .Subscribe(InsertToCollection);
+
+            _reestrCount = this.WhenAnyValue(x => x.ReestrsCollection.Count)
+                .Select(x => x)
+                .ToProperty(this, x => x.ReestrCount);
 
             _itemWeight = parsedValue.Select(x => x)
                                      .ObserveOn(RxApp.MainThreadScheduler)
@@ -257,6 +264,7 @@ namespace WeigthIndicator.ViewModels
             PackingDate = DateTime.Now,
             ReestrState = true,
             Net = net,
+
         };
 
         private bool ValidateParsedValue(double value)

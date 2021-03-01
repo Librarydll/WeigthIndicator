@@ -95,6 +95,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             
             <Grid Visibility="Hidden">
@@ -139,13 +140,7 @@
             <ListView x:Name="ReestrsCollection" Grid.Row="1"
                               Background="Transparent" BorderThickness="0"                  
                               Margin="10 0 0 5">
-                <!--<ListView.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Remove"
-            Command="{Binding RemoveItem}"
-            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
-                    </ContextMenu>
-                </ListView.ContextMenu>-->
+            
                 
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
@@ -231,6 +226,10 @@
                     </GridView>
                 </ListView.View>
             </ListView>
+            <TextBlock Padding="5 5 0 5" FontSize="18" FontWeight="DemiBold" Grid.Row="2" >
+                <Run Text="Колличество бочек: "/>
+                <Run x:Name="ReestrCount" />
+            </TextBlock>
         </Grid>
     </Grid>
 </rx:ReactiveUserControl>
