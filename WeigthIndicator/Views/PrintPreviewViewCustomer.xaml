@@ -1,0 +1,24 @@
+﻿<Window x:Class="WeigthIndicator.Views.PrintPreviewViewCustomer"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WeigthIndicator.Views"
+        mc:Ignorable="d"
+        Height="383.6" Width="576" ResizeMode="NoResize" FontFamily="Arial" WindowStyle="None" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <FlowDocumentPageViewer Margin="0" >
+            <FlowDocument x:Name="FD" LineHeight="10" PagePadding="0 22 0 0" >
+                <FlowDocument.Resources>
+                    <Style TargetType="Run">
+                        <Setter Property="FontSize" Value="12.5" />
+                        <Setter Property="FontWeight" Value="Bold" />
+                        <Setter Property="FontFamily" Value="Arial" />
+                    </Style>
+                </FlowDocument.Resources>
+              
+            </FlowDocument>
+        </FlowDocumentPageViewer>
+    </Grid>
+
+</Window>

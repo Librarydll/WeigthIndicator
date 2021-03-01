@@ -9,6 +9,7 @@ using System.Reactive;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using WeigthIndicator.Core.Excel;
 using WeigthIndicator.Core.Print;
 using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Domain.Services;
@@ -20,6 +21,7 @@ namespace WeigthIndicator.ViewModels
 {
     public class ReestrViewModel:ReactiveObject
     {
+        private string _filename = string.Empty;
         private readonly IReestrDataService _reestrDataService;
         private readonly IDialogService _dialogService;
 
@@ -40,6 +42,7 @@ namespace WeigthIndicator.ViewModels
         public ReactiveCommand<Unit, Unit> FilterBySearchQueryCommand { get; }
         public ReactiveCommand<Reestr, Unit> PrintCommand { get; }
         public ReactiveCommand<Reestr, Unit> EditCommand { get; }
+        public ReactiveCommand<Unit, Unit> ExportExcelCommand { get; }
 
         public ReestrViewModel(IReestrDataService reestrDataService,IDialogService dialogService)
         {
@@ -56,9 +59,16 @@ namespace WeigthIndicator.ViewModels
             FilterBySearchQueryCommand = ReactiveCommand.CreateFromTask(ExecuteFilterBySearchQueryCommand, canFilter);
             PrintCommand = ReactiveCommand.Create<Reestr>(ExecutePrintCommand);
             EditCommand = ReactiveCommand.Create<Reestr>(ExecuteEditCommand);
+            ExportExcelCommand = ReactiveCommand.Create(ExecuteExportExcelCommand);
         }
 
-      
+        private void ExecuteExportExcelCommand()
+        {
+            var filename = _filename + ".xlsx";
+
+            ExcelHelper.ExportExcel(ReestrsCollection, filename);
+        }
+
         private void ExecuteEditCommand(Reestr reestr)
         {
             var param = new DialogParameters();
@@ -111,10 +121,12 @@ namespace WeigthIndicator.ViewModels
             if (FilterModel.IsToDateInclude)
             {
                 reestrs = await _reestrDataService.GetReestrsByDates(FilterModel.FromDate, FilterModel.ToDate);
+                _filename = FilterModel.FromDate.ToString("dd.MM.yyyy") + "_" + FilterModel.ToDate.ToString("dd.MM.yyyy");
             }
             else
             {
                 reestrs = await _reestrDataService.GetReestrsByDate(FilterModel.FromDate);
+                _filename = FilterModel.FromDate.ToString("dd.MM.yyyy");
             }
 
             ReestrsCollection = new ObservableCollection<Reestr>(reestrs);
@@ -132,10 +144,12 @@ namespace WeigthIndicator.ViewModels
                 var to = int.Parse(match.Groups[3].Value);
 
                 reestrs = await _reestrDataService.GetReestrsByBarrelNumbers(from, to);
+                _filename = from.ToString() + "_" + to.ToString();
             }
             else
             {
                 reestrs = await _reestrDataService.GetReestrsByBatchNumber(FilterModel.SearchQuery);
+                _filename = FilterModel.SearchQuery;
             }
 
             ReestrsCollection = new ObservableCollection<Reestr>(reestrs);

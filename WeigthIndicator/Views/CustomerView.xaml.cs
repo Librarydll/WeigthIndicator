@@ -45,6 +45,10 @@ namespace WeigthIndicator.Views
 
                 this.OneWayBind(ViewModel, vm => vm.CustomersCollection, v => v.CustomersCollection.ItemsSource);
 
+                this.BindCommand(ViewModel, vm => vm.PrintCommand, v => v.PrintCommand, x => x.SelectedCustomer);
+
+                this.Bind(ViewModel, vm => vm.SelectedCustomer, v => v.CustomersCollection.SelectedItem);
+
                 this.WhenAnyValue(x => x.ViewModel)
                     .SelectMany(x => x.GetCollectionsAsync())
                     .SubscribeOnDispatcher()

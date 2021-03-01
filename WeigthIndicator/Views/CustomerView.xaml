@@ -44,7 +44,7 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Text="Покупатель код" 
+            <TextBlock Text="Имя клиента" 
                            FontSize="20" 
                            FontWeight="Bold" />
 
@@ -94,6 +94,14 @@
                       x:Name="RecipeCmbForFilter">
 
             </ComboBox>
+
+            <Button x:Name="PrintCommand" Margin="15 0 0 0" Height="50">
+                <ui:SimpleStackPanel Spacing="5" Orientation="Horizontal" >
+                    <ui:SymbolIcon Symbol="Print" />
+                    <TextBlock Text="Печатать"/>
+                </ui:SimpleStackPanel>
+            </Button>
+            
             <ListView   x:Name="CustomersCollection"
                         Grid.Row="1"
                         FontSize="20"
@@ -102,7 +110,7 @@
                 <ListView.View>
 
                     <GridView>
-                        <GridViewColumn Header="Покупатель код" >
+                        <GridViewColumn Header="Имя клиента" >
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock  Text="{Binding  Path=ShortName}"/>

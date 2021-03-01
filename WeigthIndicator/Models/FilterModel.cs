@@ -27,20 +27,6 @@ namespace WeigthIndicator.Models
             _regex = new Regex(pattern);
         }
 
-        //public string ResolveQuery()
-        //{
-        //    if (string.IsNullOrWhiteSpace(SearchQuery))
-        //    {
-        //        return string.Empty;
-        //    }
-
-        //    var match = _regex.Match(SearchQuery);
-
-
-        //    if (match.Success)
-        //    {
-        //        match.Groups[0];
-        //    }
-        //}
+     
     }
 }

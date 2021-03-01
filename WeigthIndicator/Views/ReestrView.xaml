@@ -43,7 +43,7 @@
             <Button  x:Name="FilterCommand"  Margin="5 0 0 0" Padding="5">
                 <StackPanel Orientation="Horizontal">
                     <ui:SymbolIcon Symbol="Filter"/>
-                    <TextBlock Text="Фильтр"/>
+                    <TextBlock Margin="5 0 0 0" Text="Фильтр" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
             <ComboBox  x:Name="PrintViewTypeCmb"
@@ -57,15 +57,27 @@
                 </ComboBoxItem>
             </ComboBox>
         </ToolBar>
-        <ToolBar Grid.Row="1" ToolBarTray.IsLocked="True">
-            <TextBox Width="150"  Margin="5" x:Name="SearchQuery"/>
-            <Button  x:Name="FilterBySearchQueryCommand"  Margin="5 0 0 0" Padding="5">
-                <StackPanel Orientation="Horizontal">
-                    <ui:SymbolIcon Symbol="Filter"/>
-                    <TextBlock Text="Фильтр"/>
+        <Grid Grid.Row="1">
+
+            <ToolBar x:Name="toolbar" Grid.Row="1" ToolBarTray.IsLocked="True">
+                <TextBox Width="150"  Margin="5" x:Name="SearchQuery"/>
+                <Button  x:Name="FilterBySearchQueryCommand"  Margin="5 0 0 0" Padding="5">
+                    <StackPanel Orientation="Horizontal">
+                        <ui:SymbolIcon Symbol="Filter"/>
+                        <TextBlock VerticalAlignment="Center" Margin="5 0 0 0" Text="Фильтр"/>
+                    </StackPanel>
+                </Button>
+
+            </ToolBar>
+
+            <Button x:Name="ExportExcelCommand" Margin="0 0 10 0" Cursor="Hand" HorizontalAlignment="Right" Background="#FFEEF5FD"  BorderBrush="{x:Null}" BorderThickness="0">
+             
+                <StackPanel>
+                    <Image Width="50" Height="50" Source="/Resources/ms-excel.png"/>
                 </StackPanel>
             </Button>
-        </ToolBar>
+        </Grid>
+        
         <ListView x:Name="ReestrsCollection" Grid.Row="2"
                               Background="Transparent" BorderThickness="0"                  
                               Margin="0 10 0 0">

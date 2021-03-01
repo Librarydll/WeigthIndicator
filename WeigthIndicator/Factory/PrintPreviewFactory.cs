@@ -18,6 +18,8 @@ namespace WeigthIndicator.Factory
                     return new PrintPreviewView();
                 case PrintViewType.WithNutritionValue:
                     return new PrintPreviewViewComposition();
+                case PrintViewType.BuyerInformation:
+                    return new PrintPreviewViewCustomer();
                 default:
                     throw new ArgumentException("printViewType");
             }

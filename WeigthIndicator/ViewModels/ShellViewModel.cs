@@ -248,6 +248,7 @@ namespace WeigthIndicator.ViewModels
             {
                 ReestrsCollection.Add(reestr);
                 _isValueDroppedToMinimum = false;
+                ExecutePrintViewCommand(reestr);
             }
         }
 

@@ -16,6 +16,7 @@ namespace WeigthIndicator.Factory
     public enum PrintViewType
     {
         WithAddress,
-        WithNutritionValue
+        WithNutritionValue,
+        BuyerInformation
     }
 }

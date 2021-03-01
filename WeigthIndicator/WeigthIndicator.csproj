@@ -82,6 +82,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\Excel\ExcelHelper.cs" />
     <Compile Include="Core\Print\PrintHelper.cs" />
     <Compile Include="Dialogs\Common\DialogViewModelBase.cs" />
     <Compile Include="Dialogs\ReestrEditViewModel.cs" />
@@ -118,6 +119,9 @@
     </Compile>
     <Compile Include="Views\PrintPreviewViewComposition.xaml.cs">
       <DependentUpon>PrintPreviewViewComposition.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PrintPreviewViewCustomer.xaml.cs">
+      <DependentUpon>PrintPreviewViewCustomer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\RecipeView.xaml.cs">
       <DependentUpon>RecipeView.xaml</DependentUpon>
@@ -192,6 +196,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\PrintPreviewViewCustomer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\RecipeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -222,6 +230,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="EPPlus">
+      <Version>5.5.5</Version>
+    </PackageReference>
     <PackageReference Include="ModernWpfUI">
       <Version>0.9.3</Version>
     </PackageReference>
@@ -280,6 +291,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\reestr.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ms-excel.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

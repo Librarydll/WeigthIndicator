@@ -45,6 +45,7 @@ namespace WeigthIndicator.Views
 
                 this.BindCommand(ViewModel, vm => vm.FilterCommad, v => v.FilterCommand);
                 this.BindCommand(ViewModel, vm => vm.FilterBySearchQueryCommand, v => v.FilterBySearchQueryCommand);
+                this.BindCommand(ViewModel, vm => vm.ExportExcelCommand, v => v.ExportExcelCommand);
             });
         }
     }

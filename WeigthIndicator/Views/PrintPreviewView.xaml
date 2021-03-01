@@ -165,7 +165,7 @@
                                     <Run x:Name="Net" FontWeight="ExtraBold" FontSize="16" />
                                 </Paragraph>
                             </TableCell>
-                            <TableCell  RowSpan="2" TextAlignment="Right" Padding="0 0 25 0">
+                            <TableCell  RowSpan="2" TextAlignment="Right" Padding="0 0 50 0">
                                 <Paragraph>
                                     <Image Source="/Resources/logoprint.png" Width="100"/>
                                 </Paragraph>
