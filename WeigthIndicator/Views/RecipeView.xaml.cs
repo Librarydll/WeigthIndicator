@@ -37,7 +37,7 @@ namespace WeigthIndicator.Views
                     .DisposeWith(disposables);
                 this.Bind(ViewModel, vm => vm.Recipe.VitaminC, v => v.VitaminC.Text)
                     .DisposeWith(disposables);
-                this.Bind(ViewModel, vm => vm.Recipe.Сarbohydrates, v => v.Carbohydrates.Text)
+                this.Bind(ViewModel, vm => vm.Recipe.Carbohydrates, v => v.Carbohydrates.Text)
                     .DisposeWith(disposables);
 
                 this.BindCommand(ViewModel, vm => vm.CreateRecipe, v => v.SaveButton)

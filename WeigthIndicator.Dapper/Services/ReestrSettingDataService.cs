@@ -54,5 +54,15 @@ namespace WeigthIndicator.Dapper.Services
                 return await connection.UpdateAsync(reestr);
             }
         }
+
+        public async Task<bool> UpdateReestrSettingBarrelColumn(ReestrSetting reestrSetting)
+        {
+            using (var connection = _applicationContextFactory.CreateConnection())
+            {
+                string query = "UPDATE ReestrSettings SET InitialBarrelNumber =@ibn where id=@id";
+                var rowAffected = await connection.ExecuteAsync(query,new {ibn=reestrSetting.InitialBarrelNumber,id=reestrSetting.Id });
+                return rowAffected == 1;
+            }
+        }
     }
 }

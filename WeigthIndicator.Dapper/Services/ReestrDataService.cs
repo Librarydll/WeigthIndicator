@@ -126,6 +126,10 @@ namespace WeigthIndicator.Dapper.Services
                 {
                     barrelNumber = result.BarrelNumber + 1;
                 }
+                if (reestr.BarrelNumber != 0)
+                {
+                    barrelNumber = reestr.BarrelNumber;
+                }
                 reestr.BarrelNumber = barrelNumber;
                 await connection.InsertAsync(reestr);
                 return reestr;

@@ -11,7 +11,7 @@ namespace WeigthIndicator.Domain.Services
     {
         Task<ReestrSetting> CreateReestrSetting(ReestrSetting reestr);
         Task<bool> UpdateReestrSetting(ReestrSetting reestr);
-
+        Task<bool> UpdateReestrSettingBarrelColumn(ReestrSetting reestrSetting);
         Task<ReestrSetting> GetReestrSetting();
     }
 }

@@ -35,6 +35,14 @@ namespace WeigthIndicator.Domain.Models
             set { SetProperty(ref _seconds, value); }
         }
 
+        private int _initialBarrelNumber;
+
+        public int InitialBarrelNumber
+        {
+            get => _initialBarrelNumber;
+            set => SetProperty(ref _initialBarrelNumber, value);
+        }
+
         private double _minWeight;
         public double MinWeight
         {
@@ -65,16 +73,12 @@ namespace WeigthIndicator.Domain.Models
 
         public object Clone()
         {
-            var recipe = new Recipe()
-            {
-                Id = CurrentRecipe == null ? 0 : CurrentRecipe.Id,
-                ShortName = CurrentRecipe == null ? "" : CurrentRecipe.ShortName
-            };
-
+ 
             return new ReestrSetting
             {
+
                 BatchNumber = BatchNumber,
-                CurrentRecipe = recipe,
+                CurrentRecipe = (Recipe)CurrentRecipe?.Clone(),
                 TaraBarrel = TaraBarrel,
                 Seconds = Seconds,
                 TaraBarrelWithLid = TaraBarrelWithLid,
@@ -84,8 +88,20 @@ namespace WeigthIndicator.Domain.Models
                 Id =Id,
                 RecipeId =RecipeId,
                 CustomerId=CustomerId,
-                Customer =(Customer)Customer?.Clone()
+                Customer =(Customer)Customer?.Clone(),
+                InitialBarrelNumber =InitialBarrelNumber
             };
+        }
+
+        public int GetBarrelNumberAndClearIt()
+        {
+            if (InitialBarrelNumber != 0)
+            {
+                var initial = InitialBarrelNumber;
+                InitialBarrelNumber = 0;
+                return initial;
+            }
+            return InitialBarrelNumber;
         }
     }
 }

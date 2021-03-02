@@ -15,7 +15,7 @@ using WeigthIndicator.Models;
 
 namespace WeigthIndicator.ViewModels
 {
-    public class StatusViewModel:ReactiveObject
+    public class StatusViewModel : ReactiveObject
     {
         IObservable<long> timer = Observable.Interval(TimeSpan.FromMilliseconds(200.0));
 
@@ -30,6 +30,10 @@ namespace WeigthIndicator.ViewModels
             RecipeReminder = new RecipeReminder();
             _currentRecipe = new Recipe();
 
+            MessageBus.Current.Listen<Recipe>("inserted")
+                 .Where(x => x.Id != _currentRecipe.Id)
+                 .SelectMany(CalculateReminder)
+                 .Subscribe();
 
             MessageBus.Current.Listen<Recipe>()
                 .Where(x => x.Id != _currentRecipe.Id)

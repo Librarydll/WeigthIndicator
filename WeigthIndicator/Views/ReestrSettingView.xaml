@@ -121,12 +121,11 @@
             <TextBlock Grid.Row="2" Grid.Column="2" Text="для этикетки"/>
 
 
-            <!--<TextBlock Grid.Row="3"
-            Text="Время для принятии решния"/>
+            <TextBlock Grid.Row="3"
+            Text="Начать с номер бочки"/>
             <TextBox Grid.Row="3" Grid.Column="1"
-                 x:Name="Time"  
+                 x:Name="InitialBarrelNumber"  
                  Style="{StaticResource short}" />
-            <TextBlock Grid.Row="3" Grid.Column="2" Text="секунд"/>-->
 
             <TextBlock Grid.Row="4"
             Text="Минимальный вес"/>

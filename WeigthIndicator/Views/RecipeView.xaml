@@ -217,7 +217,7 @@
                         <GridViewColumn   Header="Углевооды">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="15" Text="{Binding Path=Сarbohydrates}"/>
+                                    <TextBlock FontSize="15" Text="{Binding Path=Carbohydrates}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

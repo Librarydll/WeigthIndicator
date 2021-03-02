@@ -40,7 +40,7 @@ namespace WeigthIndicator.Views
             TranportationCondition.Text = reestr.Recipe.TransportationCondition;
             Net.Text = reestr.Net.ToString();
             Brutto.Text = (reestr.TareBarrelWithLid + reestr.Net).ToString();
-            Carbo.Text = reestr.Recipe.Сarbohydrates.ToString();
+            Carbo.Text = reestr.Recipe.Carbohydrates.ToString();
             VitaminC.Text = reestr.Recipe.VitaminC.ToString();
             EnergyBalue.Text = reestr.Recipe.EnergyValue.ToString();
             DryContent.Text = reestr.Recipe.DryContent.ToString();

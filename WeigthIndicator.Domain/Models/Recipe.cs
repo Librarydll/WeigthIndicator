@@ -27,7 +27,7 @@ namespace WeigthIndicator.Domain.Models
         public string StorageCondition { get => storageCondition; set => SetProperty(ref storageCondition, value); }
         public string TransportationCondition { get => transportationCondition; set => SetProperty(ref transportationCondition, value); }
 
-        public double Сarbohydrates { get => сarbohydrates; set => SetProperty(ref сarbohydrates, value); }
+        public double Carbohydrates { get => сarbohydrates; set => SetProperty(ref сarbohydrates, value); }
         public double VitaminC { get => vitaminC; set => SetProperty(ref vitaminC, value); }
         public double EnergyValue { get => energyValue; set => SetProperty(ref energyValue, value); }
         public double DryContent { get => dryContent; set => SetProperty(ref dryContent, value); }
@@ -45,7 +45,7 @@ namespace WeigthIndicator.Domain.Models
                 StorageCondition = StorageCondition,
                 TransportationCondition = TransportationCondition,
                 VitaminC = VitaminC,
-                Сarbohydrates = Сarbohydrates
+                Carbohydrates = Carbohydrates
             };
         }
     }

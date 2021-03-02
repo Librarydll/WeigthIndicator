@@ -1,6 +1,7 @@
 ﻿using Prism.Ioc;
 using Prism.Unity;
 using ReactiveUI;
+using System.Configuration;
 using System.Windows;
 using WeigthIndicator.Dapper;
 using WeigthIndicator.Dapper.Services;
@@ -59,11 +60,10 @@ namespace WeigthIndicator
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-
+            var connectionString  =  ConfigurationManager.ConnectionStrings[1].ConnectionString;
             containerRegistry.RegisterSingleton<ApplicationContextFactory>(_ =>
             {
-                return new ApplicationContextFactory("Data Source=127.0.0.1;port=3306;Database=indicatordb;Uid=root;Pwd=root");
-
+                return new ApplicationContextFactory(connectionString);
             });
 
             containerRegistry.RegisterSingleton<IRecipeDataService, RecipeDataService>();

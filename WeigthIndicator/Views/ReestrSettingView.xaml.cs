@@ -24,8 +24,8 @@ namespace WeigthIndicator.Views
                 this.Bind(ViewModel, vm => vm.ReestrSetting.BatchNumber, v => v.BatchNumber.Text)
                     .DisposeWith(disposables);
 
-                //this.Bind(ViewModel, vm => vm.ReestrSetting.Seconds, v => v.Time.Text)
-                //    .DisposeWith(disposables);
+                this.Bind(ViewModel, vm => vm.ReestrSetting.InitialBarrelNumber, v => v.InitialBarrelNumber.Text)
+                    .DisposeWith(disposables);
 
                 this.Bind(ViewModel,
                     vm => vm.ReestrSetting.MinDefaultWeigth,

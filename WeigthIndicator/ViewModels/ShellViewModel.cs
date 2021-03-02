@@ -239,6 +239,8 @@ namespace WeigthIndicator.ViewModels
         {
             var net = value - ReestrSetting.TaraBarrel;
             var reestr = CreateReestr(net);
+            if(reestr.BarrelNumber>0)
+                await _reestrSettingDataService.UpdateReestrSettingBarrelColumn(ReestrSetting);
             return await _reestrDataService.CreateReestrAndUpdateBarrelStorage(reestr);
         }
 
@@ -249,24 +251,30 @@ namespace WeigthIndicator.ViewModels
                 ReestrsCollection.Add(reestr);
                 _isValueDroppedToMinimum = false;
                 ExecutePrintViewCommand(reestr);
+                MessageBus.Current.SendMessage(reestr,"inserted");
             }
         }
 
 
-        private Reestr CreateReestr(double net) => new Reestr
+        private Reestr CreateReestr(double net) 
         {
-            BatchNumber = ReestrSetting.BatchNumber,
-            Customer = ReestrSetting.Customer,
-            CustomerId = ReestrSetting.CustomerId,
-            RecipeId = ReestrSetting.CurrentRecipe.Id,
-            Recipe = ReestrSetting.CurrentRecipe,
-            TareBarrel = ReestrSetting.TaraBarrelWithLid,
-            TareBarrelWithLid = ReestrSetting.TaraBarrelWithLid,
-            PackingDate = DateTime.Now,
-            ReestrState = true,
-            Net = net,
+            var reestr = new Reestr
+            {
+                BatchNumber = ReestrSetting.BatchNumber,
+                Customer = ReestrSetting.Customer,
+                CustomerId = ReestrSetting.CustomerId,
+                RecipeId = ReestrSetting.CurrentRecipe.Id,
+                Recipe = ReestrSetting.CurrentRecipe,
+                TareBarrel = ReestrSetting.TaraBarrelWithLid,
+                TareBarrelWithLid = ReestrSetting.TaraBarrelWithLid,
+                PackingDate = DateTime.Now,
+                ReestrState = true,
+                Net = net,
+            };
 
-        };
+            reestr.BarrelNumber = ReestrSetting.GetBarrelNumberAndClearIt();
+            return reestr;
+        }
 
         private bool ValidateParsedValue(double value)
         {
