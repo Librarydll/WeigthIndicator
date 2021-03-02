@@ -16,6 +16,7 @@ using WeigthIndicator.Core.Print;
 using WeigthIndicator.Domain.Exceptions;
 using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Domain.Services;
+using WeigthIndicator.Events;
 using WeigthIndicator.Factory;
 using WeigthIndicator.Services;
 using WeigthIndicator.Views;
@@ -60,6 +61,9 @@ namespace WeigthIndicator.ViewModels
         private readonly ObservableAsPropertyHelper<int> _reestrCount;
         public int ReestrCount => _reestrCount.Value;
 
+        private readonly ObservableAsPropertyHelper<double> _netTotal;
+        public double NetTotal => _netTotal.Value;
+
         public ShellViewModel(IComPortProvider comPortProvider,
             IReestrSettingDataService reestrSettingDataService,
             IRecipeDataService recipeDataService,
@@ -93,9 +97,14 @@ namespace WeigthIndicator.ViewModels
                         .ObserveOn(RxApp.MainThreadScheduler)
                         .Subscribe(InsertToCollection);
 
-            _reestrCount = this.WhenAnyValue(x => x.ReestrsCollection.Count)
-                .Select(x => x)
-                .ToProperty(this, x => x.ReestrCount);
+            var reestrCount = this.WhenAnyValue(x => x.ReestrsCollection.Count);
+          _reestrCount = reestrCount
+                        .Select(x => x)
+                        .ToProperty(this, x => x.ReestrCount);
+
+            _netTotal = reestrCount
+                .Select(x => ReestrsCollection.Sum(z => z.Net))
+                .ToProperty(this, x => x.NetTotal);
 
             _itemWeight = parsedValue.Select(x => x)
                                      .ObserveOn(RxApp.MainThreadScheduler)
@@ -251,7 +260,7 @@ namespace WeigthIndicator.ViewModels
                 ReestrsCollection.Add(reestr);
                 _isValueDroppedToMinimum = false;
                 ExecutePrintViewCommand(reestr);
-                MessageBus.Current.SendMessage(reestr,"inserted");
+                MessageBus.Current.SendMessage(new ReestredAddedEvent { Recipe =reestr.Recipe });
             }
         }
 

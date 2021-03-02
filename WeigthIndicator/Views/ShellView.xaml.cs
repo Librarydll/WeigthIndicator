@@ -35,6 +35,7 @@ namespace WeigthIndicator.Views
 
                 this.Bind(ViewModel, vm => vm.SelectedReestr, v => v.ReestrsCollection.SelectedItem);
                 this.Bind(ViewModel, vm => vm.ReestrCount, v => v.ReestrCount.Text);
+                this.Bind(ViewModel, vm => vm.NetTotal, v => v.NetSum.Text);
 
 
                 this.Bind(ViewModel, vm => vm.SelectedPrintViewType,v => v.PrintViewTypeCmb.SelectedIndex)

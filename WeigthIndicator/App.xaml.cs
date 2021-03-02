@@ -60,7 +60,7 @@ namespace WeigthIndicator
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            var connectionString  =  ConfigurationManager.ConnectionStrings[1].ConnectionString;
+            var connectionString  =  ConfigurationManager.ConnectionStrings["conn"].ConnectionString;
             containerRegistry.RegisterSingleton<ApplicationContextFactory>(_ =>
             {
                 return new ApplicationContextFactory(connectionString);

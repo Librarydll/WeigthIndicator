@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Domain.Services;
+using WeigthIndicator.Events;
 
 namespace WeigthIndicator.ViewModels
 {
@@ -73,6 +74,8 @@ namespace WeigthIndicator.ViewModels
                 ProductionDate = DateTime.Now
             };
             SelectedRecipe = null;
+            MessageBus.Current.SendMessage(new ReestredAddedEvent { Recipe = barrel.Recipe });
+
         }
 
         private async Task<BarrelStorage> ExecuteCreateBarrelStorage()

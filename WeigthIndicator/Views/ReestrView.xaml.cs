@@ -42,6 +42,8 @@ namespace WeigthIndicator.Views
                 this.Bind(ViewModel, vm => vm.SelectedPrintViewType, v => v.PrintViewTypeCmb.SelectedIndex)
                  .DisposeWith(disposables);
 
+                this.Bind(ViewModel, vm => vm.ReestrCount, v => v.ReestrCount.Text);
+                this.Bind(ViewModel, vm => vm.NetTotal, v => v.NetSum.Text);
 
                 this.BindCommand(ViewModel, vm => vm.FilterCommad, v => v.FilterCommand);
                 this.BindCommand(ViewModel, vm => vm.FilterBySearchQueryCommand, v => v.FilterBySearchQueryCommand);

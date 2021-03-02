@@ -9,4 +9,9 @@ using WeigthIndicator.Domain.Models;
 namespace WeigthIndicator.Events
 {
     public class RecipeChangedEvent: PubSubEvent<Recipe>{}
+
+    public class ReestredAddedEvent
+    {
+        public Recipe Recipe { get; set; }
+    }
 }

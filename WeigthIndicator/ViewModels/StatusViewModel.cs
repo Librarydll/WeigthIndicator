@@ -30,9 +30,8 @@ namespace WeigthIndicator.ViewModels
             RecipeReminder = new RecipeReminder();
             _currentRecipe = new Recipe();
 
-            MessageBus.Current.Listen<Recipe>("inserted")
-                 .Where(x => x.Id != _currentRecipe.Id)
-                 .SelectMany(CalculateReminder)
+            MessageBus.Current.Listen<ReestredAddedEvent>()
+                 .SelectMany(x=>CalculateReminder(x.Recipe))
                  .Subscribe();
 
             MessageBus.Current.Listen<Recipe>()

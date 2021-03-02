@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -44,6 +45,12 @@ namespace WeigthIndicator.ViewModels
         public ReactiveCommand<Reestr, Unit> EditCommand { get; }
         public ReactiveCommand<Unit, Unit> ExportExcelCommand { get; }
 
+        private readonly ObservableAsPropertyHelper<int> _reestrCount;
+        public int ReestrCount => _reestrCount.Value;
+
+        private readonly ObservableAsPropertyHelper<double> _netTotal;
+        public double NetTotal => _netTotal.Value;
+
         public ReestrViewModel(IReestrDataService reestrDataService,IDialogService dialogService)
         {
             FilterModel = new FilterModel();
@@ -55,6 +62,16 @@ namespace WeigthIndicator.ViewModels
             var canFilter =
                 this.WhenAnyValue(x => x.FilterModel.SearchQuery,
                 x => !string.IsNullOrWhiteSpace(x));
+
+
+            var reestrCount = this.WhenAnyValue(x => x.ReestrsCollection.Count);
+            _reestrCount = reestrCount
+                          .Select(x => x)
+                          .ToProperty(this, x => x.ReestrCount);
+
+            _netTotal = reestrCount
+                .Select(x => ReestrsCollection.Sum(z => z.Net))
+                .ToProperty(this, x => x.NetTotal);
 
             FilterBySearchQueryCommand = ReactiveCommand.CreateFromTask(ExecuteFilterBySearchQueryCommand, canFilter);
             PrintCommand = ReactiveCommand.Create<Reestr>(ExecutePrintCommand);
