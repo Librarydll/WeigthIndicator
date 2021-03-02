@@ -49,13 +49,13 @@ namespace WeigthIndicator.Models
                 _serialPort.DataReceived += SerialPort_DataReceived;
                 _serialPort.ErrorReceived += SerialPort_ErrorReceived;
             }
-            Task.Run(async () =>
-            {
-                await Imitation();
-                await Task.Delay(2500);
-                ParsedValue = 125;
-            });
-            ParsedValue = 250;
+            //Task.Run(async () =>
+            //{
+            //    await Imitation();
+            //    await Task.Delay(2500);
+            //    ParsedValue = 125;
+            //});
+            //ParsedValue = 250;
         }
 
         private async Task Imitation()

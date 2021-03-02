@@ -1,7 +1,10 @@
 ﻿using ReactiveUI;
 using System;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Windows;
+using System.Windows.Input;
 using WeigthIndicator.Factory;
 using WeigthIndicator.ViewModels;
 
@@ -18,7 +21,7 @@ namespace WeigthIndicator.Views
             ViewModel = DataContext as ShellViewModel;
             this.WhenActivated(disposables =>
             {
-      
+
                 this.OneWayBind(ViewModel,
                     vm => vm.ReestrsCollection,
                     v => v.ReestrsCollection.ItemsSource)
@@ -30,25 +33,30 @@ namespace WeigthIndicator.Views
                 this.Bind(ViewModel, vm => vm.IsAutoMode, v => v.@switch.IsOn);
                 this.BindCommand(ViewModel, vm => vm.OpenReestrSettingCommand, v => v.ReestrSetting);
                 this.BindCommand(ViewModel, vm => vm.SaveCommand, v => v.SaveBtn);
-                this.BindCommand(ViewModel, vm => vm.EditCommand, v => v.EditCommand,x=>x.SelectedReestr);
-                this.BindCommand(ViewModel, vm => vm.PrintCommand, v => v.PrintCommand,x=>x.SelectedReestr);
+                this.BindCommand(ViewModel, vm => vm.EditCommand, v => v.EditCommand, x => x.SelectedReestr);
+                this.BindCommand(ViewModel, vm => vm.PrintCommand, v => v.PrintCommand, x => x.SelectedReestr);
 
                 this.Bind(ViewModel, vm => vm.SelectedReestr, v => v.ReestrsCollection.SelectedItem);
                 this.Bind(ViewModel, vm => vm.ReestrCount, v => v.ReestrCount.Text);
                 this.Bind(ViewModel, vm => vm.NetTotal, v => v.NetSum.Text);
 
 
-                this.Bind(ViewModel, vm => vm.SelectedPrintViewType,v => v.PrintViewTypeCmb.SelectedIndex)
+                this.Bind(ViewModel, vm => vm.SelectedPrintViewType, v => v.PrintViewTypeCmb.SelectedIndex)
                     .DisposeWith(disposables);
 
 
             });
+
+            this.Events().KeyDown
+                         .Where(x => x.Key == Key.Enter && (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)))
+                         .Select(x=>Unit.Default)
+                         .InvokeCommand(ViewModel, x => x.SaveCommand);
 
             this.WhenAnyValue(x => x.ViewModel)
                      .SelectMany(x => x.Initialize())
                      .Subscribe(x => ViewModel.FillCollection(x));
         }
 
-       
+
     }
 }
