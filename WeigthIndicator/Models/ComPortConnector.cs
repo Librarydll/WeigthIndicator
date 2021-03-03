@@ -49,6 +49,7 @@ namespace WeigthIndicator.Models
                 _serialPort.DataReceived += SerialPort_DataReceived;
                 _serialPort.ErrorReceived += SerialPort_ErrorReceived;
             }
+
             //Task.Run(async () =>
             //{
             //    await Imitation();
@@ -60,10 +61,10 @@ namespace WeigthIndicator.Models
 
         private async Task Imitation()
         {
-            for (int i = 1; i <= 10; i++)
+            for (int i = 1; i <= 25; i++)
             {
                 await Task.Delay(500);
-                ParsedValue = i*12;
+                ParsedValue = i*5;
             }
         }
 

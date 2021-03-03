@@ -45,7 +45,8 @@ namespace WeigthIndicator.Domain.Models
                 StorageCondition = StorageCondition,
                 TransportationCondition = TransportationCondition,
                 VitaminC = VitaminC,
-                Carbohydrates = Carbohydrates
+                Carbohydrates = Carbohydrates,
+                LongNameKz = LongNameKz
             };
         }
     }
