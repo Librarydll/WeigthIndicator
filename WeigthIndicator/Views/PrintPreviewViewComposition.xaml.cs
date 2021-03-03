@@ -35,7 +35,7 @@ namespace WeigthIndicator.Views
             BarrelNumber.Text = reestr.BarrelNumber.ToString();
             ProductionDate.Text = reestr.BarrelStorage.ProductionDate.ToString("dd.MM.yyyy");
             BeforeDate.Text = reestr.BarrelStorage.ProductionDate.AddYears(2).ToString("dd.MM.yyyy");
-            PackingDate.Text = reestr.PackingDate.ToString("HH:mm:ss dd.MM.yyyy");
+          //  PackingDate.Text = reestr.PackingDate.ToString("HH:mm:ss dd.MM.yyyy");
             StorageCondition.Text = reestr.Recipe.StorageCondition;
             TranportationCondition.Text = reestr.Recipe.TransportationCondition;
             Net.Text = reestr.Net.ToString();

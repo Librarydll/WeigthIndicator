@@ -35,8 +35,10 @@ namespace WeigthIndicator.Views
                 this.WhenAnyValue(x => x.DataContext)
                     .BindTo(this, x => x.ViewModel);
 
-                this.Bind(ViewModel, vm => vm.RecipeReminder.Remainder, v => v.Reminder.Text)
-                    .DisposeWith(disposables);
+                this.OneWayBind(ViewModel,
+                   vm => vm.RecipeReminder.Remainder,
+                   v => v.Reminder.Text,
+                  x => x.ToString("N"));
 
                 this.Bind(ViewModel, vm => vm.RecipeReminder.RecipeShortName, v => v.RecipeName.Text)
                     .DisposeWith(disposables);

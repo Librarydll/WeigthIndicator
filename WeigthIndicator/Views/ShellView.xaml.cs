@@ -5,6 +5,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using WeigthIndicator.Factory;
 using WeigthIndicator.ViewModels;
 
@@ -27,6 +28,7 @@ namespace WeigthIndicator.Views
                     v => v.ReestrsCollection.ItemsSource)
                     .DisposeWith(disposables);
 
+
                 this.Bind(ViewModel, vm => vm.ItemWeigth, v => v.ItemWeigth.Text);
                 this.Bind(ViewModel, vm => vm.ProgressValue, v => v.ProgressBar.Value);
                 this.Bind(ViewModel, vm => vm.MaxProgressValue, v => v.ProgressBar.Maximum);
@@ -38,12 +40,18 @@ namespace WeigthIndicator.Views
 
                 this.Bind(ViewModel, vm => vm.SelectedReestr, v => v.ReestrsCollection.SelectedItem);
                 this.Bind(ViewModel, vm => vm.ReestrCount, v => v.ReestrCount.Text);
-                this.Bind(ViewModel, vm => vm.NetTotal, v => v.NetSum.Text);
+                this.OneWayBind(ViewModel, 
+                    vm => vm.NetTotal,
+                    v => v.NetSum.Text,
+                   x=>x.ToString("N") );
 
 
                 this.Bind(ViewModel, vm => vm.SelectedPrintViewType, v => v.PrintViewTypeCmb.SelectedIndex)
                     .DisposeWith(disposables);
 
+                this.OneWayBind(ViewModel, vm => vm.LastReestrValue.BarrelNumber, v => v.LastBarrelNumber.Text);
+                this.OneWayBind(ViewModel, vm => vm.LastReestrValue.Net, v => v.LastNet.Text);
+                this.OneWayBind(ViewModel, vm => vm.LastReestrValue.Brutto, v => v.LastBrutto.Text);
 
             });
 

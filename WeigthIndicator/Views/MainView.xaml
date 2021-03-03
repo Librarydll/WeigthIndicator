@@ -36,7 +36,7 @@
                 <ui:NavigationViewItem Cursor="Hand"  x:Name="BarrelView" >
                     <ui:SimpleStackPanel Spacing="3" Orientation="Horizontal">
                         <Image Width="30" Height="25" Source="/Resources/barrel.png"/>
-                        <TextBlock Text="Бочки" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBlock Text="Дата производства" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </ui:SimpleStackPanel>
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItem Cursor="Hand" x:Name="CustomerView" Icon="People" Content="Покупатели"/>

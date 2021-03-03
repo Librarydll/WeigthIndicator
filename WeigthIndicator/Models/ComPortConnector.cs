@@ -52,19 +52,18 @@ namespace WeigthIndicator.Models
 
             //Task.Run(async () =>
             //{
-            //    await Imitation();
-            //    await Task.Delay(2500);
-            //    ParsedValue = 125;
+            //    await Imitation(8);
+            //    await Task.Delay(7000);
+            //    await Imitation(7);
             //});
-            //ParsedValue = 250;
         }
 
-        private async Task Imitation()
+        private async Task Imitation(int z)
         {
-            for (int i = 1; i <= 25; i++)
+            for (int i = 1; i <= 10; i++)
             {
                 await Task.Delay(500);
-                ParsedValue = i*5;
+                ParsedValue = i*z;
             }
         }
 

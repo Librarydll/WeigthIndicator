@@ -11,7 +11,7 @@
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="1000">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
@@ -135,7 +135,18 @@
                     <ComboBoxItem>
                         С пищ ценностью
                     </ComboBoxItem>
+                    <ComboBoxItem>
+                        Не печатать
+                    </ComboBoxItem>
                 </ComboBox>
+                <TextBlock VerticalAlignment="Center" x:Name="LastReestr" HorizontalAlignment="Center" FontSize="20">
+                    <Run Text="N Бочки:"/>
+                    <Run x:Name="LastBarrelNumber"/>
+                    <Run Text="Нетто:"/>
+                    <Run x:Name="LastNet"/>
+                    <Run Text="Брутто:"/>
+                    <Run x:Name="LastBrutto"/>
+                </TextBlock>
             </ui:SimpleStackPanel>
             <ListView x:Name="ReestrsCollection" Grid.Row="1"
                               Background="Transparent" BorderThickness="0"                  
@@ -168,6 +179,13 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
+                        <GridViewColumn   Header="Вес нетто">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="15" Text="{Binding Path=Net}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                         <GridViewColumn   Header="Номер партии">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
@@ -179,7 +197,7 @@
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel>
-                                        <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=PackingDate, StringFormat={}{0:dd/MM/yyyy}}"/>
+                                        <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=PackingDate, StringFormat={}{0:dd.MM.y}}"/>
                                         <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=PackingDate, StringFormat={}{0:HH:mm:ss}}"/>
                                     </StackPanel>
                                 </DataTemplate>
@@ -189,7 +207,7 @@
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel>
-                                        <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=BarrelStorage.ProductionDate, StringFormat={}{0:dd/MM/yyyy}}"/>
+                                        <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=BarrelStorage.ProductionDate, StringFormat={}{0:dd.MM.y}}"/>
                                         <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=BarrelStorage.ProductionDate, StringFormat={}{0:HH:mm:ss}}"/>
                                     </StackPanel>
                                 </DataTemplate>
@@ -202,13 +220,7 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn   Header="Вес нетто">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock FontSize="15" Text="{Binding Path=Net}"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
+                      
                         <GridViewColumn   Header="Вес самой бочки">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
@@ -228,7 +240,7 @@
             </ListView>
             <ui:SimpleStackPanel Orientation="Horizontal" Grid.Row="2" Spacing="5">
                 <TextBlock Padding="5 5 0 5" FontSize="18" FontWeight="DemiBold" >
-                <Run Text="Колличество бочек: "/>
+                <Run Text="Количество бочек: "/>
                 <Run x:Name="ReestrCount" />
                 </TextBlock>
                 <TextBlock Padding="5 5 0 5" FontSize="18" FontWeight="DemiBold" >

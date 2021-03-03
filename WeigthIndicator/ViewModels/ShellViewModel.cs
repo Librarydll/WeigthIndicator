@@ -49,6 +49,7 @@ namespace WeigthIndicator.ViewModels
         [Reactive] public bool IsAutoMode { get; set; }
         [Reactive] public Reestr SelectedReestr { get; set; }
         [Reactive] public int SelectedPrintViewType { get; set; }
+        [Reactive] public Reestr LastReestrValue { get; set; }
 
         private readonly ObservableAsPropertyHelper<double> _itemWeight;
         public double ItemWeigth => _itemWeight.Value;
@@ -106,10 +107,10 @@ namespace WeigthIndicator.ViewModels
                 .Select(x => ReestrsCollection.Sum(z => z.Net))
                 .ToProperty(this, x => x.NetTotal);
 
+
             _itemWeight = parsedValue.Select(x => x)
                                      .ObserveOn(RxApp.MainThreadScheduler)
                                      .ToProperty(this, x => x.ItemWeigth);
-
 
             var canExecute = this
                .WhenAnyValue(x => x.IsAutoMode,
@@ -174,6 +175,7 @@ namespace WeigthIndicator.ViewModels
         private void ExecutePrintViewCommand(Reestr reestr)
         {
             var printViewType = (PrintViewType)Enum.Parse(typeof(PrintViewType), SelectedPrintViewType.ToString());
+            if (printViewType == PrintViewType.NoPrint) return;
             var printInitialize = PrintPreviewFactory.GetPrintView(printViewType);
 
             FlowDocument flowDoc = printInitialize.InitializeFlow(reestr);
@@ -261,6 +263,7 @@ namespace WeigthIndicator.ViewModels
                 _isValueDroppedToMinimum = false;
                 ExecutePrintViewCommand(reestr);
                 MessageBus.Current.SendMessage(new ReestredAddedEvent { Recipe =reestr.Recipe });
+                LastReestrValue = reestr;
             }
         }
 

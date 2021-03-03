@@ -45,7 +45,8 @@ namespace WeigthIndicator.Domain.Models
         public BarrelStorage BarrelStorage { get; set; }
         [Computed]
         public Customer Customer { get => customer; set => SetProperty(ref customer, value); }
-
+        [Computed]
+        public double Brutto => Net + TareBarrel;
         public object Clone()
         {
             return new Reestr

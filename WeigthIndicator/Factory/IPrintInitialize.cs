@@ -17,6 +17,7 @@ namespace WeigthIndicator.Factory
     {
         WithAddress,
         WithNutritionValue,
-        BuyerInformation
+        BuyerInformation,
+        NoPrint
     }
 }
