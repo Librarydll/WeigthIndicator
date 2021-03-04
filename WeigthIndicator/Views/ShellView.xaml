@@ -135,6 +135,9 @@
                     <ComboBoxItem>
                         С пищ ценностью
                     </ComboBoxItem>
+                    <ComboBoxItem Visibility="Collapsed">
+                        С пищ ценностью
+                    </ComboBoxItem>
                     <ComboBoxItem>
                         Не печатать
                     </ComboBoxItem>
