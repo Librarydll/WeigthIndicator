@@ -23,6 +23,7 @@ namespace WeigthIndicator.ViewModels
         private Recipe _currentRecipe;
 
         [Reactive] public RecipeReminder RecipeReminder { get; set; }
+        [Reactive] public Reestr LastReestrValue { get; set; }
 
         public StatusViewModel(IBarrelStorageDataService barrelStorageDataService)
         {
@@ -31,7 +32,7 @@ namespace WeigthIndicator.ViewModels
             _currentRecipe = new Recipe();
 
             MessageBus.Current.Listen<ReestredAddedEvent>()
-                 .SelectMany(x=>CalculateReminder(x.Recipe))
+                 .SelectMany(x => UpdateStatus(x.Reestr)) 
                  .Subscribe();
 
             MessageBus.Current.Listen<Recipe>()
@@ -39,6 +40,13 @@ namespace WeigthIndicator.ViewModels
                 .SelectMany(CalculateReminder)
                 .Subscribe();
 
+        }
+
+        public async Task<Unit> UpdateStatus(Reestr reestr)
+        {
+            LastReestrValue = reestr;
+            await CalculateReminder(reestr.Recipe);
+            return Unit.Default;
         }
 
         public async Task<Unit> CalculateReminder(Recipe recipe)

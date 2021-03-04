@@ -48,6 +48,10 @@ namespace WeigthIndicator.Views
                     v=> BoolToColor(v))
                     .DisposeWith(disposables);
 
+                this.OneWayBind(ViewModel, vm => vm.LastReestrValue.BarrelNumber, v => v.LastBarrelNumber.Text);
+                this.OneWayBind(ViewModel, vm => vm.LastReestrValue.Net, v => v.LastNet.Text);
+                this.OneWayBind(ViewModel, vm => vm.LastReestrValue.Brutto, v => v.LastBrutto.Text);
+
             });
 
         }

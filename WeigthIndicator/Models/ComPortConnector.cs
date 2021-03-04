@@ -50,12 +50,12 @@ namespace WeigthIndicator.Models
                 _serialPort.ErrorReceived += SerialPort_ErrorReceived;
             }
 
-            //Task.Run(async () =>
-            //{
-            //    await Imitation(8);
-            //    await Task.Delay(7000);
-            //    await Imitation(7);
-            //});
+            Task.Run(async () =>
+            {
+                await Imitation(8);
+                await Task.Delay(7000);
+                await Imitation(7);
+            });
         }
 
         private async Task Imitation(int z)

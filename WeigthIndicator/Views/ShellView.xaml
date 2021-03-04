@@ -142,16 +142,8 @@
                         Не печатать
                     </ComboBoxItem>
                 </ComboBox>
-                <TextBlock VerticalAlignment="Center" x:Name="LastReestr" HorizontalAlignment="Center" FontSize="20">
-                    <Run Text="N Бочки:"/>
-                    <Run x:Name="LastBarrelNumber"/>
-                    <Run Text="Нетто:"/>
-                    <Run x:Name="LastNet"/>
-                    <Run Text="Брутто:"/>
-                    <Run x:Name="LastBrutto"/>
-                </TextBlock>
             </ui:SimpleStackPanel>
-            <ListView x:Name="ReestrsCollection" Grid.Row="1"
+            <ListView x:Name="ReestrsCollection" Grid.Row="1" 
                               Background="Transparent" BorderThickness="0"                  
                               Margin="10 0 0 5">
             

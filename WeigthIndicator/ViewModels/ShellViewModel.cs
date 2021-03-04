@@ -49,7 +49,6 @@ namespace WeigthIndicator.ViewModels
         [Reactive] public bool IsAutoMode { get; set; }
         [Reactive] public Reestr SelectedReestr { get; set; }
         [Reactive] public int SelectedPrintViewType { get; set; }
-        [Reactive] public Reestr LastReestrValue { get; set; }
 
         private readonly ObservableAsPropertyHelper<double> _itemWeight;
         public double ItemWeigth => _itemWeight.Value;
@@ -259,11 +258,10 @@ namespace WeigthIndicator.ViewModels
         {
             if (reestr != null)
             {
-                ReestrsCollection.Add(reestr);
+                ReestrsCollection.Insert(0,reestr);
                 _isValueDroppedToMinimum = false;
                 ExecutePrintViewCommand(reestr);
-                MessageBus.Current.SendMessage(new ReestredAddedEvent { Recipe =reestr.Recipe });
-                LastReestrValue = reestr;
+                MessageBus.Current.SendMessage(new ReestredAddedEvent { Reestr = reestr });
             }
         }
 

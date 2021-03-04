@@ -12,6 +12,6 @@ namespace WeigthIndicator.Events
 
     public class ReestredAddedEvent
     {
-        public Recipe Recipe { get; set; }
+        public Reestr Reestr { get; set; }
     }
 }

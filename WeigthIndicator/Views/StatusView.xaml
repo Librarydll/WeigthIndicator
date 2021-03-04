@@ -20,5 +20,18 @@
                 <TextBlock Text="кг"/>
             </ui:SimpleStackPanel>
         </StatusBarItem>
+        <Separator Margin="10 0 10 0"/>
+        <StatusBarItem FontSize="35" FontWeight="DemiBold">
+            <TextBlock VerticalAlignment="Center" x:Name="LastReestr" HorizontalAlignment="Center" >
+                    <Run Text="N Бочки:"/>
+                    <Run x:Name="LastBarrelNumber"/>
+                    <Run Text="Нетто:"/>
+                    <Run x:Name="LastNet"/>
+                    <Run Text="Брутто:"/>
+                    <Run x:Name="LastBrutto"/>
+            </TextBlock>
+        </StatusBarItem>
+     
+
     </StatusBar>
 </rx:ReactiveUserControl>
