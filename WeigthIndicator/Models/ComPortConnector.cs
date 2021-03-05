@@ -11,8 +11,10 @@ using System.Threading.Tasks;
 
 namespace WeigthIndicator.Models
 {
-    public class ComPortConnector:ReactiveObject
+    public class ComPortConnector:ReactiveObject,IDisposable
     {
+        private bool _disposed = false;
+
         private string _pattern = @"wn([0-9]+\.?[0-9]+)kg";
         private SerialPort _serialPort;
 
@@ -50,12 +52,12 @@ namespace WeigthIndicator.Models
                 _serialPort.ErrorReceived += SerialPort_ErrorReceived;
             }
 
-            //Task.Run(async () =>
-            //{
-            //    await Imitation(8);
-            //    await Task.Delay(7000);
-            //    await Imitation(7);
-            //});
+            Task.Run(async () =>
+            {
+                await Imitation(8);
+                await Task.Delay(7000);
+                await Imitation(7);
+            });
         }
 
         private async Task Imitation(int z)
@@ -91,6 +93,27 @@ namespace WeigthIndicator.Models
             }
 
             return -1;
+        }
+
+       
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+
+        }
+        public void Dispose(bool disposing)
+        {
+            if (_disposed)
+                return;
+
+            if (disposing)
+            {
+                // Dispose managed state (managed objects).
+                _serialPort?.Dispose();
+            }
+            _disposed = true;
         }
     }
 }

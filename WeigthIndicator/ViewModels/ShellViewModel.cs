@@ -258,7 +258,7 @@ namespace WeigthIndicator.ViewModels
         {
             if (reestr != null)
             {
-                ReestrsCollection.Insert(0,reestr);
+                ReestrsCollection.Add(reestr);
                 _isValueDroppedToMinimum = false;
                 ExecutePrintViewCommand(reestr);
                 MessageBus.Current.SendMessage(new ReestredAddedEvent { Reestr = reestr });
@@ -275,7 +275,7 @@ namespace WeigthIndicator.ViewModels
                 CustomerId = ReestrSetting.CustomerId,
                 RecipeId = ReestrSetting.CurrentRecipe.Id,
                 Recipe = ReestrSetting.CurrentRecipe,
-                TareBarrel = ReestrSetting.TaraBarrelWithLid,
+                TareBarrel = ReestrSetting.TaraBarrel,
                 TareBarrelWithLid = ReestrSetting.TaraBarrelWithLid,
                 PackingDate = DateTime.Now,
                 ReestrState = true,
