@@ -166,7 +166,7 @@ namespace WeigthIndicator.ViewModels
             else
             {
                 reestrs = await _reestrDataService.GetReestrsByBatchNumber(FilterModel.SearchQuery);
-                _filename = FilterModel.SearchQuery;
+                _filename = FilterModel.SearchQuery.Replace("/",".");
             }
 
             ReestrsCollection = new ObservableCollection<Reestr>(reestrs);

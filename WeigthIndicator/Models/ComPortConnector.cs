@@ -54,9 +54,9 @@ namespace WeigthIndicator.Models
 
             Task.Run(async () =>
             {
-                await Imitation(8);
+                await Imitation(9);
                 await Task.Delay(7000);
-                await Imitation(7);
+                await Imitation(10);
             });
         }
 

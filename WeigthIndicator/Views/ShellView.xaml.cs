@@ -50,6 +50,10 @@ namespace WeigthIndicator.Views
                     .DisposeWith(disposables);
 
 
+                this.OneWayBind(ViewModel,
+                    vm => vm.ReestrsCollection,
+                    v => v.Pagination.ReestrsCollection)
+                    .DisposeWith(disposables);
 
             });
 

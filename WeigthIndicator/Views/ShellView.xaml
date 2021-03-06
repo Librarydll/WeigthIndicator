@@ -10,6 +10,7 @@
              xmlns:rx="http://reactiveui.net"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
+    xmlns:controls="clr-namespace:WeigthIndicator.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="1000">
     <Grid>
@@ -234,19 +235,9 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-            <!--<ui:SimpleStackPanel Spacing="8" Grid.Row="2" HorizontalAlignment="Center" Orientation="Horizontal" >
-                <Button Content="&lt;&lt;" FontWeight="Bold" x:Name="GoPrevious">
-                    
-                </Button>
-                <TextBlock FontWeight="Bold" FontSize="18"  HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Run x:Name="CurrentPage"/>
-                    <Run Text="/"/>
-                    <Run x:Name="TotalPages"/>
-                </TextBlock>
-                <Button Content=">>"  FontWeight="Bold" x:Name="GoNext">
-
-                </Button>
-            </ui:SimpleStackPanel>-->
+            <controls:PaginateController Grid.Row="2" x:Name="Pagination" ItemsPerPage="10">
+                
+            </controls:PaginateController>
             <ui:SimpleStackPanel Orientation="Horizontal" Grid.Row="3" Spacing="5">
                 <TextBlock Padding="5 5 0 5" FontSize="18" FontWeight="DemiBold" >
                 <Run Text="Количество бочек: "/>

@@ -7,16 +7,16 @@
              xmlns:ui="http://schemas.modernwpf.com/2019"
              mc:Ignorable="d" >
     <ui:SimpleStackPanel Spacing="8" Grid.Row="2" HorizontalAlignment="Center" Orientation="Horizontal" >
-        <Button Content="&lt;&lt;" FontWeight="Bold" x:Name="GoPrevious">
+        <!--<Button Content="&lt;&lt;" FontWeight="Bold" x:Name="GoPrevious">
 
         </Button>
         <TextBlock FontWeight="Bold" FontSize="18"  HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Run x:Name="CurrentPage"/>
                     <Run Text="/"/>
-                    <Run x:Name="TotalPages"/>
+                    <Run x:Name="TPages"/>
         </TextBlock>
         <Button Content=">>"  FontWeight="Bold" x:Name="GoNext">
 
-        </Button>
+        </Button>-->
     </ui:SimpleStackPanel>
 </UserControl>
