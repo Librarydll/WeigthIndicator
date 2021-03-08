@@ -88,7 +88,7 @@ namespace WeigthIndicator.ViewModels
                 .Subscribe(Progress2);
 
             parsedValue.Throttle(TimeSpan.FromSeconds(3))
-                        .Where(x => IsAutoMode)
+                        .Where(x => IsAutoMode && _isValueDroppedToMinimum)
                         .Where(ValidateParsedValue)
                         .SelectMany(InsertToDataBase)
                         .Catch((Func<Exception, IObservable<Reestr>>)HandleException)
@@ -212,7 +212,7 @@ namespace WeigthIndicator.ViewModels
 
         private async Task<Reestr> ExecuteSaveCommand()
         {
-            if (ValidateParsedValue(_comPortProvider.ComPortConnector.ParsedValue))
+            if (_isValueDroppedToMinimum)
             {
                 var net = _comPortProvider.ComPortConnector.ParsedValue - ReestrSetting.TaraBarrel;
                 var reestr = CreateReestr(net);
@@ -288,8 +288,6 @@ namespace WeigthIndicator.ViewModels
 
         private bool ValidateParsedValue(double value)
         {
-            if (!_isValueDroppedToMinimum)
-                return false;
             if (value <= 0)
                 return false;
 
