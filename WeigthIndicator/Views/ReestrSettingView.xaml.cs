@@ -84,9 +84,9 @@ namespace WeigthIndicator.Views
                     .ObserveOnDispatcher()
                     .Subscribe(x => ViewModel.Initialize(x));
 
-                this.Bind(ViewModel, vm => vm.ControlsVisibility, v => v.TarraBarrelWithLid.Visibility);
-                this.Bind(ViewModel, vm => vm.ControlsVisibility, v => v.TarraBarrelWithLidTb.Visibility);
-                this.Bind(ViewModel, vm => vm.ControlsVisibility, v => v.TarraBarrelWithLidTb2.Visibility);
+                this.Bind(ViewModel, vm => vm.ControlsEnabled, v => v.TarraBarrelWithLid.IsEnabled);
+                this.Bind(ViewModel, vm => vm.ControlsEnabled, v => v.TarraBarrelWithLidTb.IsEnabled);
+                this.Bind(ViewModel, vm => vm.ControlsEnabled, v => v.TarraBarrelWithLidTb2.IsEnabled);
             });
         }
 

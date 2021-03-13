@@ -10,7 +10,8 @@
              xmlns:rx="http://reactiveui.net"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
-    xmlns:controls="clr-namespace:WeigthIndicator.Controls"
+             xmlns:enum="clr-namespace:WeigthIndicator.Domain.Models;assembly=WeigthIndicator.Domain"
+             xmlns:controls="clr-namespace:WeigthIndicator.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="1000">
     <Grid>
@@ -145,6 +146,7 @@
                     </ComboBoxItem>
                 </ComboBox>
             </ui:SimpleStackPanel>
+
             <ListView x:Name="ReestrsCollection" Grid.Row="1" 
                               Background="Transparent" BorderThickness="0"                  
                               Margin="10 0 0 5">
@@ -157,6 +159,36 @@
                                 <Setter Property="Background" Value="#FFB33434"/>
                             </DataTrigger>
                         </Style.Triggers>
+                        <!--<Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding ReestrState}" Value="False"/>
+                                    <Condition Binding="{Binding Recipe.BarrelRecipeType}" Value="{x:Static enum:BarrelRecipeType.Mettalic}"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter  Property="Background" Value="#aa2b1d"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding ReestrState}" Value="False"/>
+                                    <Condition Binding="{Binding Recipe.BarrelRecipeType}" Value="{x:Static enum:BarrelRecipeType.Plastic}"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter  Property="Background" Value="#e40017"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding ReestrState}" Value="True"/>
+                                    <Condition Binding="{Binding Recipe.BarrelRecipeType}" Value="{x:Static enum:BarrelRecipeType.Plastic}"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter  Property="Background" Value="#51c2d5"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding ReestrState}" Value="True"/>
+                                    <Condition Binding="{Binding Recipe.BarrelRecipeType}" Value="{x:Static enum:BarrelRecipeType.Mettalic}"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter  Property="Background" Value="#dddddd"/>
+                            </MultiDataTrigger>
+                        </Style.Triggers>-->
                     </Style>
                 </ListView.ItemContainerStyle>
                 

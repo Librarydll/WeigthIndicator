@@ -43,8 +43,8 @@ namespace WeigthIndicator.Dialogs
         [Reactive] public Customer SelectedCustomer { get; set; }
         [Reactive] public string Password { get; set; }
 
-        private Visibility _controlsVisibility = Visibility.Collapsed;
-        public Visibility ControlsVisibility
+        private bool _controlsVisibility = false;
+        public bool ControlsEnabled
         {
             get { return _controlsVisibility; }
             set { this.RaiseAndSetIfChanged(ref _controlsVisibility, value); }
@@ -74,13 +74,13 @@ namespace WeigthIndicator.Dialogs
         {
             if (psw == key)
             {
-                ControlsVisibility = Visibility.Visible;
+                ControlsEnabled = true;
             }
             else
             {
-                ControlsVisibility = Visibility.Collapsed;
+                ControlsEnabled = false;
             }
-            this.RaisePropertyChanged(nameof(ControlsVisibility));
+            this.RaisePropertyChanged(nameof(ControlsEnabled));
         }
 
         public async Task<(IEnumerable<Recipe>,IEnumerable<Customer> ,ReestrSetting)> GetAsync()

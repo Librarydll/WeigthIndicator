@@ -10,6 +10,7 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using WeigthIndicator.Core.Excel;
 using WeigthIndicator.Core.Print;
 using WeigthIndicator.Domain.Models;

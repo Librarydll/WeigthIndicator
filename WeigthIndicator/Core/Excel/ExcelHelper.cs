@@ -59,10 +59,12 @@ namespace WeigthIndicator.Core.Excel
             worksheet.Cells[row, 3].Value = reestr.BatchNumber;
             worksheet.Cells[row, 4].Style.Numberformat.Format = "dd.MM.yyyy";
             worksheet.Cells[row, 4].Value = reestr.BarrelStorage.ProductionDate;
-            worksheet.Cells[row, 5].Value = reestr.Customer.ShortName;
-            worksheet.Cells[row, 6].Value = reestr.Net;
-            worksheet.Cells[row, 7].Value = reestr.TareBarrelWithLid + reestr.Net;
-            worksheet.Cells[row, 8].Value = reestr.Note;
+            worksheet.Cells[row, 5].Style.Numberformat.Format = "dd.MM.yyyy hh:mm";
+            worksheet.Cells[row, 5].Value = reestr.PackingDate;
+            worksheet.Cells[row, 6].Value = reestr.Customer.ShortName;
+            worksheet.Cells[row, 7].Value = reestr.Net;
+            worksheet.Cells[row, 8].Value = reestr.TareBarrelWithLid + reestr.Net;
+            worksheet.Cells[row, 9].Value = reestr.Note;
 
             if (!reestr.ReestrState)
             {
@@ -77,6 +79,7 @@ namespace WeigthIndicator.Core.Excel
             worksheet.Row(row).Style.Font.Size = 14;
             worksheet.Column(1).AutoFit();
             worksheet.Column(4).AutoFit();
+            worksheet.Column(5).AutoFit();
 
         }
 
@@ -86,10 +89,11 @@ namespace WeigthIndicator.Core.Excel
             worksheet.Cells["B1"].Value = "Номер бочки";
             worksheet.Cells["C1"].Value = "Номер партии";
             worksheet.Cells["D1"].Value = "Дата производства";
-            worksheet.Cells["E1"].Value = "Покупатель";
-            worksheet.Cells["F1"].Value = "Нетто";
-            worksheet.Cells["G1"].Value = "Брутто";
-            worksheet.Cells["H1"].Value = "Примечание";
+            worksheet.Cells["E1"].Value = "Дата фасовки";
+            worksheet.Cells["F1"].Value = "Покупатель";
+            worksheet.Cells["G1"].Value = "Нетто";
+            worksheet.Cells["H1"].Value = "Брутто";
+            worksheet.Cells["I1"].Value = "Примечание";
         }
     }
 }
