@@ -19,6 +19,7 @@ namespace WeigthIndicator.Domain.Models
         private double vitaminC;
         private double energyValue;
         private double dryContent;
+        private BarrelRecipeType barrelRecipeType;
 
         public string ShortName { get => shortName; set => SetProperty(ref shortName, value); }
         public string LongNameRu { get => longNameRu; set => SetProperty(ref longNameRu, value); }
@@ -31,6 +32,8 @@ namespace WeigthIndicator.Domain.Models
         public double VitaminC { get => vitaminC; set => SetProperty(ref vitaminC, value); }
         public double EnergyValue { get => energyValue; set => SetProperty(ref energyValue, value); }
         public double DryContent { get => dryContent; set => SetProperty(ref dryContent, value); }
+
+        public BarrelRecipeType BarrelRecipeType { get => barrelRecipeType; set => SetProperty(ref barrelRecipeType, value); }
 
         public object Clone()
         {
@@ -46,8 +49,15 @@ namespace WeigthIndicator.Domain.Models
                 TransportationCondition = TransportationCondition,
                 VitaminC = VitaminC,
                 Carbohydrates = Carbohydrates,
-                LongNameKz = LongNameKz
+                LongNameKz = LongNameKz,
+                BarrelRecipeType = BarrelRecipeType
             };
         }
     }
+
+    public enum BarrelRecipeType
+    {
+        Mettalic,
+        Plastic
+    };
 }

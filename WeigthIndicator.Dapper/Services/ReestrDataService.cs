@@ -118,9 +118,13 @@ namespace WeigthIndicator.Dapper.Services
 
 
                 int barrelNumber = 1;
-                string firstQuery = "SELECT * FROM Reestrs ORDER BY id DESC LIMIT 1";
+                string firstQuery = @"SELECT *FROM Reestrs as r
+                                    LEFT JOIN Recipes as rc
+                                    on rc.id = r.recipeid
+                                    WHERE rc.BarrelRecipeType = @type
+                                    ORDER BY r.id DESC LIMIT 1";
 
-                var result = await connection.QueryFirstOrDefaultAsync<Reestr>(firstQuery);
+                var result = await connection.QueryFirstOrDefaultAsync<Reestr>(firstQuery,new { type =reestr.Recipe.BarrelRecipeType });
 
                 if (result != null)
                 {

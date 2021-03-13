@@ -3,6 +3,8 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using WeigthIndicator.ViewModels;
 using System;
+using WeigthIndicator.Domain.Models;
+
 namespace WeigthIndicator.Views
 {
     /// <summary>
@@ -40,6 +42,11 @@ namespace WeigthIndicator.Views
                 this.Bind(ViewModel, vm => vm.Recipe.Carbohydrates, v => v.Carbohydrates.Text)
                     .DisposeWith(disposables);
 
+                this.Bind(ViewModel, vm => vm.Recipe.BarrelRecipeType, v => v.BarrelType.SelectedIndex,
+                    x=> (int)x,
+                    x=>(BarrelRecipeType)Enum.Parse(typeof(BarrelRecipeType),x.ToString()))
+                    .DisposeWith(disposables);
+
                 this.BindCommand(ViewModel, vm => vm.CreateRecipe, v => v.SaveButton)
                     .DisposeWith(disposables);
 
@@ -49,8 +56,11 @@ namespace WeigthIndicator.Views
                     .SelectMany(x => x.GetRecipesAsync())
                     .SubscribeOnDispatcher()
                     .Subscribe(x => ViewModel.InitializeCollection(x));
-                    
+
             });
         }
+
+
+   
     }
 }

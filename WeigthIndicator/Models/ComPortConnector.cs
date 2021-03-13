@@ -62,6 +62,7 @@ namespace WeigthIndicator.Models
 
         private async Task Imitation(int z)
         {
+            ParsedValue = 0;
             for (int i = 1; i <= 10; i++)
             {
                 await Task.Delay(500);

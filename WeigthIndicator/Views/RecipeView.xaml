@@ -99,6 +99,7 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="250"/>
@@ -145,6 +146,22 @@
                  Style="{StaticResource short}"/>
             <TextBlock Grid.Row="4" Grid.Column="2"
             Text="%"/>
+            <TextBlock Grid.Row="5"
+                       Text="Тип бочек"/>
+            <ComboBox Grid.Row="5" Grid.Column="1"
+                     Grid.ColumnSpan="2"
+                      SelectedIndex="0"
+                      x:Name="BarrelType"
+                       Margin="5"
+                      FontSize="16"
+                      Width="110">
+                <ComboBoxItem>
+                    Металл
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    Пластик
+                </ComboBoxItem>
+            </ComboBox>
         </Grid>
 
         <Button Grid.Row="2"
@@ -239,6 +256,13 @@
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock FontSize="15" Text="{Binding Path=DryContent}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn   Header="Тип бочки">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="15" Text="{Binding Path=BarrelRecipeType}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
