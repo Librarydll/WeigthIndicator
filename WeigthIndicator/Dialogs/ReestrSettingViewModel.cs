@@ -5,8 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using WeigthIndicator.Dialogs.Common;
 using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Domain.Services;
@@ -17,6 +19,8 @@ namespace WeigthIndicator.Dialogs
 {
     public class ReestrSettingViewModel : DialogViewModelBase
     {
+        private readonly string key = "vasya1999";
+
         private readonly IReestrSettingDataService _reestrSettingDataService;
         private readonly IRecipeDataService _recipeDataService;
         private readonly ICustomerDataService _customerDataService;
@@ -37,8 +41,18 @@ namespace WeigthIndicator.Dialogs
 
         [Reactive] public Recipe SelectedRecipe { get; set; }
         [Reactive] public Customer SelectedCustomer { get; set; }
+        [Reactive] public string Password { get; set; }
+
+        private Visibility _controlsVisibility = Visibility.Collapsed;
+        public Visibility ControlsVisibility
+        {
+            get { return _controlsVisibility; }
+            set { this.RaiseAndSetIfChanged(ref _controlsVisibility, value); }
+        }
+
 
         [Reactive] public ReestrSetting ReestrSetting { get; set; } = new ReestrSetting();
+
         public ReestrSettingViewModel(
             IReestrSettingDataService reestrSettingDataService,
             IRecipeDataService recipeDataService, 
@@ -48,8 +62,26 @@ namespace WeigthIndicator.Dialogs
             _reestrSettingDataService = reestrSettingDataService;
             _recipeDataService = recipeDataService;
             _customerDataService = customerDataService;
+
+                 this.WhenAnyValue(x => x.Password)
+                .Throttle(TimeSpan.FromSeconds(1))
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .ObserveOnDispatcher()
+                .Subscribe(PasswordChecker);
         }
 
+        public void PasswordChecker(string psw)
+        {
+            if (psw == key)
+            {
+                ControlsVisibility = Visibility.Visible;
+            }
+            else
+            {
+                ControlsVisibility = Visibility.Collapsed;
+            }
+            this.RaisePropertyChanged(nameof(ControlsVisibility));
+        }
 
         public async Task<(IEnumerable<Recipe>,IEnumerable<Customer> ,ReestrSetting)> GetAsync()
         {

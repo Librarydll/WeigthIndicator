@@ -27,6 +27,10 @@ namespace WeigthIndicator.Views
                 this.Bind(ViewModel, vm => vm.ReestrSetting.InitialBarrelNumber, v => v.InitialBarrelNumber.Text)
                     .DisposeWith(disposables);
 
+
+                this.Bind(ViewModel, vm => vm.Password, v => v.Password.Password)
+                    .DisposeWith(disposables);
+
                 this.Bind(ViewModel,
                     vm => vm.ReestrSetting.MinDefaultWeigth,
                     v => v.DefaultWeight.Text,
@@ -79,6 +83,10 @@ namespace WeigthIndicator.Views
                     .SelectMany(x => x.GetAsync())
                     .ObserveOnDispatcher()
                     .Subscribe(x => ViewModel.Initialize(x));
+
+                this.Bind(ViewModel, vm => vm.ControlsVisibility, v => v.TarraBarrelWithLid.Visibility);
+                this.Bind(ViewModel, vm => vm.ControlsVisibility, v => v.TarraBarrelWithLidTb.Visibility);
+                this.Bind(ViewModel, vm => vm.ControlsVisibility, v => v.TarraBarrelWithLidTb2.Visibility);
             });
         }
 
