@@ -26,7 +26,9 @@ namespace WeigthIndicator.ViewModels
         private string _filename = string.Empty;
         private readonly IReestrDataService _reestrDataService;
         private readonly IDialogService _dialogService;
-
+        private IEnumerable<Reestr> _reestrs;
+        //0-filterbydate;1-filterbystring
+        private int _lastSelectedFilter = -1;
         public FilterModel FilterModel { get; set; }
 
 
@@ -39,6 +41,7 @@ namespace WeigthIndicator.ViewModels
         }
 
         [Reactive] public int SelectedPrintViewType { get; set; }
+        [Reactive] public int SelectedBarrelType { get; set; }
 
         public ReactiveCommand<Unit, Unit> FilterCommad { get; }
         public ReactiveCommand<Unit, Unit> FilterBySearchQueryCommand { get; }
@@ -73,11 +76,28 @@ namespace WeigthIndicator.ViewModels
             _netTotal = reestrCount
                 .Select(x => ReestrsCollection.Sum(z => z.Net))
                 .ToProperty(this, x => x.NetTotal);
+            this.WhenAnyValue(x => x.SelectedBarrelType)
+                .Skip(1)
+                .SelectMany(FilterCollectionByBarrelType)
+                .Subscribe();
 
             FilterBySearchQueryCommand = ReactiveCommand.CreateFromTask(ExecuteFilterBySearchQueryCommand, canFilter);
             PrintCommand = ReactiveCommand.Create<Reestr>(ExecutePrintCommand);
             EditCommand = ReactiveCommand.Create<Reestr>(ExecuteEditCommand);
             ExportExcelCommand = ReactiveCommand.Create(ExecuteExportExcelCommand);
+        }
+
+        private async Task<Unit> FilterCollectionByBarrelType(int key)
+        {
+            if (_lastSelectedFilter == 0)
+            {
+                ExecuteFilterCommand();
+            }
+            else
+            {
+                ExecuteFilterBySearchQueryCommand();
+            }
+           return Unit.Default;
         }
 
         private void ExecuteExportExcelCommand()
@@ -134,26 +154,24 @@ namespace WeigthIndicator.ViewModels
 
         private async Task ExecuteFilterCommand()
         {
-            IEnumerable<Reestr> reestrs;
 
             if (FilterModel.IsToDateInclude)
             {
-                reestrs = await _reestrDataService.GetReestrsByDates(FilterModel.FromDate, FilterModel.ToDate);
+                _reestrs = await _reestrDataService.GetReestrsByDates(FilterModel.FromDate, FilterModel.ToDate,SelectedBarrelType);
                 _filename = FilterModel.FromDate.ToString("dd.MM.yyyy") + "_" + FilterModel.ToDate.ToString("dd.MM.yyyy");
             }
             else
             {
-                reestrs = await _reestrDataService.GetReestrsByDate(FilterModel.FromDate);
+                _reestrs = await _reestrDataService.GetReestrsByDate(FilterModel.FromDate, SelectedBarrelType);
                 _filename = FilterModel.FromDate.ToString("dd.MM.yyyy");
             }
 
-            ReestrsCollection = new ObservableCollection<Reestr>(reestrs);
-
+            ReestrsCollection = new ObservableCollection<Reestr>(_reestrs);
+            _lastSelectedFilter = 0;
         }
 
         private async Task ExecuteFilterBySearchQueryCommand()
         {
-            IEnumerable<Reestr> reestrs;
             var regex = new Regex(FilterModel.pattern);
             var match = regex.Match(FilterModel.SearchQuery);
             if (match.Success)
@@ -161,17 +179,17 @@ namespace WeigthIndicator.ViewModels
                 var from = int.Parse(match.Groups[1].Value);
                 var to = int.Parse(match.Groups[3].Value);
 
-                reestrs = await _reestrDataService.GetReestrsByBarrelNumbers(from, to);
+                _reestrs = await _reestrDataService.GetReestrsByBarrelNumbers(from, to, SelectedBarrelType);
                 _filename = from.ToString() + "_" + to.ToString();
             }
             else
             {
-                reestrs = await _reestrDataService.GetReestrsByBatchNumber(FilterModel.SearchQuery);
+                _reestrs = await _reestrDataService.GetReestrsByBatchNumber(FilterModel.SearchQuery, SelectedBarrelType);
                 _filename = FilterModel.SearchQuery.Replace("/",".");
             }
 
-            ReestrsCollection = new ObservableCollection<Reestr>(reestrs);
-
+            ReestrsCollection = new ObservableCollection<Reestr>(_reestrs);
+            _lastSelectedFilter = 1;
         }
 
     }

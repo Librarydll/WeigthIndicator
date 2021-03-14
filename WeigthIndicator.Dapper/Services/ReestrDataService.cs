@@ -48,12 +48,11 @@ namespace WeigthIndicator.Dapper.Services
 
             }
         }
-
         public async Task<IEnumerable<Reestr>> GetReestrsByDate(DateTime dateTime)
         {
             using (var connection = _factory.CreateConnection())
             {
-                string query = reestrSelectQuery + "where date(reestr.packingDate) =@date";
+                string query = reestrSelectQuery + "where date(reestr.packingDate) =@date ";
 
                 return await connection.QueryAsync<Reestr, Recipe, BarrelStorage, Customer, Reestr>(query,
                     (reestr, recipe, br, c) =>
@@ -65,7 +64,29 @@ namespace WeigthIndicator.Dapper.Services
                     }
                     , new
                     {
-                        date = dateTime.Date
+                        date = dateTime.Date,
+                    });
+            }
+        }
+
+        public async Task<IEnumerable<Reestr>> GetReestrsByDate(DateTime dateTime, int type)
+        {
+            using (var connection = _factory.CreateConnection())
+            {
+                string query = reestrSelectQuery + "where date(reestr.packingDate) =@date and recipe.BarrelRecipeType =@type";
+
+                return await connection.QueryAsync<Reestr, Recipe, BarrelStorage, Customer, Reestr>(query,
+                    (reestr, recipe, br, c) =>
+                    {
+                        reestr.Recipe = recipe;
+                        reestr.BarrelStorage = br;
+                        reestr.Customer = c;
+                        return reestr;
+                    }
+                    , new
+                    {
+                        date = dateTime.Date,
+                        type
                     });
             }
         }
@@ -151,11 +172,11 @@ namespace WeigthIndicator.Dapper.Services
             }
         }
 
-        public async Task<IEnumerable<Reestr>> GetReestrsByDates(DateTime fromDate, DateTime toDate)
+        public async Task<IEnumerable<Reestr>> GetReestrsByDates(DateTime fromDate, DateTime toDate, int type)
         {
             using (var connection = _factory.CreateConnection())
             {
-                string query = reestrSelectQuery + "where date(reestr.packingDate) >=@fromDate and date(reestr.packingDate) <=@toDate";
+                string query = reestrSelectQuery + "where (date(reestr.packingDate) >=@fromDate and date(reestr.packingDate) <=@toDate) and recipe.BarrelRecipeType =@type";
 
                 return await connection.QueryAsync<Reestr, Recipe, BarrelStorage, Customer, Reestr>(query,
                     (reestr, recipe, br, c) =>
@@ -168,16 +189,17 @@ namespace WeigthIndicator.Dapper.Services
                     , new
                     {
                         fromDate = fromDate.Date,
-                        toDate = toDate.Date
+                        toDate = toDate.Date,
+                        type
                     });
             }
         }
 
-        public async Task<IEnumerable<Reestr>> GetReestrsByBatchNumber(string batchNumber)
+        public async Task<IEnumerable<Reestr>> GetReestrsByBatchNumber(string batchNumber, int type)
         {
             using (var connection = _factory.CreateConnection())
             {
-                string query = reestrSelectQuery + "where reestr.batchNumber=@batchNumber";
+                string query = reestrSelectQuery + "where reestr.batchNumber=@batchNumber and recipe.BarrelRecipeType =@type";
 
                 return await connection.QueryAsync<Reestr, Recipe, BarrelStorage, Customer, Reestr>(query,
                     (reestr, recipe, br, c) =>
@@ -189,16 +211,17 @@ namespace WeigthIndicator.Dapper.Services
                     }
                     , new
                     {
-                        batchNumber
+                        batchNumber,
+                        type
                     });
             }
         }
 
-        public async Task<IEnumerable<Reestr>> GetReestrsByBarrelNumbers(int from, int to)
+        public async Task<IEnumerable<Reestr>> GetReestrsByBarrelNumbers(int from, int to, int type)
         {
             using (var connection = _factory.CreateConnection())
             {
-                string query = reestrSelectQuery + "where reestr.barrelNumber >=@from and reestr.barrelNumber <=@to";
+                string query = reestrSelectQuery + "where reestr.barrelNumber >=@from and reestr.barrelNumber <=@to and recipe.BarrelRecipeType =@type";
 
                 return await connection.QueryAsync<Reestr, Recipe, BarrelStorage, Customer, Reestr>(query,
                     (reestr, recipe, br, c) =>
@@ -211,7 +234,8 @@ namespace WeigthIndicator.Dapper.Services
                     , new
                     {
                         from ,
-                        to 
+                        to ,
+                        type
                     });
             }
         }

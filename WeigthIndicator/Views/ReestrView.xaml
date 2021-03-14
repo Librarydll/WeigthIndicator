@@ -68,7 +68,20 @@
                         <TextBlock VerticalAlignment="Center" Margin="5 0 0 0" Text="Фильтр"/>
                     </StackPanel>
                 </Button>
+                <ComboBox Grid.Row="5" Grid.Column="1"
+                     Grid.ColumnSpan="2"
 
+                      x:Name="BarrelType"
+                       Margin="5"
+                      FontSize="16"
+                      Width="110">
+                    <ComboBoxItem>
+                        Металл
+                    </ComboBoxItem>
+                    <ComboBoxItem>
+                        Пластик
+                    </ComboBoxItem>
+                </ComboBox>
             </ToolBar>
 
             <Button x:Name="ExportExcelCommand" Margin="0 0 10 0" Cursor="Hand" HorizontalAlignment="Right" Background="#FFEEF5FD"  BorderBrush="{x:Null}" BorderThickness="0">

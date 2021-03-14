@@ -40,7 +40,11 @@ namespace WeigthIndicator.Views
                 this.Bind(ViewModel, vm => vm.FilterModel.SearchQuery, v => v.SearchQuery.Text);
 
                 this.Bind(ViewModel, vm => vm.SelectedPrintViewType, v => v.PrintViewTypeCmb.SelectedIndex)
-                 .DisposeWith(disposables);
+                    .DisposeWith(disposables);
+
+
+                this.Bind(ViewModel, vm => vm.SelectedBarrelType, v => v.BarrelType.SelectedIndex)
+                    .DisposeWith(disposables);
 
                 this.Bind(ViewModel, vm => vm.ReestrCount, v => v.ReestrCount.Text);
                 this.OneWayBind(ViewModel,
