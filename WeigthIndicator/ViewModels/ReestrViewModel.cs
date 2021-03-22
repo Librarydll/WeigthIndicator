@@ -91,11 +91,11 @@ namespace WeigthIndicator.ViewModels
         {
             if (_lastSelectedFilter == 0)
             {
-                ExecuteFilterCommand();
+              await  ExecuteFilterCommand();
             }
             else
             {
-                ExecuteFilterBySearchQueryCommand();
+              await  ExecuteFilterBySearchQueryCommand();
             }
            return Unit.Default;
         }

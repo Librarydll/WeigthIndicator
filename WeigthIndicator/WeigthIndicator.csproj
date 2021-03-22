@@ -51,6 +51,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>weigth indicator logo.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="netstandard" />
     <Reference Include="ReachFramework" />
@@ -308,6 +311,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\ms-excel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="weigth indicator logo.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
