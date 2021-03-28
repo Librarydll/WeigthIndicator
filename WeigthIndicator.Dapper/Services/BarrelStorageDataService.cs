@@ -53,5 +53,26 @@ namespace WeigthIndicator.Dapper.Services
                 return reminder ?? 0;
             }
         }
+
+        public async Task<int> GetLastBarrelNumber(Recipe recipe)
+        {
+            using (var connection = _factory.CreateConnection())
+            {
+                int barrelNumber = 0;
+                string firstQuery = @"SELECT *FROM Reestrs as r
+                                    LEFT JOIN Recipes as rc
+                                    on rc.id = r.recipeid
+                                    WHERE rc.BarrelRecipeType = @type
+                                    ORDER BY r.id DESC LIMIT 1";
+
+                var result = await connection.QueryFirstOrDefaultAsync<Reestr>(firstQuery, new { type = recipe.BarrelRecipeType });
+
+                if (result != null)
+                {
+                    barrelNumber = result.BarrelNumber;
+                }
+                return barrelNumber;
+            }
+        }
     }
 }

@@ -20,7 +20,7 @@ namespace WeigthIndicator.Dialogs
     public class ReestrSettingViewModel : DialogViewModelBase
     {
         private readonly string key = "vasya1999";
-
+        private readonly IBarrelStorageDataService _barrelStorageDataService;
         private readonly IReestrSettingDataService _reestrSettingDataService;
         private readonly IRecipeDataService _recipeDataService;
         private readonly ICustomerDataService _customerDataService;
@@ -54,21 +54,30 @@ namespace WeigthIndicator.Dialogs
         [Reactive] public ReestrSetting ReestrSetting { get; set; } = new ReestrSetting();
 
         public ReestrSettingViewModel(
+            IBarrelStorageDataService barrelStorageDataService,
             IReestrSettingDataService reestrSettingDataService,
-            IRecipeDataService recipeDataService, 
+            IRecipeDataService recipeDataService,
             ICustomerDataService customerDataService)
         {
             Title = "Настройки реестра";
+            _barrelStorageDataService = barrelStorageDataService;
             _reestrSettingDataService = reestrSettingDataService;
             _recipeDataService = recipeDataService;
             _customerDataService = customerDataService;
 
-                 this.WhenAnyValue(x => x.Password)
+            this.WhenAnyValue(x => x.Password)
                 .Throttle(TimeSpan.FromSeconds(1))
                 .Where(x => !string.IsNullOrWhiteSpace(x))
                 .ObserveOnDispatcher()
                 .Subscribe(PasswordChecker);
+
+            this.WhenAnyValue(x => x.SelectedRecipe)
+                .Skip(1)
+                .SelectMany(async (x) => await _barrelStorageDataService.GetLastBarrelNumber(x))
+                .ObserveOnDispatcher()
+                .Subscribe(number => ReestrSetting.InitialBarrelNumber = number+1);
         }
+       
 
         public void PasswordChecker(string psw)
         {
@@ -83,21 +92,23 @@ namespace WeigthIndicator.Dialogs
             this.RaisePropertyChanged(nameof(ControlsEnabled));
         }
 
-        public async Task<(IEnumerable<Recipe>,IEnumerable<Customer> ,ReestrSetting)> GetAsync()
+        public async Task<(IEnumerable<Recipe>, IEnumerable<Customer>, ReestrSetting, int)> GetAsync()
         {
             var rs = await _reestrSettingDataService.GetReestrSetting();
             var collection = await _recipeDataService.GetRecipes();
             var customers = await _customerDataService.GetCustomers();
-            return (collection, customers, rs);
+            var barrelNumber = await _barrelStorageDataService.GetLastBarrelNumber(rs.CurrentRecipe);
+            return (collection, customers, rs, barrelNumber);
         }
 
-        public void Initialize((IEnumerable<Recipe>,IEnumerable<Customer> ,ReestrSetting) args)
+        public void Initialize((IEnumerable<Recipe>, IEnumerable<Customer>, ReestrSetting, int) args)
         {
             RecipesCollection = new ObservableCollection<Recipe>(args.Item1);
             CustomersCollection = new ObservableCollection<Customer>(args.Item2);
             ReestrSetting = args.Item3 ?? new ReestrSetting();
             SelectedRecipe = RecipesCollection.FirstOrDefault(x => x.Id == ReestrSetting.RecipeId);
             SelectedCustomer = CustomersCollection.FirstOrDefault(x => x.Id == ReestrSetting.CustomerId);
+            ReestrSetting.InitialBarrelNumber = args.Item4 + 1;
         }
 
         protected override async void CloseDialogOnOk(IDialogParameters parameters)
