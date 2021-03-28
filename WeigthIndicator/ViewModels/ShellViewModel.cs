@@ -306,12 +306,30 @@ namespace WeigthIndicator.ViewModels
                     MessageBus.Current.SendMessage(ReestrSetting.CurrentRecipe);
 
                 }
-
                 if (!_comPortProvider.ComPortConnector.IsOpen)
+                {
+                    OpenComPort();
+                }
+
+            });
+        }
+
+        private void OpenComPort()
+        {
+            if (!_comPortProvider.ComPortConnector.IsOpen)
+            {
+                try
                 {
                     _comPortProvider.Start();
                 }
-            });
+                catch (Exception ex)
+                {
+                 MessageBox.Show(ex.Message);
+                 MessageBox.Show(ex.InnerException?.Message);
+                _comPortProvider.ComPortConnector.CloseComPort();
+                _comPortProvider.Start();
+                }
+            }
         }
     }
 

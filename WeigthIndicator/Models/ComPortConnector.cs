@@ -29,6 +29,10 @@ namespace WeigthIndicator.Models
         {
             _serialPort = new SerialPort();
         }
+        public void CloseComPort()
+        {
+            _serialPort.Close();
+        }
 
         public void InitializeSerialPort(ComPortConnectorSetting setting)
         {
