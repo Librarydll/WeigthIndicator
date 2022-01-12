@@ -25,12 +25,14 @@ namespace WeigthIndicator.ViewModels
         private StatusView _statusView;
         private CustomerView _customerView;
         private ReestrView _reestrView;
+        private GroupedReestrView _groupedReestrView;
         [Reactive] public bool RecipeView { get; set; }
         [Reactive] public bool MainView { get; set; }
         [Reactive] public bool SettingView { get; set; }
         [Reactive] public bool BarrelView { get; set; }
         [Reactive] public bool CustomerView { get; set; }
         [Reactive] public bool ReestrView { get; set; }
+        [Reactive] public bool GroupedReestrView { get; set; }
 
         public MainViewModel(IRegionManager regionManager,
             IUnityContainer unityContainer)
@@ -61,6 +63,10 @@ namespace WeigthIndicator.ViewModels
             this.WhenAnyValue(x => x.ReestrView)
                 .Where(x => ReestrView)
                 .Subscribe(x => GoToReestrView());
+
+            this.WhenAnyValue(x => x.GroupedReestrView)
+               .Where(x => GroupedReestrView)
+               .Subscribe(x => GoToGropedReestrView());
         }
 
 
@@ -70,6 +76,12 @@ namespace WeigthIndicator.ViewModels
             _statusView = _statusView ?? _unityContainer.Resolve<StatusView>();
             NavigateToView(_statusView, nameof(StatusView), "StatusBarRegion");
 
+        }
+
+        private void GoToGropedReestrView()
+        {
+            _groupedReestrView = _groupedReestrView ?? _unityContainer.Resolve<GroupedReestrView>();
+            NavigateToView(_groupedReestrView, nameof(GroupedReestrView));
         }
 
         private void GoToReestrView()

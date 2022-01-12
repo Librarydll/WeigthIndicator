@@ -19,14 +19,15 @@ using WeigthIndicator.ViewModels;
 namespace WeigthIndicator.Views
 {
     /// <summary>
-    /// Interaction logic for ReestrView.xaml
+    /// Interaction logic for GroupedReeestView.xaml
     /// </summary>
-    public partial class ReestrView : ReactiveUserControl<ReestrViewModel>
+    public partial class GroupedReestrView : ReactiveUserControl<GroupedReestrViewModel>
     {
-        public ReestrView()
+        public GroupedReestrView()
         {
             InitializeComponent();
-            ViewModel = DataContext as ReestrViewModel;
+
+            ViewModel = DataContext as GroupedReestrViewModel;
             this.WhenActivated(disposables =>
             {
                 this.OneWayBind(ViewModel,
@@ -37,14 +38,7 @@ namespace WeigthIndicator.Views
                 this.Bind(ViewModel, vm => vm.FilterModel.FromDate, v => v.FromDate.SelectedDate);
                 this.Bind(ViewModel, vm => vm.FilterModel.ToDate, v => v.ToDate.SelectedDate);
                 this.Bind(ViewModel, vm => vm.FilterModel.IsToDateInclude, v => v.IncludeToDate.IsChecked);
-                this.Bind(ViewModel, vm => vm.FilterModel.SearchQuery, v => v.SearchQuery.Text);
 
-                this.Bind(ViewModel, vm => vm.SelectedPrintViewType, v => v.PrintViewTypeCmb.SelectedIndex)
-                    .DisposeWith(disposables);
-
-
-                this.Bind(ViewModel, vm => vm.SelectedBarrelType, v => v.BarrelType.SelectedIndex)
-                    .DisposeWith(disposables);
 
                 this.Bind(ViewModel, vm => vm.ReestrCount, v => v.ReestrCount.Text);
                 this.OneWayBind(ViewModel,
@@ -52,13 +46,9 @@ namespace WeigthIndicator.Views
                                 v => v.NetSum.Text,
                                 x => x.ToString("N"));
 
-                this.OneWayBind(ViewModel, vm => vm.Batches, v => v.Batches.ItemsSource);
-                this.OneWayBind(ViewModel, vm => vm.Materials, v => v.Materials.ItemsSource);
-
-
                 this.BindCommand(ViewModel, vm => vm.FilterCommad, v => v.FilterCommand);
-                this.BindCommand(ViewModel, vm => vm.FilterBySearchQueryCommand, v => v.FilterBySearchQueryCommand);
                 this.BindCommand(ViewModel, vm => vm.ExportExcelCommand, v => v.ExportExcelCommand);
+
             });
         }
     }

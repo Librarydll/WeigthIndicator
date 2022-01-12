@@ -8,6 +8,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using WeigthIndicator.Core.Print;
 using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Domain.Services;
@@ -46,9 +47,6 @@ namespace WeigthIndicator.ViewModels
             var printInitialize = PrintPreviewFactory.GetPrintView(PrintViewType.BuyerInformation);
             var flowDoc = printInitialize.InitializeFlow(new Reestr() { Customer = customer });
             PrintHelper.Prints(flowDoc, customer.ShortName);
-
-            //    PrintPreviewViewCustomer printPreviewViewCustomer = new PrintPreviewViewCustomer();
-            //   printPreviewViewCustomer.InitializeFlow(new Reestr() { Customer = customer }); printPreviewViewCustomer.Show();
         }
 
         public async Task<IEnumerable<Customer>> GetCollectionsAsync()

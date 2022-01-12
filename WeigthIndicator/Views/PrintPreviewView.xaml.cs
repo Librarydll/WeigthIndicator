@@ -21,7 +21,7 @@ namespace WeigthIndicator.Views
     /// <summary>
     /// Interaction logic for PrintPreviewView.xaml
     /// </summary>
-    public partial class PrintPreviewView : Window, IPrintInitialize
+    public partial class PrintPreviewView : UserControl, IPrintInitialize
     {
         public PrintPreviewView()
         {

@@ -19,7 +19,7 @@ namespace WeigthIndicator.Dialogs
 {
     public class ReestrSettingViewModel : DialogViewModelBase
     {
-        private readonly string key = "vasya1999";
+        private readonly string key = "lenovo2021";
         private readonly IBarrelStorageDataService _barrelStorageDataService;
         private readonly IReestrSettingDataService _reestrSettingDataService;
         private readonly IRecipeDataService _recipeDataService;

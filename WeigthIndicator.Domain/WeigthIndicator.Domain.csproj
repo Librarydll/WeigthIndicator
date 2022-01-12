@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTO\GroupedReestr.cs" />
     <Compile Include="Exceptions\BarrelStorageEmptyException.cs" />
     <Compile Include="Exceptions\BarrelStorageNotEnoughException.cs" />
     <Compile Include="Models\BarrelStorage.cs" />

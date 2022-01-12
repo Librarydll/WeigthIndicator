@@ -178,8 +178,8 @@ namespace WeigthIndicator.ViewModels
             var printInitialize = PrintPreviewFactory.GetPrintView(printViewType);
 
             FlowDocument flowDoc = printInitialize.InitializeFlow(reestr);
-
             PrintHelper.Prints(flowDoc, reestr.PackingDate.ToString("dd.MM.yyyy"));
+
         }
 
 

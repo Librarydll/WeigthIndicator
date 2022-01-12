@@ -8,6 +8,7 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace WeigthIndicator.Models
 {
@@ -36,31 +37,42 @@ namespace WeigthIndicator.Models
 
         public void InitializeSerialPort(ComPortConnectorSetting setting)
         {
-            if (_serialPort.IsOpen)
+            try
             {
-                _serialPort.Close();
-            }
+                if (_serialPort.IsOpen)
+                {
+                    _serialPort.Close();
+                }
 
-            string[] ports = SerialPort.GetPortNames();
-            var port = ports.FirstOrDefault(x => x == setting.ComPortName);
-            if (setting != null && port != null)
+                string[] ports = SerialPort.GetPortNames();
+                var port = ports.FirstOrDefault(x => x == setting.ComPortName);
+                if (setting != null && port != null)
+                {
+                    _serialPort.PortName = port;
+                    _serialPort.BaudRate = setting.BaudRate;
+                    _serialPort.DataBits = setting.DataBits;
+                    _serialPort.StopBits = setting.StopBits;
+                    _serialPort.Parity = setting.Parity;
+                    _serialPort.Open();
+                    _serialPort.DataReceived -= SerialPort_DataReceived;
+                    _serialPort.ErrorReceived -= SerialPort_ErrorReceived;
+                    _serialPort.DataReceived += SerialPort_DataReceived;
+                    _serialPort.ErrorReceived += SerialPort_ErrorReceived;
+                }
+
+            }
+            catch (Exception ex)
             {
-                _serialPort.PortName = port;
-                _serialPort.BaudRate = setting.BaudRate;
-                _serialPort.DataBits = setting.DataBits;
-                _serialPort.StopBits = setting.StopBits;
-                _serialPort.Parity = setting.Parity;
-                _serialPort.Open();
-
-                _serialPort.DataReceived += SerialPort_DataReceived;
-                _serialPort.ErrorReceived += SerialPort_ErrorReceived;
+               MessageBox.Show(ex.Message);
             }
-
             //Task.Run(async () =>
             //{
-            //    await Imitation(9);
-            //    await Task.Delay(7000);
-            //    await Imitation(10);
+            //    await Imitation(20);
+            //    await Task.Delay(5000);
+            //    await Imitation(20);
+            //    await Task.Delay(5000);
+            //    await Imitation(20);
+            //    await Imitation(20);
             //});
         }
 

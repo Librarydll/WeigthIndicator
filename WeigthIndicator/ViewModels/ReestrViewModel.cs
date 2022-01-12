@@ -10,6 +10,7 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 using WeigthIndicator.Core.Excel;
 using WeigthIndicator.Core.Print;
@@ -30,8 +31,8 @@ namespace WeigthIndicator.ViewModels
         //0-filterbydate;1-filterbystring
         private int _lastSelectedFilter = -1;
         public FilterModel FilterModel { get; set; }
-
-
+        private IEnumerable<string> _allBatches;
+        private bool ignore = false;
         private ObservableCollection<Reestr> _reestrsCollection;
 
         public ObservableCollection<Reestr> ReestrsCollection
@@ -40,8 +41,50 @@ namespace WeigthIndicator.ViewModels
             set { this.RaiseAndSetIfChanged(ref _reestrsCollection, value); }
         }
 
+        private ObservableCollection<string> _materials;
+        public ObservableCollection<string> Materials
+        {
+            get { return _materials; }
+            set { this.RaiseAndSetIfChanged(ref _materials, value); }
+        }
+
+        private ObservableCollection<string> _batches;
+        public ObservableCollection<string> Batches
+        {
+            get { return _batches; }
+            set { this.RaiseAndSetIfChanged(ref _batches, value); }
+        }
+
+        private string _selectedBatch;
+        public string SelectedBatch
+        {
+            get { return _selectedBatch; }
+            set 
+            {
+                _selectedBatch = value; 
+                if(!ignore)
+                    SelectedBatchChanged(); 
+            }
+        }
+
+    
+        private string _selectedMaterial;
+        public string SelectedMaterial
+        {
+            get { return _selectedMaterial; }
+            set 
+            { 
+                _selectedMaterial = value;
+                if (!ignore)
+                    SelectedMaterialChanged(); 
+            }
+        }
+
+     
+
         [Reactive] public int SelectedPrintViewType { get; set; }
         [Reactive] public int SelectedBarrelType { get; set; }
+        public int BarrelCode => SelectedBarrelType - 1;
 
         public ReactiveCommand<Unit, Unit> FilterCommad { get; }
         public ReactiveCommand<Unit, Unit> FilterBySearchQueryCommand { get; }
@@ -91,13 +134,13 @@ namespace WeigthIndicator.ViewModels
         {
             if (_lastSelectedFilter == 0)
             {
-              await  ExecuteFilterCommand();
+                await  ExecuteFilterCommand();
             }
             else
             {
-              await  ExecuteFilterBySearchQueryCommand();
+                await  ExecuteFilterBySearchQueryCommand();
             }
-           return Unit.Default;
+            return Unit.Default;
         }
 
         private void ExecuteExportExcelCommand()
@@ -157,17 +200,18 @@ namespace WeigthIndicator.ViewModels
 
             if (FilterModel.IsToDateInclude)
             {
-                _reestrs = await _reestrDataService.GetReestrsByDates(FilterModel.FromDate, FilterModel.ToDate,SelectedBarrelType);
+                _reestrs = await _reestrDataService.GetReestrsByDates(FilterModel.FromDate, FilterModel.ToDate, BarrelCode);
                 _filename = FilterModel.FromDate.ToString("dd.MM.yyyy") + "_" + FilterModel.ToDate.ToString("dd.MM.yyyy");
             }
             else
             {
-                _reestrs = await _reestrDataService.GetReestrsByDate(FilterModel.FromDate, SelectedBarrelType);
+                _reestrs = await _reestrDataService.GetReestrsByDate(FilterModel.FromDate, BarrelCode);
                 _filename = FilterModel.FromDate.ToString("dd.MM.yyyy");
             }
 
             ReestrsCollection = new ObservableCollection<Reestr>(_reestrs);
-            _lastSelectedFilter = 0;
+            FillCombo();
+             _lastSelectedFilter = 0;
         }
 
         private async Task ExecuteFilterBySearchQueryCommand()
@@ -179,17 +223,65 @@ namespace WeigthIndicator.ViewModels
                 var from = int.Parse(match.Groups[1].Value);
                 var to = int.Parse(match.Groups[3].Value);
 
-                _reestrs = await _reestrDataService.GetReestrsByBarrelNumbers(from, to, SelectedBarrelType);
+                _reestrs = await _reestrDataService.GetReestrsByBarrelNumbers(FilterModel.FromDate,FilterModel.ToDate, from, to, BarrelCode);
                 _filename = from.ToString() + "_" + to.ToString();
             }
             else
             {
-                _reestrs = await _reestrDataService.GetReestrsByBatchNumber(FilterModel.SearchQuery, SelectedBarrelType);
+                _reestrs = await _reestrDataService.GetReestrsByBatchNumber(FilterModel.FromDate, FilterModel.ToDate, FilterModel.SearchQuery, BarrelCode);
                 _filename = FilterModel.SearchQuery.Replace("/",".");
             }
 
             ReestrsCollection = new ObservableCollection<Reestr>(_reestrs);
             _lastSelectedFilter = 1;
+            FillCombo();
+        }
+
+        private void SelectedBatchChanged()
+        {
+            IEnumerable<Reestr> reestrs = _reestrs;
+            if (!string.IsNullOrWhiteSpace(SelectedMaterial))
+            {
+                reestrs = _reestrs.Where(x => x.Recipe.ShortName == SelectedMaterial);
+
+            }
+            if (!string.IsNullOrWhiteSpace(SelectedBatch))
+            {
+                reestrs = reestrs.Where(x => x.BatchNumber == SelectedBatch);
+            }
+            ReestrsCollection = new ObservableCollection<Reestr>(reestrs);
+        }
+        private void SelectedMaterialChanged()
+        {
+            IEnumerable<Reestr> reestrs = _reestrs;
+            if (!string.IsNullOrWhiteSpace(SelectedMaterial))
+            {
+                reestrs = _reestrs.Where(x => x.Recipe.ShortName == SelectedMaterial);
+            }
+            ignore = true;
+            Batches = new ObservableCollection<string>(reestrs.Select(x => x.BatchNumber).Distinct());
+            ignore = false;
+            ReestrsCollection = new ObservableCollection<Reestr>(reestrs);
+        }
+
+        public void FillCombo()
+        {
+            string all = "";
+            _allBatches = ReestrsCollection.Select(x => x.BatchNumber).Distinct();
+            Batches = new ObservableCollection<string>
+            {
+                all
+            };
+            Batches.AddRange(_allBatches);
+            var materials = ReestrsCollection.Select(x => x.Recipe.ShortName).Distinct();
+            Materials = new ObservableCollection<string>
+            {
+                all
+            };
+            Materials.AddRange(materials);
+
+           // SelectedMaterial = Materials.FirstOrDefault();
+           // SelectedBatch = Batches.FirstOrDefault();
         }
 
     }

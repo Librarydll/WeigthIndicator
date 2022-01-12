@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WeigthIndicator.Domain.DTO;
 using WeigthIndicator.Domain.Exceptions;
 using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Domain.Services;
@@ -20,6 +21,7 @@ namespace WeigthIndicator.Dapper.Services
                                 "on reestr.barrelStorageId =br.id " +
                                 "Left join Customers as c " +
                                 "on reestr.customerid =c.id ";
+
 
         private readonly ApplicationContextFactory _factory;
 
@@ -73,7 +75,12 @@ namespace WeigthIndicator.Dapper.Services
         {
             using (var connection = _factory.CreateConnection())
             {
-                string query = reestrSelectQuery + "where date(reestr.packingDate) =@date and recipe.BarrelRecipeType =@type";
+                string query = reestrSelectQuery + "where date(reestr.packingDate) =@date";
+
+                if (type != -1)
+                {
+                    query += " and recipe.BarrelRecipeType =@type";
+                }
 
                 return await connection.QueryAsync<Reestr, Recipe, BarrelStorage, Customer, Reestr>(query,
                     (reestr, recipe, br, c) =>
@@ -145,7 +152,7 @@ namespace WeigthIndicator.Dapper.Services
                                     WHERE rc.BarrelRecipeType = @type
                                     ORDER BY r.id DESC LIMIT 1";
 
-                var result = await connection.QueryFirstOrDefaultAsync<Reestr>(firstQuery,new { type =reestr.Recipe.BarrelRecipeType });
+                var result = await connection.QueryFirstOrDefaultAsync<Reestr>(firstQuery, new { type = reestr.Recipe.BarrelRecipeType });
 
                 if (result != null)
                 {
@@ -176,8 +183,11 @@ namespace WeigthIndicator.Dapper.Services
         {
             using (var connection = _factory.CreateConnection())
             {
-                string query = reestrSelectQuery + "where (date(reestr.packingDate) >=@fromDate and date(reestr.packingDate) <=@toDate) and recipe.BarrelRecipeType =@type";
-
+                string query = reestrSelectQuery + "where (date(reestr.packingDate) >=@fromDate and date(reestr.packingDate) <=@toDate)";
+                if (type != -1)
+                {
+                    query += " and recipe.BarrelRecipeType =@type";
+                }
                 return await connection.QueryAsync<Reestr, Recipe, BarrelStorage, Customer, Reestr>(query,
                     (reestr, recipe, br, c) =>
                     {
@@ -195,11 +205,17 @@ namespace WeigthIndicator.Dapper.Services
             }
         }
 
-        public async Task<IEnumerable<Reestr>> GetReestrsByBatchNumber(string batchNumber, int type)
+        public async Task<IEnumerable<Reestr>> GetReestrsByBatchNumber(DateTime fromDate, DateTime toDate, string batchNumber, int type)
         {
             using (var connection = _factory.CreateConnection())
             {
-                string query = reestrSelectQuery + "where reestr.batchNumber=@batchNumber and recipe.BarrelRecipeType =@type";
+                string query = reestrSelectQuery + "where (date(reestr.packingDate) >=@fromDate and date(reestr.packingDate) <=@toDate) and reestr.batchNumber=@batchNumber";
+
+
+                if (type != -1)
+                {
+                    query += " and recipe.BarrelRecipeType =@type";
+                }
 
                 return await connection.QueryAsync<Reestr, Recipe, BarrelStorage, Customer, Reestr>(query,
                     (reestr, recipe, br, c) =>
@@ -211,17 +227,25 @@ namespace WeigthIndicator.Dapper.Services
                     }
                     , new
                     {
+                        fromDate = fromDate.Date,
+                        toDate = toDate.Date,
                         batchNumber,
                         type
                     });
             }
         }
 
-        public async Task<IEnumerable<Reestr>> GetReestrsByBarrelNumbers(int from, int to, int type)
+        public async Task<IEnumerable<Reestr>> GetReestrsByBarrelNumbers(DateTime fromDate, DateTime toDate, int from, int to, int type)
         {
             using (var connection = _factory.CreateConnection())
             {
-                string query = reestrSelectQuery + "where reestr.barrelNumber >=@from and reestr.barrelNumber <=@to and recipe.BarrelRecipeType =@type";
+                string query = reestrSelectQuery + "where (date(reestr.packingDate) >=@fromDate and date(reestr.packingDate) <=@toDate) and reestr.barrelNumber >=@from and reestr.barrelNumber <=@to";
+
+                if (type != -1)
+                {
+                    query += " and recipe.BarrelRecipeType =@type";
+                }
+
 
                 return await connection.QueryAsync<Reestr, Recipe, BarrelStorage, Customer, Reestr>(query,
                     (reestr, recipe, br, c) =>
@@ -233,9 +257,51 @@ namespace WeigthIndicator.Dapper.Services
                     }
                     , new
                     {
-                        from ,
-                        to ,
+                        fromDate = fromDate.Date,
+                        toDate = toDate.Date,
+                        from,
+                        to,
                         type
+                    });
+            }
+        }
+
+        public async Task<IEnumerable<GroupedReestr>> GetGroupedReestrs(DateTime fromDate, DateTime toDate)
+        {
+            using (var connection = _factory.CreateConnection())
+            {
+                string query =  @"SELECT reestr.BatchNumber,recipe.ShortName as RecipeName,Count(recipe.id) as barrelscount,Sum(reestr.Net) as totalnet FROM Reestrs as reestr 
+                                              Left join Recipes as recipe
+                                              on recipe.id = reestr.recipeid
+                                              where(date(reestr.packingDate) >= @fromDate and date(reestr.packingDate) <= @toDate)
+                                              group by recipe.ShortName,reestr.BatchNumber;";
+
+
+                return await connection.QueryAsync<GroupedReestr>(query,
+                    new
+                    {
+                        fromDate = fromDate.Date,
+                        toDate = toDate.Date,
+
+                    });
+            }
+        }
+
+        public async Task<IEnumerable<GroupedReestr>> GetGroupedReestrs(DateTime fromDate)
+        {
+            using (var connection = _factory.CreateConnection())
+            {
+                string query =  @"SELECT reestr.BatchNumber,recipe.ShortName as RecipeName,Count(recipe.id) as barrelscount,Sum(reestr.Net) as totalnet FROM Reestrs as reestr 
+                                              Left join Recipes as recipe
+                                              on recipe.id = reestr.recipeid
+                                              where date(reestr.packingDate) >= @fromDate
+                                              group by recipe.ShortName,reestr.BatchNumber;";
+
+
+                return await connection.QueryAsync<GroupedReestr>(query,
+                    new
+                    {
+                        fromDate = fromDate.Date,
                     });
             }
         }

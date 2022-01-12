@@ -37,6 +37,9 @@ namespace WeigthIndicator.Views
                 this.Bind(ViewModel, vm => vm.ReestrView, view => view.ReestrView.IsSelected)
                    .DisposeWith(disposables);
 
+                this.Bind(ViewModel, vm => vm.GroupedReestrView, view => view.GropedReestrView.IsSelected)
+                 .DisposeWith(disposables);
+
                 this.WhenAnyValue(x => x.ViewModel)
                    .Subscribe(x => x.GoToStatusView());
 
