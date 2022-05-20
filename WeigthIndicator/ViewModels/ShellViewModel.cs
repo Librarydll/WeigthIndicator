@@ -18,6 +18,7 @@ using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Domain.Services;
 using WeigthIndicator.Events;
 using WeigthIndicator.Factory;
+using WeigthIndicator.Models.ViewModels;
 using WeigthIndicator.Services;
 using WeigthIndicator.Views;
 
@@ -27,15 +28,14 @@ namespace WeigthIndicator.ViewModels
     {
         private readonly IComPortProvider _comPortProvider;
         private readonly IReestrSettingDataService _reestrSettingDataService;
-        private readonly IRecipeDataService _recipeDataService;
         private readonly IReestrDataService _reestrDataService;
         private readonly IDialogService _dialogService;
         private bool _isValueDroppedToMinimum = true;
         public ReactiveCommand<Unit, Unit> OpenReestrSettingCommand => ReactiveCommand.Create(ExecuteOpenReestrSettingCommand);
 
-        private ObservableCollection<Reestr> _reestrsCollection;
+        private ObservableCollection<ReestrObject> _reestrsCollection;
 
-        public ObservableCollection<Reestr> ReestrsCollection
+        public ObservableCollection<ReestrObject> ReestrsCollection
         {
             get { return _reestrsCollection; }
             set { this.RaiseAndSetIfChanged(ref _reestrsCollection, value); }
@@ -47,16 +47,17 @@ namespace WeigthIndicator.ViewModels
         [Reactive] public int ProgressValue { get; set; }
         [Reactive] public int MaxProgressValue { get; set; }
         [Reactive] public bool IsAutoMode { get; set; }
-        [Reactive] public Reestr SelectedReestr { get; set; }
+        [Reactive] public ReestrObject SelectedReestr { get; set; }
         [Reactive] public int SelectedPrintViewType { get; set; }
 
         private readonly ObservableAsPropertyHelper<double> _itemWeight;
         public double ItemWeigth => _itemWeight.Value;
 
+        public ReactiveCommand<Unit, Unit> Imitation { get; set; }
 
-        public ReactiveCommand<Unit, Reestr> SaveCommand { get; set; }
-        public ReactiveCommand<Reestr, Unit> EditCommand { get; set; }
-        public ReactiveCommand<Reestr, Unit> PrintCommand { get; set; }
+        public ReactiveCommand<Unit, ReestrObject> SaveCommand { get; set; }
+        public ReactiveCommand<ReestrObject, Unit> EditCommand { get; set; }
+        public ReactiveCommand<ReestrObject, Unit> PrintCommand { get; set; }
 
         private readonly ObservableAsPropertyHelper<int> _reestrCount;
         public int ReestrCount => _reestrCount.Value;
@@ -66,13 +67,11 @@ namespace WeigthIndicator.ViewModels
 
         public ShellViewModel(IComPortProvider comPortProvider,
             IReestrSettingDataService reestrSettingDataService,
-            IRecipeDataService recipeDataService,
             IReestrDataService reestrDataService,
             IDialogService dialogService)
         {
             _comPortProvider = comPortProvider;
             _reestrSettingDataService = reestrSettingDataService;
-            _recipeDataService = recipeDataService;
             _reestrDataService = reestrDataService;
             _dialogService = dialogService;
             MaxProgressValue = 3;
@@ -91,7 +90,7 @@ namespace WeigthIndicator.ViewModels
                         .Where(x => IsAutoMode && _isValueDroppedToMinimum)
                         .Where(ValidateParsedValue)
                         .SelectMany(InsertToDataBase)
-                        .Catch((Func<Exception, IObservable<Reestr>>)HandleException)
+                        .Catch((Func<Exception, IObservable<ReestrObject>>)HandleException)
                         .Where(x => x != null)
                         .Select(x => x)
                         .ObserveOn(RxApp.MainThreadScheduler)
@@ -115,9 +114,10 @@ namespace WeigthIndicator.ViewModels
                .WhenAnyValue(x => x.IsAutoMode,
                isAutoMode => isAutoMode == false);
 
+            Imitation = ReactiveCommand.CreateFromTask(ExecuteImitation);
             SaveCommand = ReactiveCommand.CreateFromTask(ExecuteSaveCommand, canExecute);
             SaveCommand
-                .Catch((Func<Exception, IObservable<Reestr>>)HandleException)
+                .Catch((Func<Exception, IObservable<ReestrObject>>)HandleException)
                 .Where(x => x != null)
                 .Select(x => x)
                 .ObserveOn(RxApp.MainThreadScheduler)
@@ -129,16 +129,28 @@ namespace WeigthIndicator.ViewModels
                 .Select(x => x != null);
 
 
-            EditCommand = ReactiveCommand.Create<Reestr>(ExecuteEditViewCommand, canEditAndCanPrint);
-            PrintCommand = ReactiveCommand.Create<Reestr>(ExecutePrintViewCommand, canEditAndCanPrint);
+            EditCommand = ReactiveCommand.Create<ReestrObject>(ExecuteEditViewCommand, canEditAndCanPrint);
+            PrintCommand = ReactiveCommand.Create<ReestrObject>(ExecutePrintViewCommand, canEditAndCanPrint);
             ExecuteOpenReestrSettingCommand();
 
         }
 
-        private void ExecuteEditViewCommand(Reestr reestr)
+        private async Task<Unit> ExecuteImitation()
+        {
+            _comPortProvider.ComPortConnector.ParsedValue = 0;
+            for (int i = 1; i <= 10; i++)
+            {
+                await Task.Delay(500);
+                _comPortProvider.ComPortConnector.ParsedValue = i * 25;
+            }
+
+            return Unit.Default;
+        }
+
+        private void ExecuteEditViewCommand(ReestrObject reestr)
         {
             var param = new DialogParameters();
-            param.Add("model", reestr);
+            param.Add("model", reestr.BuildOut());
             Reestr updated = null;
             _dialogService.ShowDialog("ReestrEditView", param, x =>
              {
@@ -171,7 +183,7 @@ namespace WeigthIndicator.ViewModels
 
         }
 
-        private void ExecutePrintViewCommand(Reestr reestr)
+        private void ExecutePrintViewCommand(ReestrObject reestr)
         {
             var printViewType = (PrintViewType)Enum.Parse(typeof(PrintViewType), SelectedPrintViewType.ToString());
             if (printViewType == PrintViewType.NoPrint) return;
@@ -183,18 +195,18 @@ namespace WeigthIndicator.ViewModels
         }
 
 
-        public async Task<IEnumerable<Reestr>> Initialize()
+        public async Task<IEnumerable<ReestrObject>> Initialize()
         {
             var reestrs = await _reestrDataService.GetReestrsByDate(DateTime.Now);
             ReestrSetting = await _reestrSettingDataService.GetReestrSetting();
             MessageBus.Current.SendMessage(ReestrSetting.CurrentRecipe);
-            return reestrs;
+            return reestrs.Select(z=>new ReestrObject(z));
         }
 
-        public void FillCollection(IEnumerable<Reestr> reestrs)
+        public void FillCollection(IEnumerable<ReestrObject> reestrs)
         {
             if (ReestrsCollection == null)
-                ReestrsCollection = new ObservableCollection<Reestr>(reestrs);
+                ReestrsCollection = new ObservableCollection<ReestrObject>(reestrs);
             else
             {
                 ReestrsCollection.AddRange(reestrs);
@@ -210,26 +222,27 @@ namespace WeigthIndicator.ViewModels
 
         }
 
-        private async Task<Reestr> ExecuteSaveCommand()
+        private async Task<ReestrObject> ExecuteSaveCommand()
         {
             if (_isValueDroppedToMinimum)
             {
                 var net = _comPortProvider.ComPortConnector.ParsedValue - ReestrSetting.TaraBarrel;
                 var reestr = CreateReestr(net);
-                return await _reestrDataService.CreateReestrAndUpdateBarrelStorage(reestr);
+                var  r = await _reestrDataService.CreateReestrAndUpdateBarrelStorage(reestr);
+                return new ReestrObject(r);
             }
 
             return null;
         }
 
-        private IObservable<Reestr> HandleException(Exception exception)
+        private IObservable<ReestrObject> HandleException(Exception exception)
         {
-            if (exception is BarrelStorageEmptyException ex)
+            if (exception is BarrelStorageEmptyException)
             {
                 MessageBox.Show("Test");
             }
 
-            return Observable.Return<Reestr>(null);
+            return Observable.Return<ReestrObject>(null);
         }
 
         private void Progress2(long obj)
@@ -245,16 +258,17 @@ namespace WeigthIndicator.ViewModels
             return value;
         }
 
-        private async Task<Reestr> InsertToDataBase(double value)
+        private async Task<ReestrObject> InsertToDataBase(double value)
         {
             var net = value - ReestrSetting.TaraBarrel;
             var reestr = CreateReestr(net);
             if(reestr.BarrelNumber>0)
                 await _reestrSettingDataService.UpdateReestrSettingBarrelColumn(ReestrSetting);
-            return await _reestrDataService.CreateReestrAndUpdateBarrelStorage(reestr);
+            var r = await _reestrDataService.CreateReestrAndUpdateBarrelStorage(reestr);
+            return new ReestrObject(r);
         }
 
-        private void InsertToCollection(Reestr reestr)
+        private void InsertToCollection(ReestrObject reestr)
         {
             if (reestr != null)
             {

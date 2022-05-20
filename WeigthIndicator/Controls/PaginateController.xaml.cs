@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WeigthIndicator.Domain.Models;
+using WeigthIndicator.Models.ViewModels;
 
 namespace WeigthIndicator.Controls
 {
@@ -64,15 +65,15 @@ namespace WeigthIndicator.Controls
 
 
 
-        public ObservableCollection<Reestr> ReestrsCollection
+        public ObservableCollection<ReestrObject> ReestrsCollection
         {
-            get { return (ObservableCollection<Reestr>)GetValue(ReestrsCollectionProperty); }
+            get { return (ObservableCollection<ReestrObject>)GetValue(ReestrsCollectionProperty); }
             set { SetValue(ReestrsCollectionProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for ReestrsCollection.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ReestrsCollectionProperty =
-            DependencyProperty.Register("ReestrsCollection", typeof(ObservableCollection<Reestr>), typeof(PaginateController), new PropertyMetadata(new ObservableCollection<Reestr>(), OnCollectionChanged));
+            DependencyProperty.Register("ReestrsCollection", typeof(ObservableCollection<ReestrObject>), typeof(PaginateController), new PropertyMetadata(new ObservableCollection<ReestrObject>(), OnCollectionChanged));
 
 
         private static void OnCollectionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

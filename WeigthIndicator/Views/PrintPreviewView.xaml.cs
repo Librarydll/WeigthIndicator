@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Factory;
 using WeigthIndicator.Models;
+using WeigthIndicator.Models.ViewModels;
 
 namespace WeigthIndicator.Views
 {
@@ -29,7 +30,7 @@ namespace WeigthIndicator.Views
         }
 
 
-        public FlowDocument InitializeFlow(Reestr reestr)
+        public FlowDocument InitializeFlow(ReestrObject reestr)
         {
             NameRu.Text = reestr.Recipe.LongNameRu;
             NameKz.Text = reestr.Recipe.LongNameKz;

@@ -152,8 +152,10 @@ namespace WeigthIndicator.ViewModels
 
         private void ExecuteEditCommand(Reestr reestr)
         {
-            var param = new DialogParameters();
-            param.Add("model", reestr);
+            var param = new DialogParameters
+            {
+                { "model", reestr }
+            };
             Reestr updated = null;
             _dialogService.ShowDialog("ReestrEditView", param, x =>
             {
@@ -190,7 +192,7 @@ namespace WeigthIndicator.ViewModels
             var printViewType = (PrintViewType)Enum.Parse(typeof(PrintViewType), SelectedPrintViewType.ToString());
             var printInitialize = PrintPreviewFactory.GetPrintView(printViewType);
 
-            var flowDoc = printInitialize.InitializeFlow(reestr);
+            var flowDoc = printInitialize.InitializeFlow(new Models.ViewModels.ReestrObject(reestr));
 
             PrintHelper.Prints(flowDoc, reestr.PackingDate.ToString("dd.MM.yyyy"));
         }

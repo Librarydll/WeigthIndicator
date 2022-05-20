@@ -23,6 +23,8 @@ namespace WeigthIndicator.Domain.Services
 
         Task<IEnumerable<GroupedReestr>> GetGroupedReestrs(DateTime fromDate, DateTime toDate);
         Task<IEnumerable<GroupedReestr>> GetGroupedReestrs(DateTime fromDate);
+        Task<Reestr> GetLastReestr(int recipeId, DateTime date);
+
 
     }
 }

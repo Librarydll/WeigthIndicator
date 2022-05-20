@@ -305,5 +305,15 @@ namespace WeigthIndicator.Dapper.Services
                     });
             }
         }
+
+        public async Task<Reestr> GetLastReestr(int recipeId, DateTime date)
+        {
+            using (var connection = _factory.CreateConnection())
+            {
+                string query = "SELECT *FROM Reestrs where recipeid =@recipeId and Date(PackingDate) =@date  order by id desc";
+
+                return await connection.QueryFirstOrDefaultAsync<Reestr>(query, new { recipeId, date = date.Date });
+            }
+        }
     }
 }

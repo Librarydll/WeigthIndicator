@@ -45,7 +45,7 @@ namespace WeigthIndicator.ViewModels
         private void ExecutePrintCommand(Customer customer)
         {
             var printInitialize = PrintPreviewFactory.GetPrintView(PrintViewType.BuyerInformation);
-            var flowDoc = printInitialize.InitializeFlow(new Reestr() { Customer = customer });
+            var flowDoc = printInitialize.InitializeFlow(new Models.ViewModels.ReestrObject(new Reestr() { Customer = customer }));
             PrintHelper.Prints(flowDoc, customer.ShortName);
         }
 

@@ -105,6 +105,7 @@
     <Compile Include="Models\FilterModel.cs" />
     <Compile Include="Models\PrintModel.cs" />
     <Compile Include="Models\RecipeReminder.cs" />
+    <Compile Include="Models\ViewModels\ReestrObject.cs" />
     <Compile Include="Services\ComPortProvider.cs" />
     <Compile Include="Services\IComPortProvider.cs" />
     <Compile Include="ViewModels\BarrelViewModel.cs" />

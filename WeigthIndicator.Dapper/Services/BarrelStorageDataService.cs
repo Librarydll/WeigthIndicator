@@ -29,7 +29,7 @@ namespace WeigthIndicator.Dapper.Services
         {
             using (var connection = _factory.CreateConnection())
             {
-                string query = "SELECT *FROM barrelStorages as bs LEFT JOIN Recipes as r on bs.RecipeId = r.Id";
+                string query = "SELECT *FROM barrelStorages as bs LEFT JOIN Recipes as r on bs.RecipeId = r.Id order by ProductionDate desc";
 
                 var barrelStorages = await connection.QueryAsync<BarrelStorage, Recipe, BarrelStorage>(query,
                     (rs, r) =>
@@ -74,5 +74,7 @@ namespace WeigthIndicator.Dapper.Services
                 return barrelNumber;
             }
         }
+
+     
     }
 }

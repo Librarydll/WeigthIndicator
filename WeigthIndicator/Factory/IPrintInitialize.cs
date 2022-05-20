@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 using WeigthIndicator.Domain.Models;
+using WeigthIndicator.Models.ViewModels;
 
 namespace WeigthIndicator.Factory
 {
     public interface IPrintInitialize
     {
-        FlowDocument InitializeFlow(Reestr reestr);
+        FlowDocument InitializeFlow(ReestrObject reestr);
     }
 
     public enum PrintViewType

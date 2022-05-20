@@ -12,22 +12,25 @@ using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Domain.Services;
 using WeigthIndicator.Events;
 using WeigthIndicator.Models;
+using WeigthIndicator.Models.ViewModels;
 
 namespace WeigthIndicator.ViewModels
 {
     public class StatusViewModel : ReactiveObject
     {
-        IObservable<long> timer = Observable.Interval(TimeSpan.FromMilliseconds(200.0));
+        private bool _isInitial = true;
 
         private readonly IBarrelStorageDataService _barrelStorageDataService;
+        private readonly IReestrDataService _reestrDataService;
         private Recipe _currentRecipe;
 
         [Reactive] public RecipeReminder RecipeReminder { get; set; }
-        [Reactive] public Reestr LastReestrValue { get; set; }
+        [Reactive] public ReestrObject LastReestrValue { get; set; }
 
-        public StatusViewModel(IBarrelStorageDataService barrelStorageDataService)
+        public StatusViewModel(IBarrelStorageDataService barrelStorageDataService,IReestrDataService reestrDataService)
         {
             _barrelStorageDataService = barrelStorageDataService;
+            _reestrDataService = reestrDataService;
             RecipeReminder = new RecipeReminder();
             _currentRecipe = new Recipe();
 
@@ -42,7 +45,7 @@ namespace WeigthIndicator.ViewModels
 
         }
 
-        public async Task<Unit> UpdateStatus(Reestr reestr)
+        public async Task<Unit> UpdateStatus(ReestrObject reestr)
         {
             LastReestrValue = reestr;
             await CalculateReminder(reestr.Recipe);
@@ -51,6 +54,12 @@ namespace WeigthIndicator.ViewModels
 
         public async Task<Unit> CalculateReminder(Recipe recipe)
         {
+            if (_isInitial)
+            {
+                 var last = await _reestrDataService.GetLastReestr(recipe.Id, DateTime.Now);
+                LastReestrValue = new ReestrObject(last);
+                _isInitial = false;
+            }
             var reminder = await _barrelStorageDataService.GetBarrelStorageRemainderByRecipe(recipe.Id);
             RecipeReminder.Remainder = reminder;
             RecipeReminder.RecipeShortName = recipe.ShortName;

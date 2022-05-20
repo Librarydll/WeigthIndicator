@@ -74,7 +74,7 @@ namespace WeigthIndicator.ViewModels
                 ProductionDate = DateTime.Now
             };
             SelectedRecipe = null;
-            MessageBus.Current.SendMessage(new ReestredAddedEvent { Reestr = new Reestr() { Recipe = barrel.Recipe } });
+            MessageBus.Current.SendMessage(new ReestredAddedEvent { Reestr = new Models.ViewModels.ReestrObject(new Reestr() { Recipe = barrel.Recipe }) });
 
         }
 
