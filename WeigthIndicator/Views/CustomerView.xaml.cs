@@ -31,7 +31,7 @@ namespace WeigthIndicator.Views
             this.WhenActivated(disposables =>
             {
                 this.WhenAnyValue(x => x.DataContext)
-                  .BindTo(this, x => x.ViewModel);
+                    .BindTo(this, x => x.ViewModel);
 
                 this.Bind(ViewModel, vm => vm.Customer.ShortName, v => v.ShortName.Text)
                     .DisposeWith(disposables);
@@ -48,11 +48,6 @@ namespace WeigthIndicator.Views
                 this.BindCommand(ViewModel, vm => vm.PrintCommand, v => v.PrintCommand, x => x.SelectedCustomer);
 
                 this.Bind(ViewModel, vm => vm.SelectedCustomer, v => v.CustomersCollection.SelectedItem);
-
-                this.WhenAnyValue(x => x.ViewModel)
-                    .SelectMany(x => x.GetCollectionsAsync())
-                    .SubscribeOnDispatcher()
-                    .Subscribe(x => ViewModel.InitializeCollection(x));
             });
         }
     }

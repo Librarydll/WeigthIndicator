@@ -2,6 +2,7 @@
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -44,25 +45,23 @@ namespace WeigthIndicator.ViewModels
             _barrelStorageDataService = barrelStorageDataService;
             CreateRecipe = ReactiveCommand.CreateFromTask(ExecuteCreateBarrelStorage, canExecute);
             CreateRecipe.Subscribe(x => AddBarrelStorage(x));
+
+            Task.Run(Initialize);
+        }
+
+        private async Task Initialize()
+        {
+            var recipes = await _recipeDataService.GetRecipes();
+            _barrelStorages = await _barrelStorageDataService.GetBarrelStorages();
+
+            RecipesCollection = new ObservableCollection<Recipe>(recipes);
+            BarrelStoragesCollection = new ObservableCollection<BarrelStorage>(_barrelStorages);
         }
 
         private void FilterCollection(Recipe recipe)
         {
             var filtered = _barrelStorages.Where(x => x.RecipeId == recipe.Id);
             BarrelStoragesCollection = new ObservableCollection<BarrelStorage>(filtered);
-        }
-
-        public async Task<(IEnumerable<Recipe>,IEnumerable<BarrelStorage>)> GetCollectionsAsync()
-        {
-            var recipes = await _recipeDataService.GetRecipes();
-            _barrelStorages = await _barrelStorageDataService.GetBarrelStorages();
-            return (recipes, _barrelStorages);
-        }
-
-        public void InitializeCollection((IEnumerable<Recipe>, IEnumerable<BarrelStorage>) collections)
-        {
-            RecipesCollection = new ObservableCollection<Recipe>(collections.Item1);
-            BarrelStoragesCollection = new ObservableCollection<BarrelStorage>(collections.Item2);
         }
 
 

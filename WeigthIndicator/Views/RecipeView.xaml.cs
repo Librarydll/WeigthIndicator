@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using WeigthIndicator.ViewModels;
 using System;
 using WeigthIndicator.Domain.Models;
+using System.Windows;
 
 namespace WeigthIndicator.Views
 {
@@ -52,15 +53,10 @@ namespace WeigthIndicator.Views
 
                 this.OneWayBind(ViewModel, vm => vm.RecipesCollection, v => v.RecipesCollection.ItemsSource);
 
-                this.WhenAnyValue(x => x.ViewModel)
-                    .SelectMany(x => x.GetRecipesAsync())
-                    .SubscribeOnDispatcher()
-                    .Subscribe(x => ViewModel.InitializeCollection(x));
 
             });
+      
         }
-
-
    
     }
 }

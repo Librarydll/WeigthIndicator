@@ -1,13 +1,13 @@
 ﻿using Prism.Ioc;
 using Prism.Unity;
-using ReactiveUI;
 using System.Configuration;
 using System.Windows;
 using WeigthIndicator.Dapper;
 using WeigthIndicator.Dapper.Services;
-using WeigthIndicator.Dialogs;
+using WeigthIndicator.Dialog;
 using WeigthIndicator.Domain.Services;
 using WeigthIndicator.Services;
+using WeigthIndicator.Store;
 using WeigthIndicator.ViewModels;
 using WeigthIndicator.Views;
 
@@ -34,7 +34,13 @@ namespace WeigthIndicator
 
         protected override Window CreateShell()
         {
-            return Container.Resolve<MainView>();
+            var loginvm = Container.Resolve<LoginViewModel>();
+            var store = Container.Resolve<NavigationStore>();
+
+            var v = Container.Resolve<MainView>();
+            store.CurrentViewModel = loginvm;
+
+            return v;
         }
 
         protected override void OnExit(ExitEventArgs e)
@@ -57,10 +63,23 @@ namespace WeigthIndicator
             containerRegistry.RegisterSingleton<IReestrSettingDataService, ReestrSettingDataService>();
            // containerRegistry.RegisterSingleton<IReestrSettingProvider, ReestrSettingProvider>();
             containerRegistry.RegisterSingleton<IComPortProvider, ComPortProvider>();
-
-            containerRegistry.RegisterDialog<ReestrSettingView, ReestrSettingViewModel>();
-            containerRegistry.RegisterDialog<ReestrEditView, ReestrEditViewModel>();
-
+            containerRegistry.RegisterSingleton<IUserDataService, UserDataService>();
+            containerRegistry.RegisterSingleton<IDialogNavigationService, DialogNavigationService>();
+            containerRegistry.RegisterSingleton<UserStore>();
+            containerRegistry.RegisterSingleton<NavigationStore>();
+            containerRegistry.RegisterSingleton<ModalNavigationStore>();
+            containerRegistry.RegisterSingleton<NavigationViewModel>();
+            containerRegistry.RegisterSingleton<MainViewModel>();
+            containerRegistry.RegisterSingleton<ReestrSettingViewModel>();
+            containerRegistry.RegisterSingleton<ShellViewModel>();
+            containerRegistry.RegisterSingleton<ReestrEditViewModel>();
+            containerRegistry.RegisterSingleton<MainView>(c =>
+            {
+                return new MainView
+                {
+                    DataContext = c.Resolve<MainViewModel>()
+                };
+            });
         }
     }
 }

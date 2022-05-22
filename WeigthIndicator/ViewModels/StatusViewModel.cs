@@ -57,7 +57,8 @@ namespace WeigthIndicator.ViewModels
             if (_isInitial)
             {
                  var last = await _reestrDataService.GetLastReestr(recipe.Id, DateTime.Now);
-                LastReestrValue = new ReestrObject(last);
+                if(last!=null)
+                    LastReestrValue = new ReestrObject(last);
                 _isInitial = false;
             }
             var reminder = await _barrelStorageDataService.GetBarrelStorageRemainderByRecipe(recipe.Id);

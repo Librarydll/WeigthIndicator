@@ -101,6 +101,7 @@
     <Compile Include="Services\RecipeDataService.cs" />
     <Compile Include="Services\ReestrDataService.cs" />
     <Compile Include="Services\ReestrSettingDataService.cs" />
+    <Compile Include="Services\UserDataService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

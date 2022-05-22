@@ -20,9 +20,12 @@ namespace WeigthIndicator.Views
         public ShellView()
         {
             InitializeComponent();
-            ViewModel = DataContext as ShellViewModel;
             this.WhenActivated(disposables =>
             {
+
+                this.WhenAnyValue(x => x.DataContext)
+                   .BindTo(this, x => x.ViewModel);
+
 
                 this.OneWayBind(ViewModel,
                     vm => vm.ReestrsCollection,
@@ -41,10 +44,10 @@ namespace WeigthIndicator.Views
 
                 this.Bind(ViewModel, vm => vm.SelectedReestr, v => v.ReestrsCollection.SelectedItem);
                 this.Bind(ViewModel, vm => vm.ReestrCount, v => v.ReestrCount.Text);
-                this.OneWayBind(ViewModel, 
+                this.OneWayBind(ViewModel,
                     vm => vm.NetTotal,
                     v => v.NetSum.Text,
-                   x=>x.ToString("N") );
+                   x => x.ToString("N"));
 
 
                 this.Bind(ViewModel, vm => vm.SelectedPrintViewType, v => v.PrintViewTypeCmb.SelectedIndex)
@@ -58,23 +61,16 @@ namespace WeigthIndicator.Views
 
                 this.Events().KeyDown
                          .Where(x => x.Key == Key.I && Keyboard.IsKeyDown(Key.LeftCtrl))
-                         .Select(x=> Unit.Default)
+                         .Select(x => Unit.Default)
                          .InvokeCommand(this, x => x.ViewModel.Imitation);
+
+                this.Events().KeyDown
+                   .Where(x => x.Key == Key.Enter && (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)))
+                   .Select(x => Unit.Default)
+                   .InvokeCommand(this, x => x.ViewModel.SaveCommand);
 
             });
 
-            
-
-            this.Events().KeyDown
-                       .Where(x => x.Key == Key.Enter && (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)))
-                       .Select(x => Unit.Default)
-                       .InvokeCommand(ViewModel, x => x.SaveCommand);
-
-            this.WhenAnyValue(x => x.ViewModel)
-                     .SelectMany(x => x.Initialize())
-                     .Subscribe(x => ViewModel.FillCollection(x));
         }
-
-
     }
 }

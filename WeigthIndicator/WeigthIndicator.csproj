@@ -85,18 +85,26 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controls\PaginateController.xaml.cs">
-      <DependentUpon>PaginateController.xaml</DependentUpon>
+    <Compile Include="Controls\Modal.cs" />
+    <Compile Include="Controls\NavigationControl.xaml.cs">
+      <DependentUpon>NavigationControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\BindablePasswordBox.xaml.cs">
       <DependentUpon>BindablePasswordBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\PaginateController.xaml.cs">
+      <DependentUpon>PaginateController.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Core\Excel\ExcelHelper.cs" />
     <Compile Include="Core\Excel\ExcelHelperForGrouped.cs" />
     <Compile Include="Core\Print\PrintHelper.cs" />
-    <Compile Include="Dialogs\Common\DialogViewModelBase.cs" />
-    <Compile Include="Dialogs\ReestrEditViewModel.cs" />
-    <Compile Include="Dialogs\ReestrSettingViewModel.cs" />
+    <Compile Include="Dialog\DialogNavigationService.cs" />
+    <Compile Include="Dialog\IDialogNavigationService.cs" />
+    <Compile Include="Dialog\IModal.cs" />
+    <Compile Include="Dialog\ModelDialogParameter.cs" />
+    <Compile Include="Store\ModalNavigationStore.cs" />
+    <Compile Include="ViewModels\ReestrEditViewModel.cs" />
+    <Compile Include="ViewModels\ReestrSettingViewModel.cs" />
     <Compile Include="Events\RecipeChangedEvent.cs" />
     <Compile Include="Factory\IPrintInitialize.cs" />
     <Compile Include="Factory\PrintPreviewFactory.cs" />
@@ -108,10 +116,14 @@
     <Compile Include="Models\ViewModels\ReestrObject.cs" />
     <Compile Include="Services\ComPortProvider.cs" />
     <Compile Include="Services\IComPortProvider.cs" />
+    <Compile Include="Store\NavigationStore.cs" />
+    <Compile Include="Store\UserStore.cs" />
     <Compile Include="ViewModels\BarrelViewModel.cs" />
     <Compile Include="ViewModels\CustomerViewModel.cs" />
     <Compile Include="ViewModels\GroupedReestrViewModel.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\NavigationViewModel.cs" />
     <Compile Include="ViewModels\ReestrViewModel.cs" />
     <Compile Include="ViewModels\SettingViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
@@ -125,6 +137,9 @@
     </Compile>
     <Compile Include="Views\GroupedReestrView.xaml.cs">
       <DependentUpon>GroupedReestrView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LoginView.xaml.cs">
+      <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
@@ -187,11 +202,19 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Controls\PaginateController.xaml">
+    <Page Include="Controls\NavigationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\BindablePasswordBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PaginateController.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dictionaries\Generic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -208,6 +231,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\GroupedReestrView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LoginView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

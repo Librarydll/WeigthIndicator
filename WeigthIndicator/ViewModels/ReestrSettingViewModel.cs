@@ -1,25 +1,22 @@
-﻿using Prism.Services.Dialogs;
+﻿using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using WeigthIndicator.Dialogs.Common;
+using WeigthIndicator.Dialog;
 using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Domain.Services;
-using WeigthIndicator.Models;
-using WeigthIndicator.Services;
+using WeigthIndicator.Store;
 
-namespace WeigthIndicator.Dialogs
+namespace WeigthIndicator.ViewModels
 {
-    public class ReestrSettingViewModel : DialogViewModelBase
+    public class ReestrSettingViewModel : ReactiveObject ,IModal<ReestrSetting>
     {
         private readonly string key = "lenovo2021";
+        private readonly ModalNavigationStore _modalNavigationStore;
         private readonly IBarrelStorageDataService _barrelStorageDataService;
         private readonly IReestrSettingDataService _reestrSettingDataService;
         private readonly IRecipeDataService _recipeDataService;
@@ -44,6 +41,9 @@ namespace WeigthIndicator.Dialogs
         [Reactive] public string Password { get; set; }
 
         private bool _controlsVisibility = false;
+
+        public event Action<ModelDialogParameter<ReestrSetting>> DialogClosed;
+
         public bool ControlsEnabled
         {
             get { return _controlsVisibility; }
@@ -52,14 +52,16 @@ namespace WeigthIndicator.Dialogs
 
 
         [Reactive] public ReestrSetting ReestrSetting { get; set; } = new ReestrSetting();
-
+        public DelegateCommand CancelCommand { get; set; }
+        public DelegateCommand SubmitCommand { get; set; }
         public ReestrSettingViewModel(
+            ModalNavigationStore modalNavigationStore,
             IBarrelStorageDataService barrelStorageDataService,
             IReestrSettingDataService reestrSettingDataService,
             IRecipeDataService recipeDataService,
             ICustomerDataService customerDataService)
         {
-            Title = "Настройки реестра";
+            _modalNavigationStore = modalNavigationStore;
             _barrelStorageDataService = barrelStorageDataService;
             _reestrSettingDataService = reestrSettingDataService;
             _recipeDataService = recipeDataService;
@@ -76,44 +78,14 @@ namespace WeigthIndicator.Dialogs
                 .SelectMany(async (x) => await _barrelStorageDataService.GetLastBarrelNumber(x))
                 .ObserveOnDispatcher()
                 .Subscribe(number => ReestrSetting.InitialBarrelNumber = number+1);
-        }
-       
 
-        public void PasswordChecker(string psw)
-        {
-            if (psw == key)
-            {
-                ControlsEnabled = true;
-            }
-            else
-            {
-                ControlsEnabled = false;
-            }
-            this.RaisePropertyChanged(nameof(ControlsEnabled));
+            Task.Run(Initialize);
+            SubmitCommand = new DelegateCommand(ExecuteSubmitCommand);
+            CancelCommand = new DelegateCommand(() => modalNavigationStore.Close());
         }
 
-        public async Task<(IEnumerable<Recipe>, IEnumerable<Customer>, ReestrSetting, int)> GetAsync()
+        private async void ExecuteSubmitCommand()
         {
-            var rs = await _reestrSettingDataService.GetReestrSetting();
-            var collection = await _recipeDataService.GetRecipes();
-            var customers = await _customerDataService.GetCustomers();
-            var barrelNumber = await _barrelStorageDataService.GetLastBarrelNumber(rs.CurrentRecipe);
-            return (collection, customers, rs, barrelNumber);
-        }
-
-        public void Initialize((IEnumerable<Recipe>, IEnumerable<Customer>, ReestrSetting, int) args)
-        {
-            RecipesCollection = new ObservableCollection<Recipe>(args.Item1);
-            CustomersCollection = new ObservableCollection<Customer>(args.Item2);
-            ReestrSetting = args.Item3 ?? new ReestrSetting();
-            SelectedRecipe = RecipesCollection.FirstOrDefault(x => x.Id == ReestrSetting.RecipeId);
-            SelectedCustomer = CustomersCollection.FirstOrDefault(x => x.Id == ReestrSetting.CustomerId);
-            ReestrSetting.InitialBarrelNumber = args.Item4 + 1;
-        }
-
-        protected override async void CloseDialogOnOk(IDialogParameters parameters)
-        {
-            Result = ButtonResult.OK;
             ReestrSetting.RecipeId = SelectedRecipe.Id;
             ReestrSetting.CurrentRecipe = SelectedRecipe;
             ReestrSetting.Customer = SelectedCustomer;
@@ -127,13 +99,46 @@ namespace WeigthIndicator.Dialogs
                 await _reestrSettingDataService.UpdateReestrSetting(ReestrSetting);
             }
 
-            parameters = new DialogParameters
+            var result = new ModelDialogParameter<ReestrSetting>
             {
-                { "model", (ReestrSetting)ReestrSetting.Clone() }
+                IsSuccess = true,
+                Value = (ReestrSetting)ReestrSetting.Clone()
             };
-
-            base.CloseDialogOnOk(parameters);
+            _modalNavigationStore.Close();
+            DialogClosed?.Invoke(result);
         }
 
+        private async Task Initialize()
+        {
+            var rs = await _reestrSettingDataService.GetReestrSetting();
+            var collection = await _recipeDataService.GetRecipes();
+            var customers = await _customerDataService.GetCustomers();
+            var barrelNumber = await _barrelStorageDataService.GetLastBarrelNumber(rs.CurrentRecipe);
+
+            RecipesCollection = new ObservableCollection<Recipe>(collection);
+            CustomersCollection = new ObservableCollection<Customer>(customers);
+            ReestrSetting = rs ?? new ReestrSetting();
+            SelectedRecipe = RecipesCollection.FirstOrDefault(x => x.Id == ReestrSetting.RecipeId);
+            SelectedCustomer = CustomersCollection.FirstOrDefault(x => x.Id == ReestrSetting.CustomerId);
+            ReestrSetting.InitialBarrelNumber = barrelNumber + 1;
+        }
+
+        public void PasswordChecker(string psw)
+        {
+            if (psw == key)
+            {
+                ControlsEnabled = true;
+            }
+            else
+            {
+                ControlsEnabled = false;
+            }
+            this.RaisePropertyChanged(nameof(ControlsEnabled));
+        }
+  
+        public void OnDialogOpen(ReestrSetting model)
+        {
+           
+        }
     }
 }

@@ -24,10 +24,8 @@ namespace WeigthIndicator.ViewModels
     {
         private string _filename = string.Empty;
         private readonly IReestrDataService _reestrDataService;
-        private readonly IDialogService _dialogService;
         private IEnumerable<GroupedReestr> _reestrs;
         //0-filterbydate;1-filterbystring
-        private int _lastSelectedFilter = -1;
         public FilterModel FilterModel { get; set; }
 
         private ObservableCollection<GroupedReestr> _reestrsCollection;
@@ -47,11 +45,10 @@ namespace WeigthIndicator.ViewModels
         private readonly ObservableAsPropertyHelper<double> _netTotal;
         public double NetTotal => _netTotal.Value;
 
-        public GroupedReestrViewModel(IReestrDataService reestrDataService, IDialogService dialogService)
+        public GroupedReestrViewModel(IReestrDataService reestrDataService)
         {
             FilterModel = new FilterModel();
             _reestrDataService = reestrDataService;
-            _dialogService = dialogService;
             FilterCommad = ReactiveCommand.CreateFromTask(ExecuteFilterCommand);
 
 
@@ -97,7 +94,6 @@ namespace WeigthIndicator.ViewModels
             }
 
             ReestrsCollection = new ObservableCollection<GroupedReestr>(_reestrs);
-            _lastSelectedFilter = 0;
         }
       
     }
