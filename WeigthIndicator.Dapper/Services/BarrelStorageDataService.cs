@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Dapper.Contrib.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace WeigthIndicator.Dapper.Services
         }
         public async Task<BarrelStorage> CreateBarrelStorage(BarrelStorage barrelStorage)
         {
-            using (var connection =_factory.CreateConnection())
+            using (var connection = _factory.CreateConnection())
             {
                 await connection.InsertAsync(barrelStorage);
                 return barrelStorage;
@@ -29,7 +30,7 @@ namespace WeigthIndicator.Dapper.Services
         {
             using (var connection = _factory.CreateConnection())
             {
-                string query = "SELECT *FROM barrelStorages as bs LEFT JOIN Recipes as r on bs.RecipeId = r.Id";
+                string query = "SELECT *FROM barrelStorages as bs LEFT JOIN Recipes as r on bs.RecipeId = r.Id order by ProductionDate desc";
 
                 var barrelStorages = await connection.QueryAsync<BarrelStorage, Recipe, BarrelStorage>(query,
                     (rs, r) =>
@@ -42,14 +43,13 @@ namespace WeigthIndicator.Dapper.Services
 
             }
         }
-
         public async Task<double> GetBarrelStorageRemainderByRecipe(int recipeId)
         {
             using (var connection = _factory.CreateConnection())
             {
                 string query = "SELECT SUM(b.TotalWeight-B.ConsumptionWeight) FROM barrelstorages as b where IsEmpty = false and recipeid =@recipeId ";
 
-                var reminder =await connection.QueryFirstOrDefaultAsync<double?>(query,new { recipeId });
+                var reminder = await connection.QueryFirstOrDefaultAsync<double?>(query, new { recipeId });
                 return reminder ?? 0;
             }
         }
