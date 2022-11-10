@@ -1,4 +1,6 @@
-﻿using Prism.Services.Dialogs;
+﻿using Newtonsoft.Json;
+using Prism.Services.Dialogs;
+using QRCoder;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using System;
@@ -11,22 +13,26 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Forms;
 using WeigthIndicator.Core.Excel;
 using WeigthIndicator.Core.Print;
+using WeigthIndicator.Dialog;
 using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Domain.Services;
 using WeigthIndicator.Factory;
+using WeigthIndicator.Mapper;
 using WeigthIndicator.Models;
+using WeigthIndicator.Shared.Services;
 using WeigthIndicator.Views;
 
 namespace WeigthIndicator.ViewModels
 {
-    public class ReestrViewModel:ReactiveObject
+    public class ReestrViewModel : ReactiveObject
     {
         private string _filename = string.Empty;
         private readonly IReestrDataService _reestrDataService;
-        private readonly IDialogService _dialogService;
+        private readonly IDialogNavigationService _dialogNavigationService;
         private IEnumerable<Reestr> _reestrs;
         //0-filterbydate;1-filterbystring
         private int _lastSelectedFilter = -1;
@@ -98,11 +104,11 @@ namespace WeigthIndicator.ViewModels
         private readonly ObservableAsPropertyHelper<double> _netTotal;
         public double NetTotal => _netTotal.Value;
 
-        public ReestrViewModel(IReestrDataService reestrDataService,IDialogService dialogService)
+        public ReestrViewModel(IReestrDataService reestrDataService,IDialogNavigationService dialogNavigationService)
         {
             FilterModel = new FilterModel();
             _reestrDataService = reestrDataService;
-            _dialogService = dialogService;
+            _dialogNavigationService = dialogNavigationService;
             FilterCommad = ReactiveCommand.CreateFromTask(ExecuteFilterCommand);
 
 
@@ -152,23 +158,17 @@ namespace WeigthIndicator.ViewModels
 
         private void ExecuteEditCommand(Reestr reestr)
         {
-            var param = new DialogParameters();
-            param.Add("model", reestr);
-            Reestr updated = null;
-            _dialogService.ShowDialog("ReestrEditView", param, x =>
-            {
-                if (x.Result == ButtonResult.OK)
-                {
-                    updated = x.Parameters.GetValue<Reestr>("model");
-                }
-            });
 
-            if (updated != null)
+            _dialogNavigationService.ShowDialog<ReestrEditViewModel, Reestr>(reestr, callback =>
             {
-                Task.Run(async () =>
+                if (callback.IsSuccess)
                 {
-                    await _reestrDataService.UpdateReestr(updated);
-                })
+                    Reestr updated = callback.Value;
+
+                    Task.Run(async () =>
+                    {
+                        await _reestrDataService.UpdateReestr(updated);
+                    })
                 .ContinueWith(x =>
                 {
                     if (x.Status == TaskStatus.RanToCompletion)
@@ -181,18 +181,18 @@ namespace WeigthIndicator.ViewModels
                         r.Note = updated.Note;
                     }
                 });
-
-            }
+                }
+            });
         }
 
         private void ExecutePrintCommand(Reestr reestr)
         {
             var printViewType = (PrintViewType)Enum.Parse(typeof(PrintViewType), SelectedPrintViewType.ToString());
             var printInitialize = PrintPreviewFactory.GetPrintView(printViewType);
-
-            var flowDoc = printInitialize.InitializeFlow(reestr);
-
+            var robj = new Models.ViewModels.ReestrObject(reestr);
+            FlowDocument flowDoc = printInitialize.InitializeFlow(robj);
             PrintHelper.Prints(flowDoc, reestr.PackingDate.ToString("dd.MM.yyyy"));
+
         }
 
         private async Task ExecuteFilterCommand()
@@ -205,7 +205,7 @@ namespace WeigthIndicator.ViewModels
             }
             else
             {
-                _reestrs = await _reestrDataService.GetReestrsByDate(FilterModel.FromDate, BarrelCode);
+                _reestrs = await _reestrDataService.GetReestrsByDateAndType(FilterModel.FromDate, BarrelCode);
                 _filename = FilterModel.FromDate.ToString("dd.MM.yyyy");
             }
 

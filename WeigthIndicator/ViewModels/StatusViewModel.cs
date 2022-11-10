@@ -8,41 +8,47 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Domain.Services;
 using WeigthIndicator.Events;
 using WeigthIndicator.Models;
+using WeigthIndicator.Models.ViewModels;
 
 namespace WeigthIndicator.ViewModels
 {
     public class StatusViewModel : ReactiveObject
     {
-        IObservable<long> timer = Observable.Interval(TimeSpan.FromMilliseconds(200.0));
+        private bool _isInitial = true;
 
         private readonly IBarrelStorageDataService _barrelStorageDataService;
+        private readonly IReestrDataService _reestrDataService;
         private Recipe _currentRecipe;
 
         [Reactive] public RecipeReminder RecipeReminder { get; set; }
-        [Reactive] public Reestr LastReestrValue { get; set; }
+        [Reactive] public ReestrObject LastReestrValue { get; set; }
 
-        public StatusViewModel(IBarrelStorageDataService barrelStorageDataService)
+        public StatusViewModel(IBarrelStorageDataService barrelStorageDataService,IReestrDataService reestrDataService)
         {
             _barrelStorageDataService = barrelStorageDataService;
+            _reestrDataService = reestrDataService;
             RecipeReminder = new RecipeReminder();
             _currentRecipe = new Recipe();
 
             MessageBus.Current.Listen<ReestredAddedEvent>()
-                 .SelectMany(x => UpdateStatus(x.Reestr)) 
+                 .SelectMany(x => UpdateStatus(x.Reestr))
+                 .ObserveOn(RxApp.MainThreadScheduler)
                  .Subscribe();
 
             MessageBus.Current.Listen<Recipe>()
                 .Where(x => x.Id != _currentRecipe.Id)
                 .SelectMany(CalculateReminder)
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe();
 
         }
 
-        public async Task<Unit> UpdateStatus(Reestr reestr)
+        public async Task<Unit> UpdateStatus(ReestrObject reestr)
         {
             LastReestrValue = reestr;
             await CalculateReminder(reestr.Recipe);
@@ -51,17 +57,28 @@ namespace WeigthIndicator.ViewModels
 
         public async Task<Unit> CalculateReminder(Recipe recipe)
         {
+            if (_isInitial)
+            {
+                var last = await _reestrDataService.GetLastReestr(recipe.Id, DateTime.Now);
+                if (last != null)
+                    LastReestrValue = new ReestrObject(last);
+                _isInitial = false;
+            }
             var reminder = await _barrelStorageDataService.GetBarrelStorageRemainderByRecipe(recipe.Id);
-            RecipeReminder.Remainder = reminder;
-            RecipeReminder.RecipeShortName = recipe.ShortName;
-            if (reminder < 10000)
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                RecipeReminder.IsCritical = true;
-            }
-            else
-            {
-                RecipeReminder.IsCritical = false;
-            }
+                RecipeReminder.Remainder = reminder;
+                RecipeReminder.RecipeShortName = recipe.ShortName;
+                if (reminder < 10000)
+                {
+                    RecipeReminder.IsCritical = true;
+                }
+                else
+                {
+                    RecipeReminder.IsCritical = false;
+                }
+            });
+            
             return Unit.Default;
         }
     }

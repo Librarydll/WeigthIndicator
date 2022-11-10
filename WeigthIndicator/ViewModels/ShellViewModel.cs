@@ -1,5 +1,7 @@
 ﻿using DynamicData;
+using Newtonsoft.Json;
 using Prism.Services.Dialogs;
+using QRCoder;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using System;
@@ -13,11 +15,14 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using WeigthIndicator.Core.Print;
+using WeigthIndicator.Dialog;
 using WeigthIndicator.Domain.Exceptions;
 using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Domain.Services;
 using WeigthIndicator.Events;
 using WeigthIndicator.Factory;
+using WeigthIndicator.Mapper;
+using WeigthIndicator.Models.ViewModels;
 using WeigthIndicator.Services;
 using WeigthIndicator.Views;
 
@@ -27,15 +32,14 @@ namespace WeigthIndicator.ViewModels
     {
         private readonly IComPortProvider _comPortProvider;
         private readonly IReestrSettingDataService _reestrSettingDataService;
-        private readonly IRecipeDataService _recipeDataService;
+        private readonly IDialogNavigationService _dialogNavigationService;
         private readonly IReestrDataService _reestrDataService;
-        private readonly IDialogService _dialogService;
         private bool _isValueDroppedToMinimum = true;
         public ReactiveCommand<Unit, Unit> OpenReestrSettingCommand => ReactiveCommand.Create(ExecuteOpenReestrSettingCommand);
 
-        private ObservableCollection<Reestr> _reestrsCollection;
+        private ObservableCollection<ReestrObject> _reestrsCollection;
 
-        public ObservableCollection<Reestr> ReestrsCollection
+        public ObservableCollection<ReestrObject> ReestrsCollection
         {
             get { return _reestrsCollection; }
             set { this.RaiseAndSetIfChanged(ref _reestrsCollection, value); }
@@ -47,16 +51,17 @@ namespace WeigthIndicator.ViewModels
         [Reactive] public int ProgressValue { get; set; }
         [Reactive] public int MaxProgressValue { get; set; }
         [Reactive] public bool IsAutoMode { get; set; }
-        [Reactive] public Reestr SelectedReestr { get; set; }
+        [Reactive] public ReestrObject SelectedReestr { get; set; }
         [Reactive] public int SelectedPrintViewType { get; set; }
 
         private readonly ObservableAsPropertyHelper<double> _itemWeight;
         public double ItemWeigth => _itemWeight.Value;
 
+        public ReactiveCommand<Unit, Unit> Imitation { get; set; }
 
-        public ReactiveCommand<Unit, Reestr> SaveCommand { get; set; }
-        public ReactiveCommand<Reestr, Unit> EditCommand { get; set; }
-        public ReactiveCommand<Reestr, Unit> PrintCommand { get; set; }
+        public ReactiveCommand<Unit, ReestrObject> SaveCommand { get; set; }
+        public ReactiveCommand<ReestrObject, Unit> EditCommand { get; set; }
+        public ReactiveCommand<ReestrObject, Unit> PrintCommand { get; set; }
 
         private readonly ObservableAsPropertyHelper<int> _reestrCount;
         public int ReestrCount => _reestrCount.Value;
@@ -66,17 +71,16 @@ namespace WeigthIndicator.ViewModels
 
         public ShellViewModel(IComPortProvider comPortProvider,
             IReestrSettingDataService reestrSettingDataService,
-            IRecipeDataService recipeDataService,
-            IReestrDataService reestrDataService,
-            IDialogService dialogService)
+            IDialogNavigationService dialogNavigationService,
+            IReestrDataService reestrDataService)
         {
             _comPortProvider = comPortProvider;
             _reestrSettingDataService = reestrSettingDataService;
-            _recipeDataService = recipeDataService;
+            _dialogNavigationService = dialogNavigationService;
             _reestrDataService = reestrDataService;
-            _dialogService = dialogService;
             MaxProgressValue = 3;
             IsAutoMode = true;
+            Task.Run(Initialize);
 
             var parsedValue = this.WhenAnyValue(x => x._comPortProvider.ComPortConnector.ParsedValue);
             parsedValue.Subscribe(ValueDropped);
@@ -91,16 +95,16 @@ namespace WeigthIndicator.ViewModels
                         .Where(x => IsAutoMode && _isValueDroppedToMinimum)
                         .Where(ValidateParsedValue)
                         .SelectMany(InsertToDataBase)
-                        .Catch((Func<Exception, IObservable<Reestr>>)HandleException)
+                        .Catch((Func<Exception, IObservable<ReestrObject>>)HandleException)
                         .Where(x => x != null)
                         .Select(x => x)
                         .ObserveOn(RxApp.MainThreadScheduler)
                         .Subscribe(InsertToCollection);
 
             var reestrCount = this.WhenAnyValue(x => x.ReestrsCollection.Count);
-          _reestrCount = reestrCount
-                        .Select(x => x)
-                        .ToProperty(this, x => x.ReestrCount);
+            _reestrCount = reestrCount
+                          .Select(x => x)
+                          .ToProperty(this, x => x.ReestrCount);
 
             _netTotal = reestrCount
                 .Select(x => ReestrsCollection.Sum(z => z.Net))
@@ -115,9 +119,10 @@ namespace WeigthIndicator.ViewModels
                .WhenAnyValue(x => x.IsAutoMode,
                isAutoMode => isAutoMode == false);
 
+            Imitation = ReactiveCommand.CreateFromTask(ExecuteImitation);
             SaveCommand = ReactiveCommand.CreateFromTask(ExecuteSaveCommand, canExecute);
             SaveCommand
-                .Catch((Func<Exception, IObservable<Reestr>>)HandleException)
+                .Catch((Func<Exception, IObservable<ReestrObject>>)HandleException)
                 .Where(x => x != null)
                 .Select(x => x)
                 .ObserveOn(RxApp.MainThreadScheduler)
@@ -129,72 +134,75 @@ namespace WeigthIndicator.ViewModels
                 .Select(x => x != null);
 
 
-            EditCommand = ReactiveCommand.Create<Reestr>(ExecuteEditViewCommand, canEditAndCanPrint);
-            PrintCommand = ReactiveCommand.Create<Reestr>(ExecutePrintViewCommand, canEditAndCanPrint);
+            EditCommand = ReactiveCommand.Create<ReestrObject>(ExecuteEditViewCommand, canEditAndCanPrint);
+            PrintCommand = ReactiveCommand.Create<ReestrObject>(ExecutePrintViewCommand, canEditAndCanPrint);
             ExecuteOpenReestrSettingCommand();
-
         }
 
-        private void ExecuteEditViewCommand(Reestr reestr)
+        private async Task<Unit> ExecuteImitation()
         {
-            var param = new DialogParameters();
-            param.Add("model", reestr);
-            Reestr updated = null;
-            _dialogService.ShowDialog("ReestrEditView", param, x =>
-             {
-                 if (x.Result == ButtonResult.OK)
-                 {
-                     updated = x.Parameters.GetValue<Reestr>("model");
-                 }
-             });
-
-            if (updated != null)
+            _comPortProvider.ComPortConnector.ParsedValue = 0;
+            for (int i = 1; i <= 10; i++)
             {
-                Task.Run(async () =>
-                {
-                    await _reestrDataService.UpdateReestr(updated);
-                })
-                .ContinueWith(x =>
-                {
-                    if (x.Status == TaskStatus.RanToCompletion)
-                    {
-                        var r = ReestrsCollection.FirstOrDefault(z => z.Id == reestr.Id);
-                        r.ReestrState = updated.ReestrState;
-                        r.Customer = updated.Customer;
-                        r.CustomerId = updated.CustomerId;
-                        r.Net = updated.Net;
-                        r.Note = updated.Note;
-                    }
-                });
-
+                await Task.Delay(500);
+                _comPortProvider.ComPortConnector.ParsedValue = i * 25;
             }
 
+            return Unit.Default;
         }
 
-        private void ExecutePrintViewCommand(Reestr reestr)
+        private void ExecuteEditViewCommand(ReestrObject reestr)
+        {
+            _dialogNavigationService.ShowDialog<ReestrEditViewModel, Reestr>(reestr.BuildOut(), callback =>
+            {
+                 if (callback.IsSuccess)
+                 {
+                     var result = callback.Value;
+                     Task.Run(async () =>
+                     {
+                         await _reestrDataService.UpdateReestr(result);
+                     }).ContinueWith(x =>
+                     {
+                        if (x.Status == TaskStatus.RanToCompletion)
+                        {
+                            var r = ReestrsCollection.FirstOrDefault(z => z.Id == reestr.Id);
+                            r.ReestrState = result.ReestrState;
+                            r.Customer = result.Customer;
+                            r.CustomerId = result.CustomerId;
+                            r.Net = result.Net;
+                            r.Note = result.Note;
+                            r.ManufactureId = result.ManufactureId;
+                            r.Manufacture = result.Manufacture;
+                        }
+                     });
+                 }
+            });
+
+        }
+
+        private void ExecutePrintViewCommand(ReestrObject reestr)
         {
             var printViewType = (PrintViewType)Enum.Parse(typeof(PrintViewType), SelectedPrintViewType.ToString());
             if (printViewType == PrintViewType.NoPrint) return;
             var printInitialize = PrintPreviewFactory.GetPrintView(printViewType);
-
             FlowDocument flowDoc = printInitialize.InitializeFlow(reestr);
             PrintHelper.Prints(flowDoc, reestr.PackingDate.ToString("dd.MM.yyyy"));
-
         }
 
 
-        public async Task<IEnumerable<Reestr>> Initialize()
+        public async Task Initialize()
         {
             var reestrs = await _reestrDataService.GetReestrsByDate(DateTime.Now);
             ReestrSetting = await _reestrSettingDataService.GetReestrSetting();
             MessageBus.Current.SendMessage(ReestrSetting.CurrentRecipe);
-            return reestrs;
+            var data = reestrs.Select(z => new ReestrObject(z)).ToArray();
+            FillCollection(data);
         }
 
-        public void FillCollection(IEnumerable<Reestr> reestrs)
+        public void FillCollection(IEnumerable<ReestrObject> reestrs)
         {
             if (ReestrsCollection == null)
-                ReestrsCollection = new ObservableCollection<Reestr>(reestrs);
+                ReestrsCollection = new ObservableCollection<ReestrObject>(reestrs);
             else
             {
                 ReestrsCollection.AddRange(reestrs);
@@ -210,26 +218,27 @@ namespace WeigthIndicator.ViewModels
 
         }
 
-        private async Task<Reestr> ExecuteSaveCommand()
+        private async Task<ReestrObject> ExecuteSaveCommand()
         {
             if (_isValueDroppedToMinimum)
             {
                 var net = _comPortProvider.ComPortConnector.ParsedValue - ReestrSetting.TaraBarrel;
                 var reestr = CreateReestr(net);
-                return await _reestrDataService.CreateReestrAndUpdateBarrelStorage(reestr);
+                var r = await _reestrDataService.CreateReestrAndUpdateBarrelStorage(reestr);
+                return new ReestrObject(r);
             }
 
             return null;
         }
 
-        private IObservable<Reestr> HandleException(Exception exception)
+        private IObservable<ReestrObject> HandleException(Exception exception)
         {
-            if (exception is BarrelStorageEmptyException ex)
+            if (exception is BarrelStorageEmptyException)
             {
                 MessageBox.Show("Test");
             }
 
-            return Observable.Return<Reestr>(null);
+            return Observable.Return<ReestrObject>(null);
         }
 
         private void Progress2(long obj)
@@ -245,16 +254,17 @@ namespace WeigthIndicator.ViewModels
             return value;
         }
 
-        private async Task<Reestr> InsertToDataBase(double value)
+        private async Task<ReestrObject> InsertToDataBase(double value)
         {
             var net = value - ReestrSetting.TaraBarrel;
             var reestr = CreateReestr(net);
-            if(reestr.BarrelNumber>0)
+            if (reestr.BarrelNumber > 0)
                 await _reestrSettingDataService.UpdateReestrSettingBarrelColumn(ReestrSetting);
-            return await _reestrDataService.CreateReestrAndUpdateBarrelStorage(reestr);
+            var r = await _reestrDataService.CreateReestrAndUpdateBarrelStorage(reestr);
+            return new ReestrObject(r);
         }
 
-        private void InsertToCollection(Reestr reestr)
+        private void InsertToCollection(ReestrObject reestr)
         {
             if (reestr != null)
             {
@@ -266,7 +276,7 @@ namespace WeigthIndicator.ViewModels
         }
 
 
-        private Reestr CreateReestr(double net) 
+        private Reestr CreateReestr(double net)
         {
             var reestr = new Reestr
             {
@@ -280,6 +290,8 @@ namespace WeigthIndicator.ViewModels
                 PackingDate = DateTime.Now,
                 ReestrState = true,
                 Net = net,
+                ManufactureId = ReestrSetting.ManufactureId,
+                Manufacture = ReestrSetting.Manufacture
             };
 
             reestr.BarrelNumber = ReestrSetting.GetBarrelNumberAndClearIt();
@@ -298,21 +310,19 @@ namespace WeigthIndicator.ViewModels
 
         private void ExecuteOpenReestrSettingCommand()
         {
-            _dialogService.ShowDialog("ReestrSettingView", x =>
+            _dialogNavigationService.ShowDialog<ReestrSettingViewModel, ReestrSetting>(callback =>
             {
-                if (x.Result == ButtonResult.OK)
-                {
-                    ReestrSetting = x.Parameters.GetValue<ReestrSetting>("model");
-                    MessageBus.Current.SendMessage(ReestrSetting.CurrentRecipe);
-
-                }
-                if (!_comPortProvider.ComPortConnector.IsOpen)
-                {
-                    OpenComPort();
-                }
-
+                 if (callback.IsSuccess)
+                 {
+                     ReestrSetting = callback.Value;
+                     MessageBus.Current.SendMessage(ReestrSetting.CurrentRecipe);
+                 }
+                 if (!_comPortProvider.ComPortConnector.IsOpen)
+                 {
+                     OpenComPort();
+                 }
             });
-        }
+      }
 
         private void OpenComPort()
         {
@@ -324,10 +334,10 @@ namespace WeigthIndicator.ViewModels
                 }
                 catch (Exception ex)
                 {
-                 MessageBox.Show(ex.Message);
-                 MessageBox.Show(ex.InnerException?.Message);
-                _comPortProvider.ComPortConnector.CloseComPort();
-                _comPortProvider.Start();
+                    MessageBox.Show(ex.Message);
+                    MessageBox.Show(ex.InnerException?.Message);
+                    _comPortProvider.ComPortConnector.CloseComPort();
+                    _comPortProvider.Start();
                 }
             }
         }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WeigthIndicator.Dapper.Helper;
 using WeigthIndicator.Domain.DTO;
 using WeigthIndicator.Domain.Exceptions;
 using WeigthIndicator.Domain.Models;
@@ -14,13 +15,17 @@ namespace WeigthIndicator.Dapper.Services
 {
     public class ReestrDataService : IReestrDataService
     {
-        private string reestrSelectQuery = @"SELECT *FROM Reestrs as reestr " +
-                                "Left join Recipes as recipe " +
-                                "on recipe.id = reestr.recipeid " +
-                                "Left join BarrelStorages as br " +
-                                "on reestr.barrelStorageId =br.id " +
-                                "Left join Customers as c " +
-                                "on reestr.customerid =c.id ";
+        public const ReestrLocationState EveryWhere = ReestrLocationState.InWarehouse | ReestrLocationState.Outcomed | ReestrLocationState.RetrunedBack;
+
+        private string reestrSelectQuery = $@"SELECT *FROM Reestrs as reestr 
+                                Left join Recipes as recipe 
+                                on recipe.id = reestr.recipeid  
+                                Left join BarrelStorages as br  
+                                on reestr.barrelStorageId =br.id 
+                                Left join Customers as c 
+                                on reestr.customerid =c.id
+                                Left join Manufactures as m 
+                                on reestr.manufactureId =m.id ";
 
 
         private readonly ApplicationContextFactory _factory;
@@ -50,28 +55,35 @@ namespace WeigthIndicator.Dapper.Services
 
             }
         }
-        public async Task<IEnumerable<Reestr>> GetReestrsByDate(DateTime dateTime)
+        public async Task<IEnumerable<Reestr>> GetReestrsByDate(DateTime dateTime,
+            ReestrLocationState reestrLocationState = ReestrLocationState.InWarehouse | ReestrLocationState.Outcomed | ReestrLocationState.RetrunedBack)
         {
             using (var connection = _factory.CreateConnection())
             {
                 string query = reestrSelectQuery + "where date(reestr.packingDate) =@date ";
-
-                return await connection.QueryAsync<Reestr, Recipe, BarrelStorage, Customer, Reestr>(query,
-                    (reestr, recipe, br, c) =>
+                if (reestrLocationState != EveryWhere)
+                {
+                    query += " and reestr.reestrLocationState in @locations";
+                }
+                return await connection.QueryAsync<Reestr, Recipe, BarrelStorage, Customer, Manufacture,Reestr>(query,
+                    (reestr, recipe, br, c,m) =>
                     {
                         reestr.Recipe = recipe;
                         reestr.BarrelStorage = br;
                         reestr.Customer = c;
+                        reestr.Manufacture = m;
                         return reestr;
                     }
                     , new
                     {
                         date = dateTime.Date,
+                        locations = reestrLocationState.GetUniqueFlags(),
                     });
             }
         }
 
-        public async Task<IEnumerable<Reestr>> GetReestrsByDate(DateTime dateTime, int type)
+        public async Task<IEnumerable<Reestr>> GetReestrsByDateAndType(DateTime dateTime, int type,
+            ReestrLocationState reestrLocationState = ReestrLocationState.InWarehouse | ReestrLocationState.Outcomed | ReestrLocationState.RetrunedBack)
         {
             using (var connection = _factory.CreateConnection())
             {
@@ -81,19 +93,24 @@ namespace WeigthIndicator.Dapper.Services
                 {
                     query += " and recipe.BarrelRecipeType =@type";
                 }
-
-                return await connection.QueryAsync<Reestr, Recipe, BarrelStorage, Customer, Reestr>(query,
-                    (reestr, recipe, br, c) =>
+                if (reestrLocationState != EveryWhere)
+                {
+                    query += " and reestr.reestrLocationState in @locations";
+                }
+                return await connection.QueryAsync<Reestr, Recipe, BarrelStorage, Customer, Manufacture,Reestr>(query,
+                    (reestr, recipe, br, c,m) =>
                     {
                         reestr.Recipe = recipe;
                         reestr.BarrelStorage = br;
                         reestr.Customer = c;
+                        reestr.Manufacture = m;
                         return reestr;
                     }
                     , new
                     {
                         date = dateTime.Date,
-                        type
+                        type,
+                        locations = reestrLocationState.GetUniqueFlags()
                     });
             }
         }
@@ -179,7 +196,8 @@ namespace WeigthIndicator.Dapper.Services
             }
         }
 
-        public async Task<IEnumerable<Reestr>> GetReestrsByDates(DateTime fromDate, DateTime toDate, int type)
+        public async Task<IEnumerable<Reestr>> GetReestrsByDates(DateTime fromDate, DateTime toDate, int type,
+            ReestrLocationState reestrLocationState = ReestrLocationState.InWarehouse | ReestrLocationState.Outcomed | ReestrLocationState.RetrunedBack)
         {
             using (var connection = _factory.CreateConnection())
             {
@@ -188,24 +206,31 @@ namespace WeigthIndicator.Dapper.Services
                 {
                     query += " and recipe.BarrelRecipeType =@type";
                 }
-                return await connection.QueryAsync<Reestr, Recipe, BarrelStorage, Customer, Reestr>(query,
-                    (reestr, recipe, br, c) =>
+                if (reestrLocationState != EveryWhere)
+                {
+                    query += " and reestr.reestrLocationState in @locations";
+                }
+                return await connection.QueryAsync<Reestr, Recipe, BarrelStorage, Customer, Manufacture,Reestr>(query,
+                    (reestr, recipe, br, c,m) =>
                     {
                         reestr.Recipe = recipe;
                         reestr.BarrelStorage = br;
                         reestr.Customer = c;
+                        reestr.Manufacture = m;
                         return reestr;
                     }
                     , new
                     {
                         fromDate = fromDate.Date,
                         toDate = toDate.Date,
-                        type
+                        type,
+                        locations = reestrLocationState.GetUniqueFlags()
                     });
             }
         }
 
-        public async Task<IEnumerable<Reestr>> GetReestrsByBatchNumber(DateTime fromDate, DateTime toDate, string batchNumber, int type)
+        public async Task<IEnumerable<Reestr>> GetReestrsByBatchNumber(DateTime fromDate, DateTime toDate, string batchNumber, int type,
+            ReestrLocationState reestrLocationState = ReestrLocationState.InWarehouse | ReestrLocationState.Outcomed | ReestrLocationState.RetrunedBack)
         {
             using (var connection = _factory.CreateConnection())
             {
@@ -216,13 +241,18 @@ namespace WeigthIndicator.Dapper.Services
                 {
                     query += " and recipe.BarrelRecipeType =@type";
                 }
+                if (reestrLocationState != EveryWhere)
+                {
+                    query += " and reestr.reestrLocationState in @locations";
+                }
 
-                return await connection.QueryAsync<Reestr, Recipe, BarrelStorage, Customer, Reestr>(query,
-                    (reestr, recipe, br, c) =>
+                return await connection.QueryAsync<Reestr, Recipe, BarrelStorage, Customer, Manufacture,Reestr>(query,
+                    (reestr, recipe, br, c,m) =>
                     {
                         reestr.Recipe = recipe;
                         reestr.BarrelStorage = br;
                         reestr.Customer = c;
+                        reestr.Manufacture = m;
                         return reestr;
                     }
                     , new
@@ -230,12 +260,14 @@ namespace WeigthIndicator.Dapper.Services
                         fromDate = fromDate.Date,
                         toDate = toDate.Date,
                         batchNumber,
-                        type
+                        type,
+                        locations = reestrLocationState.GetUniqueFlags(),
                     });
             }
         }
 
-        public async Task<IEnumerable<Reestr>> GetReestrsByBarrelNumbers(DateTime fromDate, DateTime toDate, int from, int to, int type)
+        public async Task<IEnumerable<Reestr>> GetReestrsByBarrelNumbers(DateTime fromDate, DateTime toDate, int from, int to, int type,
+            ReestrLocationState reestrLocationState = ReestrLocationState.InWarehouse | ReestrLocationState.Outcomed | ReestrLocationState.RetrunedBack)
         {
             using (var connection = _factory.CreateConnection())
             {
@@ -245,14 +277,18 @@ namespace WeigthIndicator.Dapper.Services
                 {
                     query += " and recipe.BarrelRecipeType =@type";
                 }
+                if(reestrLocationState != EveryWhere)
+                {
+                    query += " and reestr.reestrLocationState in @locations";
+                }
 
-
-                return await connection.QueryAsync<Reestr, Recipe, BarrelStorage, Customer, Reestr>(query,
-                    (reestr, recipe, br, c) =>
+                return await connection.QueryAsync<Reestr, Recipe, BarrelStorage, Customer, Manufacture,Reestr>(query,
+                    (reestr, recipe, br, c,m) =>
                     {
                         reestr.Recipe = recipe;
                         reestr.BarrelStorage = br;
                         reestr.Customer = c;
+                        reestr.Manufacture = m;
                         return reestr;
                     }
                     , new
@@ -261,7 +297,8 @@ namespace WeigthIndicator.Dapper.Services
                         toDate = toDate.Date,
                         from,
                         to,
-                        type
+                        type,
+                        locations = reestrLocationState.GetUniqueFlags(),
                     });
             }
         }
@@ -270,7 +307,7 @@ namespace WeigthIndicator.Dapper.Services
         {
             using (var connection = _factory.CreateConnection())
             {
-                string query =  @"SELECT reestr.BatchNumber,recipe.ShortName as RecipeName,Count(recipe.id) as barrelscount,Sum(reestr.Net) as totalnet FROM Reestrs as reestr 
+                string query = @"SELECT reestr.BatchNumber,recipe.ShortName as RecipeName,Count(recipe.id) as barrelscount,Sum(reestr.Net) as totalnet FROM Reestrs as reestr 
                                               Left join Recipes as recipe
                                               on recipe.id = reestr.recipeid
                                               where(date(reestr.packingDate) >= @fromDate and date(reestr.packingDate) <= @toDate)
@@ -291,7 +328,7 @@ namespace WeigthIndicator.Dapper.Services
         {
             using (var connection = _factory.CreateConnection())
             {
-                string query =  @"SELECT reestr.BatchNumber,recipe.ShortName as RecipeName,Count(recipe.id) as barrelscount,Sum(reestr.Net) as totalnet FROM Reestrs as reestr 
+                string query = @"SELECT reestr.BatchNumber,recipe.ShortName as RecipeName,Count(recipe.id) as barrelscount,Sum(reestr.Net) as totalnet FROM Reestrs as reestr 
                                               Left join Recipes as recipe
                                               on recipe.id = reestr.recipeid
                                               where date(reestr.packingDate) >= @fromDate
@@ -303,6 +340,74 @@ namespace WeigthIndicator.Dapper.Services
                     {
                         fromDate = fromDate.Date,
                     });
+            }
+        }
+
+        public async Task<Reestr> GetLastReestr(int recipeId, DateTime date)
+        {
+            using (var connection = _factory.CreateConnection())
+            {
+                string query = "SELECT *FROM Reestrs where recipeid =@recipeId and Date(PackingDate) =@date  order by id desc";
+
+                return await connection.QueryFirstOrDefaultAsync<Reestr>(query, new { recipeId, date = date.Date });
+            }
+        }
+
+        public async Task<IEnumerable<Reestr>> FilterReestr(
+            DateTime packageDate, DateTime productionDate,
+            string barrelNumber = null,
+            int recipeId = 0,
+            string batch = "Все",
+            BarrelRecipeType? barrelRecipeType = null)
+        {
+            using (var connection = _factory.CreateConnection())
+            {
+                var filterQuery = @"Select *from Reestrs as reestr
+                                   Left join Recipes as r on reestr.RecipeId = r.Id
+                                   Left join BarrelStorages as bs on reestr.BarrelStorageId = bs.Id
+                                   where";
+                List<string> subQuery = new List<string>();
+
+                bool and = false;
+                if (packageDate != DateTime.MinValue)
+                {
+                    subQuery.Add(" Date(reestr.packingDate) =Date(@packageDate) ");
+                }
+                if (productionDate != DateTime.MinValue)
+                {
+                    subQuery.Add(" Date(bs.productionDate) =Date(@productionDate) ");
+                }
+                if (!string.IsNullOrWhiteSpace(barrelNumber))
+                {
+                    subQuery.Add(" reestr.BarrelNumber=@barrelNumber ");
+                }
+                if (recipeId != 0)
+                {
+                    subQuery.Add(" reestr.RecipeId=@recipeId ");
+                }
+                if (batch != "Все" && batch != null)
+                {
+                    subQuery.Add(" reestr.BatchNumber=@batch ");                
+                }
+                if (barrelRecipeType != null)
+                {
+                    subQuery.Add(" r.BarrelRecipeType=@barrelRecipeType");                  
+                }
+                if(subQuery.Count == 0)
+                {
+                    return Enumerable.Empty<Reestr>();
+                    //filterQuery = filterQuery.Replace("where", "");
+                }
+                var query = string.Join("and", subQuery);
+                return await connection.QueryAsync<Reestr, Recipe, BarrelStorage,Reestr>(filterQuery + query,
+                      (reestr,recipe,bs) =>
+                      {
+                          reestr.Recipe = recipe;
+                          reestr.BarrelStorage = bs;
+                          return reestr;
+                      },
+                      new { packageDate, productionDate, barrelNumber, recipeId, batch, barrelRecipeType });
+
             }
         }
     }

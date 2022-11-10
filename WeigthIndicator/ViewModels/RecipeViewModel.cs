@@ -28,6 +28,14 @@ namespace WeigthIndicator.ViewModels
            _recipeDataService = recipeDataService;
             CreateRecipe = ReactiveCommand.CreateFromTask(ExecuteCreateRecipe);
             CreateRecipe.Subscribe(x => AddRecipe(x));
+            Task.Run(Initialize);
+        }
+
+        private async Task Initialize()
+        {
+            var recipes = await _recipeDataService.GetRecipes();
+            RecipesCollection = new ObservableCollection<Recipe>(recipes);
+
         }
 
         private async Task<Recipe> ExecuteCreateRecipe()
@@ -35,16 +43,6 @@ namespace WeigthIndicator.ViewModels
             await _recipeDataService.CreateRecipe(Recipe);
 
             return Recipe;
-        }
-
-        public async Task<IEnumerable<Recipe>> GetRecipesAsync()
-        {
-            return await _recipeDataService.GetRecipes();
-        }
-
-        public void InitializeCollection(IEnumerable<Recipe> recipes)
-        {
-            RecipesCollection = new ObservableCollection<Recipe>(recipes);
         }
         public void AddRecipe(Recipe recipe)
         {

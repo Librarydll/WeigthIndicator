@@ -52,11 +52,9 @@ namespace WeigthIndicator.Views
                 this.OneWayBind(ViewModel, vm => vm.RecipesCollection, v => v.RecipesCmb.ItemsSource)
                     .DisposeWith(disposables);
 
-                this.WhenAnyValue(x => x.ViewModel)
-                    .SelectMany(x => x.GetCollectionsAsync())
-                    .SubscribeOnDispatcher()
-                    .Subscribe(x => ViewModel.InitializeCollection(x));
             });
+         
         }
+
     }
 }

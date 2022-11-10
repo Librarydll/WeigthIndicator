@@ -65,6 +65,7 @@ namespace WeigthIndicator.Models
             {
                MessageBox.Show(ex.Message);
             }
+
             //Task.Run(async () =>
             //{
             //    await Imitation(20);

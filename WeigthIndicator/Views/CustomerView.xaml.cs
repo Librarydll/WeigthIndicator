@@ -1,20 +1,5 @@
 ﻿using ReactiveUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using WeigthIndicator.ViewModels;
 
 namespace WeigthIndicator.Views
@@ -31,7 +16,7 @@ namespace WeigthIndicator.Views
             this.WhenActivated(disposables =>
             {
                 this.WhenAnyValue(x => x.DataContext)
-                  .BindTo(this, x => x.ViewModel);
+                    .BindTo(this, x => x.ViewModel);
 
                 this.Bind(ViewModel, vm => vm.Customer.ShortName, v => v.ShortName.Text)
                     .DisposeWith(disposables);
@@ -48,11 +33,6 @@ namespace WeigthIndicator.Views
                 this.BindCommand(ViewModel, vm => vm.PrintCommand, v => v.PrintCommand, x => x.SelectedCustomer);
 
                 this.Bind(ViewModel, vm => vm.SelectedCustomer, v => v.CustomersCollection.SelectedItem);
-
-                this.WhenAnyValue(x => x.ViewModel)
-                    .SelectMany(x => x.GetCollectionsAsync())
-                    .SubscribeOnDispatcher()
-                    .Subscribe(x => ViewModel.InitializeCollection(x));
             });
         }
     }

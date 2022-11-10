@@ -95,12 +95,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Factory\ApplicationContextFactory.cs" />
+    <Compile Include="Helper\EnumHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BarrelStorageDataService.cs" />
     <Compile Include="Services\CustomerDataService.cs" />
+    <Compile Include="Services\HelperDataService.cs" />
+    <Compile Include="Services\ManufactureDataService.cs" />
+    <Compile Include="Services\OutcomeDataService.cs" />
     <Compile Include="Services\RecipeDataService.cs" />
     <Compile Include="Services\ReestrDataService.cs" />
     <Compile Include="Services\ReestrSettingDataService.cs" />
+    <Compile Include="Services\UserDataService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

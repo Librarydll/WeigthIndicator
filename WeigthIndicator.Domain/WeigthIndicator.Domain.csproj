@@ -51,22 +51,39 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTO\AuthBase.cs" />
+    <Compile Include="DTO\AuthenticationResult.cs" />
     <Compile Include="DTO\GroupedReestr.cs" />
+    <Compile Include="DTO\ReestrFilterObject.cs" />
+    <Compile Include="DTO\RegistrationResult.cs" />
     <Compile Include="Exceptions\BarrelStorageEmptyException.cs" />
     <Compile Include="Exceptions\BarrelStorageNotEnoughException.cs" />
+    <Compile Include="Exceptions\ReestrAlreadyOutcomedException.cs" />
     <Compile Include="Models\BarrelStorage.cs" />
     <Compile Include="Models\Common\BaseEntity.cs" />
     <Compile Include="Models\Common\NotifyEntity.cs" />
     <Compile Include="Models\Customer.cs" />
+    <Compile Include="Models\Common\IQrGenerator.cs" />
+    <Compile Include="Models\Manufacture.cs" />
+    <Compile Include="Models\Outcome.cs" />
+    <Compile Include="Models\OutcomeItem.cs" />
     <Compile Include="Models\Reestr.cs" />
     <Compile Include="Models\Recipe.cs" />
     <Compile Include="Models\ReestrSetting.cs" />
+    <Compile Include="Models\ReturnBarrelStorage.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="PaginationObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Result.cs" />
     <Compile Include="Services\IBarrelStorageDataService.cs" />
     <Compile Include="Services\ICustomerDataService.cs" />
+    <Compile Include="Services\IHelperDataService.cs" />
+    <Compile Include="Services\IManufactureDataService.cs" />
+    <Compile Include="Services\IOutcomeDataService.cs" />
     <Compile Include="Services\IRecipeDataService.cs" />
     <Compile Include="Services\IReestrDataService.cs" />
     <Compile Include="Services\IReestrSettingDataService.cs" />
+    <Compile Include="Services\IUserDataService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

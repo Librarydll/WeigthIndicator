@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WeigthIndicator.Domain.Models;
+using WeigthIndicator.Models.ViewModels;
 
 namespace WeigthIndicator.Events
 {
@@ -12,6 +13,6 @@ namespace WeigthIndicator.Events
 
     public class ReestredAddedEvent
     {
-        public Reestr Reestr { get; set; }
+        public ReestrObject Reestr { get; set; }
     }
 }

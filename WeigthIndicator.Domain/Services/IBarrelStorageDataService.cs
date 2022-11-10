@@ -13,7 +13,7 @@ namespace WeigthIndicator.Domain.Services
         Task<IEnumerable<BarrelStorage>> GetBarrelStorages();
 
         Task<double> GetBarrelStorageRemainderByRecipe(int recipeId);
-
         Task<int> GetLastBarrelNumber(Recipe recipe);
+        Task<Reestr> GetLastReestr(int recipeId, DateTime date);
     }
 }

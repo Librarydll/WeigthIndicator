@@ -63,7 +63,7 @@ namespace WeigthIndicator.Domain.Models
             get { return _minDefaultWeigth; }
             set { SetProperty(ref _minDefaultWeigth, value); }
         }
-
+        public int ManufactureId { get; set; }
         public int CustomerId { get; set; }
         public int RecipeId { get; set; }
         [Computed]
@@ -71,9 +71,12 @@ namespace WeigthIndicator.Domain.Models
         [Computed]
         public Customer Customer { get; set; }
 
+        [Computed]
+        public Manufacture Manufacture { get; set; }
+
         public object Clone()
         {
- 
+
             return new ReestrSetting
             {
 
@@ -82,14 +85,16 @@ namespace WeigthIndicator.Domain.Models
                 TaraBarrel = TaraBarrel,
                 Seconds = Seconds,
                 TaraBarrelWithLid = TaraBarrelWithLid,
-                MaxWeight =MaxWeight,
-                MinWeight =MinWeight,
+                MaxWeight = MaxWeight,
+                MinWeight = MinWeight,
                 MinDefaultWeigth = MinDefaultWeigth,
-                Id =Id,
-                RecipeId =RecipeId,
-                CustomerId=CustomerId,
-                Customer =(Customer)Customer?.Clone(),
-                InitialBarrelNumber =InitialBarrelNumber
+                Id = Id,
+                RecipeId = RecipeId,
+                CustomerId = CustomerId,
+                Customer = (Customer)Customer?.Clone(),
+                InitialBarrelNumber = InitialBarrelNumber,
+                Manufacture = Manufacture?.Clone(),
+                ManufactureId = ManufactureId
             };
         }
 

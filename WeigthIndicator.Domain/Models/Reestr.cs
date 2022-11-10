@@ -10,10 +10,6 @@ namespace WeigthIndicator.Domain.Models
 {
     public class Reestr : BaseEntity, ICloneable
     {
-        private bool reestrState;
-        private double net;
-        private string note;
-        private Customer customer;
 
         public int BarrelNumber { get; set; }
         public string BatchNumber { get; set; }
@@ -21,11 +17,11 @@ namespace WeigthIndicator.Domain.Models
         /// <summary>
         /// 0-грузить,1-не грузить
         /// </summary>
-        public bool ReestrState { get => reestrState; set => SetProperty(ref reestrState, value); }
+        public bool ReestrState { get; set; }
         /// <summary>
         /// Чистый вес
         /// </summary>
-        public double Net { get => net; set => SetProperty(ref net, value); }
+        public double Net { get; set; }
         /// <summary>
         /// Вес самой бочки 
         /// </summary>
@@ -34,17 +30,21 @@ namespace WeigthIndicator.Domain.Models
         /// Вес самой бочки с крышкой
         /// </summary>
         public double TareBarrelWithLid { get; set; }
-        public string Note { get => note; set => SetProperty(ref note, value); }
-
+        public string Note { get; set; }
+        public ReestrLocationState ReestrLocationState { get; set; }
         public int RecipeId { get; set; }
         public int BarrelStorageId { get; set; }
         public int CustomerId { get; set; }
+        public int ManufactureId { get; set; }
+
         [Computed]
         public Recipe Recipe { get; set; }
         [Computed]
         public BarrelStorage BarrelStorage { get; set; }
         [Computed]
-        public Customer Customer { get => customer; set => SetProperty(ref customer, value); }
+        public Customer Customer { get; set; }
+        [Computed]
+        public Manufacture Manufacture { get; set; }
         [Computed]
         public double Brutto => Net + TareBarrel;
         public object Clone()
@@ -65,9 +65,18 @@ namespace WeigthIndicator.Domain.Models
                 BarrelStorage = (BarrelStorage)BarrelStorage?.Clone(),
                 Recipe = (Recipe)Recipe?.Clone(),
                 Customer = (Customer)Customer?.Clone(),
-                CustomerId = CustomerId
+                CustomerId = CustomerId,
+                ManufactureId =ManufactureId,
+                Manufacture = Manufacture?.Clone()
             };
         }
+    }
+    [Flags]
+    public enum ReestrLocationState
+    {
+        InWarehouse,
+        Outcomed = 1,
+        RetrunedBack = 2
     }
 
 

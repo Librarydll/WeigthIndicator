@@ -85,18 +85,46 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controls\PaginateController.xaml.cs">
-      <DependentUpon>PaginateController.xaml</DependentUpon>
+    <Compile Include="Controls\Modal.cs" />
+    <Compile Include="Controls\NavigationControl.xaml.cs">
+      <DependentUpon>NavigationControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\BindablePasswordBox.xaml.cs">
       <DependentUpon>BindablePasswordBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\PaginateController.xaml.cs">
+      <DependentUpon>PaginateController.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Core\Excel\ExcelHelper.cs" />
     <Compile Include="Core\Excel\ExcelHelperForGrouped.cs" />
     <Compile Include="Core\Print\PrintHelper.cs" />
-    <Compile Include="Dialogs\Common\DialogViewModelBase.cs" />
-    <Compile Include="Dialogs\ReestrEditViewModel.cs" />
-    <Compile Include="Dialogs\ReestrSettingViewModel.cs" />
+    <Compile Include="Dialog\DialogNavigationService.cs" />
+    <Compile Include="Dialog\IDialogNavigationService.cs" />
+    <Compile Include="Dialog\IModal.cs" />
+    <Compile Include="Dialog\ModelDialogParameter.cs" />
+    <Compile Include="Mapper\ReestrMapper.cs" />
+    <Compile Include="Models\Infrastructure\PaginationHelper.cs" />
+    <Compile Include="Models\SelectableItem.cs" />
+    <Compile Include="Models\ViewModels\OutcomeItemViewModel.cs" />
+    <Compile Include="Services\ICodeGenerator.cs" />
+    <Compile Include="Services\Websocket\Infrastructure\MobileScanner.cs" />
+    <Compile Include="Services\Websocket\IWebsocketServer.cs" />
+    <Compile Include="Services\Websocket\IWebsocketClientService.cs" />
+    <Compile Include="Services\Websocket\IWebsocketMessageHandler.cs" />
+    <Compile Include="Services\Websocket\WebsocketServer.cs" />
+    <Compile Include="Services\Websocket\WebsocketClientService.cs" />
+    <Compile Include="Services\Websocket\WebsocketMessageHandler.cs" />
+    <Compile Include="Store\ModalNavigationStore.cs" />
+    <Compile Include="ViewModels\AllReestrsViewModel.cs" />
+    <Compile Include="ViewModels\Common\ItemPaginationViewModelBase.cs" />
+    <Compile Include="ViewModels\Common\ItemsListViewModelBase.cs" />
+    <Compile Include="ViewModels\CreateUpdateOutcomeViewModel.cs" />
+    <Compile Include="ViewModels\ItemDialogViewModelBase.cs" />
+    <Compile Include="ViewModels\ManufactureViewModel.cs" />
+    <Compile Include="ViewModels\OutcomeViewModel.cs" />
+    <Compile Include="ViewModels\OutcomeWebsocketViewModel.cs" />
+    <Compile Include="ViewModels\ReestrEditViewModel.cs" />
+    <Compile Include="ViewModels\ReestrSettingViewModel.cs" />
     <Compile Include="Events\RecipeChangedEvent.cs" />
     <Compile Include="Factory\IPrintInitialize.cs" />
     <Compile Include="Factory\PrintPreviewFactory.cs" />
@@ -105,19 +133,30 @@
     <Compile Include="Models\FilterModel.cs" />
     <Compile Include="Models\PrintModel.cs" />
     <Compile Include="Models\RecipeReminder.cs" />
+    <Compile Include="Models\ViewModels\ReestrObject.cs" />
     <Compile Include="Services\ComPortProvider.cs" />
     <Compile Include="Services\IComPortProvider.cs" />
+    <Compile Include="Store\NavigationStore.cs" />
+    <Compile Include="Store\UserStore.cs" />
     <Compile Include="ViewModels\BarrelViewModel.cs" />
     <Compile Include="ViewModels\CustomerViewModel.cs" />
     <Compile Include="ViewModels\GroupedReestrViewModel.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\NavigationViewModel.cs" />
     <Compile Include="ViewModels\ReestrViewModel.cs" />
     <Compile Include="ViewModels\SettingViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="ViewModels\RecipeViewModel.cs" />
     <Compile Include="ViewModels\StatusViewModel.cs" />
+    <Compile Include="Views\AllReestrsView.xaml.cs">
+      <DependentUpon>AllReestrsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\BarrelView.xaml.cs">
       <DependentUpon>BarrelView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CreateUpdateOutcomeView.xaml.cs">
+      <DependentUpon>CreateUpdateOutcomeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CustomerView.xaml.cs">
       <DependentUpon>CustomerView.xaml</DependentUpon>
@@ -125,16 +164,28 @@
     <Compile Include="Views\GroupedReestrView.xaml.cs">
       <DependentUpon>GroupedReestrView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\LoginView.xaml.cs">
+      <DependentUpon>LoginView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\PrintPreviewView.xaml.cs">
+    <Compile Include="Views\ManufactureView.xaml.cs">
+      <DependentUpon>ManufactureView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OutcomeView.xaml.cs">
+      <DependentUpon>OutcomeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OutcomeWebsocketView.xaml.cs">
+      <DependentUpon>OutcomeWebsocketView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PrintView\PrintPreviewView.xaml.cs">
       <DependentUpon>PrintPreviewView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\PrintPreviewViewComposition.xaml.cs">
+    <Compile Include="Views\PrintView\PrintPreviewViewComposition.xaml.cs">
       <DependentUpon>PrintPreviewViewComposition.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\PrintPreviewViewCustomer.xaml.cs">
+    <Compile Include="Views\PrintView\PrintPreviewViewCustomer.xaml.cs">
       <DependentUpon>PrintPreviewViewCustomer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\RecipeView.xaml.cs">
@@ -186,7 +237,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Controls\PaginateController.xaml">
+    <Page Include="Controls\NavigationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -194,11 +245,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\PaginateController.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dictionaries\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dictionaries\ListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\AllReestrsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\BarrelView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CreateUpdateOutcomeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -210,19 +277,35 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\LoginView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\PrintPreviewView.xaml">
+    <Page Include="Views\ManufactureView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\PrintPreviewViewComposition.xaml">
+    <Page Include="Views\OutcomeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\PrintPreviewViewCustomer.xaml">
+    <Page Include="Views\OutcomeWebsocketView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PrintView\PrintPreviewView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PrintView\PrintPreviewViewComposition.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PrintView\PrintPreviewViewCustomer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -274,6 +357,9 @@
     <PackageReference Include="Prism.Wpf">
       <Version>8.0.0.1909</Version>
     </PackageReference>
+    <PackageReference Include="QRCoder">
+      <Version>1.4.1</Version>
+    </PackageReference>
     <PackageReference Include="ReactiveUI">
       <Version>13.1.1</Version>
     </PackageReference>
@@ -286,6 +372,9 @@
     <PackageReference Include="ReactiveUI.WPF">
       <Version>13.1.1</Version>
     </PackageReference>
+    <PackageReference Include="WebSocketSharp">
+      <Version>1.0.3-rc11</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WeigthIndicator.Dapper\WeigthIndicator.Dapper.csproj">
@@ -295,6 +384,10 @@
     <ProjectReference Include="..\WeigthIndicator.Domain\WeigthIndicator.Domain.csproj">
       <Project>{4e449ec2-5488-4c21-9437-07c125c84907}</Project>
       <Name>WeigthIndicator.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WeigthIndicator.Shared\WeigthIndicator.Shared.csproj">
+      <Project>{F6852420-D97D-4745-95B6-1CAA53B7C743}</Project>
+      <Name>WeigthIndicator.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -329,6 +422,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\logoprint2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Helpers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\full.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

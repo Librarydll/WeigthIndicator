@@ -1,13 +1,15 @@
 ﻿using Prism.Ioc;
 using Prism.Unity;
-using ReactiveUI;
 using System.Configuration;
+using System.Linq;
+using System.Net;
 using System.Windows;
 using WeigthIndicator.Dapper;
 using WeigthIndicator.Dapper.Services;
-using WeigthIndicator.Dialogs;
+using WeigthIndicator.Dialog;
 using WeigthIndicator.Domain.Services;
 using WeigthIndicator.Services;
+using WeigthIndicator.Store;
 using WeigthIndicator.ViewModels;
 using WeigthIndicator.Views;
 
@@ -34,12 +36,19 @@ namespace WeigthIndicator
 
         protected override Window CreateShell()
         {
-            return Container.Resolve<MainView>();
+            var loginvm = Container.Resolve<NavigationViewModel>();
+            var store = Container.Resolve<NavigationStore>();
+
+            var v = Container.Resolve<MainView>();
+            store.CurrentViewModel = loginvm;
+
+            return v;
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
             Container.Resolve<IComPortProvider>().ComPortConnector?.Dispose();
+            Container.Resolve<IWebsocketServer>()?.Dispose();
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
@@ -57,10 +66,46 @@ namespace WeigthIndicator
             containerRegistry.RegisterSingleton<IReestrSettingDataService, ReestrSettingDataService>();
            // containerRegistry.RegisterSingleton<IReestrSettingProvider, ReestrSettingProvider>();
             containerRegistry.RegisterSingleton<IComPortProvider, ComPortProvider>();
+            containerRegistry.RegisterSingleton<IUserDataService, UserDataService>();
+            containerRegistry.RegisterSingleton<IOutcomeDataService, OutcomeDataService>();
+            containerRegistry.RegisterSingleton<IDialogNavigationService, DialogNavigationService>();
+            containerRegistry.RegisterSingleton<IHelperDataService, HelperDataService>();
+            containerRegistry.RegisterSingleton<IManufactureDataService, ManufactureDataService>();
+            containerRegistry.RegisterSingleton<IWebsocketServer>(c=>
+            {
+              var ipAddress =  Dns.GetHostEntry(Dns.GetHostName())
+                    .AddressList
+                    .FirstOrDefault(x => x.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)?
+                    .ToString();
 
-            containerRegistry.RegisterDialog<ReestrSettingView, ReestrSettingViewModel>();
-            containerRegistry.RegisterDialog<ReestrEditView, ReestrEditViewModel>();
+                return new WebsocketServer($"ws://{ipAddress}:7070", c.Resolve<IWebsocketClientService>(), c.Resolve<IWebsocketMessageHandler>());
+            });
+            containerRegistry.RegisterSingleton<IWebsocketClientService, WebsocketClientService>();
+            containerRegistry.RegisterSingleton<IWebsocketMessageHandler, WebsocketMessageHandler>();
+            containerRegistry.RegisterSingleton<UserStore>();
+            containerRegistry.RegisterSingleton<NavigationStore>();
+            containerRegistry.RegisterSingleton<ModalNavigationStore>();
+            containerRegistry.RegisterSingleton<NavigationViewModel>();
+            containerRegistry.RegisterSingleton<MainViewModel>();
+            containerRegistry.RegisterSingleton<ShellViewModel>();
+            containerRegistry.RegisterSingleton<ReestrViewModel>();
+            containerRegistry.RegisterSingleton<GroupedReestrViewModel>();
+            containerRegistry.RegisterSingleton<OutcomeWebsocketViewModel>();
+            containerRegistry.RegisterSingleton<MainView>(c =>
+            {
+                return new MainView
+                {
+                    DataContext = c.Resolve<MainViewModel>()
+                };
+            });
+            containerRegistry.Register<AllReestrsViewModel>();
+            containerRegistry.Register<CreateUpdateOutcomeViewModel>();
+            containerRegistry.Register<OutcomeViewModel>();
+            containerRegistry.Register<ReestrEditViewModel>();
+            containerRegistry.Register<ReestrSettingViewModel>();
+            containerRegistry.Register<ManufactureViewModel>();
 
         }
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -40,25 +41,23 @@ namespace WeigthIndicator.ViewModels
                 .Select(x => x != null);
 
             PrintCommand = ReactiveCommand.Create<Customer>(ExecutePrintCommand, canPrint);
+            Task.Run(Initialize);
+
+        }
+
+        private async Task Initialize()
+        {
+            var customers = await _customerDataService.GetCustomers();
+            CustomersCollection = new ObservableCollection<Customer>(customers);
+
         }
 
         private void ExecutePrintCommand(Customer customer)
         {
             var printInitialize = PrintPreviewFactory.GetPrintView(PrintViewType.BuyerInformation);
-            var flowDoc = printInitialize.InitializeFlow(new Reestr() { Customer = customer });
+            var flowDoc = printInitialize.InitializeFlow(new Models.ViewModels.ReestrObject(new Reestr() { Customer = customer }));
             PrintHelper.Prints(flowDoc, customer.ShortName);
-        }
-
-        public async Task<IEnumerable<Customer>> GetCollectionsAsync()
-        {
-           return await _customerDataService.GetCustomers();
-        }
-
-        public void InitializeCollection(IEnumerable<Customer> collections)
-        {
-            CustomersCollection = new ObservableCollection<Customer>(collections);
-        }
-
+        }   
         private void AddCustomer(Customer customer)
         {
             CustomersCollection.Add((Customer)customer.Clone());

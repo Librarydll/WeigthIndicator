@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Dapper.Contrib.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,7 +30,7 @@ namespace WeigthIndicator.Dapper.Services
         {
             using (var connection = _factory.CreateConnection())
             {
-                string query = "SELECT *FROM barrelStorages as bs LEFT JOIN Recipes as r on bs.RecipeId = r.Id";
+                string query = "SELECT *FROM barrelStorages as bs LEFT JOIN Recipes as r on bs.RecipeId = r.Id order by ProductionDate desc";
 
                 var barrelStorages = await connection.QueryAsync<BarrelStorage, Recipe, BarrelStorage>(query,
                     (rs, r) =>
@@ -42,7 +43,15 @@ namespace WeigthIndicator.Dapper.Services
 
             }
         }
+        public async Task<Reestr> GetLastReestr(int recipeId, DateTime date)
+        {
+            using (var connection = _factory.CreateConnection())
+            {
+                string query = "SELECT *FROM Reestrs where recipeid =@recipeId and Date(PackingDate) =@date  order by id desc";
 
+                return await connection.QueryFirstOrDefaultAsync<Reestr>(query, new { recipeId, date = date.Date });
+            }
+        }
         public async Task<double> GetBarrelStorageRemainderByRecipe(int recipeId)
         {
             using (var connection = _factory.CreateConnection())
@@ -74,5 +83,7 @@ namespace WeigthIndicator.Dapper.Services
                 return barrelNumber;
             }
         }
+
+     
     }
 }

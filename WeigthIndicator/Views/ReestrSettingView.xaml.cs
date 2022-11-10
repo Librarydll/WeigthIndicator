@@ -1,9 +1,6 @@
 ﻿using ReactiveUI;
-using System;
-using System.Linq;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using WeigthIndicator.Dialogs;
+using WeigthIndicator.ViewModels;
 
 namespace WeigthIndicator.Views
 {
@@ -76,13 +73,13 @@ namespace WeigthIndicator.Views
                 this.OneWayBind(ViewModel, vm => vm.CustomersCollection, v => v.CustomerCmb.ItemsSource)
                    .DisposeWith(disposables);
 
-                this.Bind(ViewModel, vm => vm.SelectedCustomer, v => v.CustomerCmb.SelectedItem)
+                this.OneWayBind(ViewModel, vm => vm.ManufacturesCollection, v => v.ManufactureCmb.ItemsSource)
                     .DisposeWith(disposables);
 
-                this.WhenAnyValue(x => x.ViewModel)
-                    .SelectMany(x => x.GetAsync())
-                    .ObserveOnDispatcher()
-                    .Subscribe(x => ViewModel.Initialize(x));
+                this.Bind(ViewModel, vm => vm.SelectedCustomer, v => v.CustomerCmb.SelectedItem)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel, vm => vm.SelectedManufacture, v => v.ManufactureCmb.SelectedItem)
+                   .DisposeWith(disposables);
 
                 this.Bind(ViewModel, vm => vm.ControlsEnabled, v => v.TarraBarrelWithLid.IsEnabled);
                 this.Bind(ViewModel, vm => vm.ControlsEnabled, v => v.TarraBarrelWithLidTb.IsEnabled);
