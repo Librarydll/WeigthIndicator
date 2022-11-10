@@ -1,16 +1,16 @@
 ﻿using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WeigthIndicator.Domain.Models;
 
 namespace WeigthIndicator.Models.ViewModels
 {
     public class ReestrObject : ReactiveObject
     {
+        public ReestrObject()
+        {
+
+        }
         public ReestrObject(Reestr reestr)
         {
             Id = reestr.Id;
@@ -28,7 +28,8 @@ namespace WeigthIndicator.Models.ViewModels
             Recipe = (Recipe)reestr.Recipe?.Clone();
             BarrelStorage = (BarrelStorage)reestr.BarrelStorage?.Clone();
             Customer = (Customer)reestr.Customer?.Clone();
-
+            Manufacture = reestr.Manufacture?.Clone();
+            ManufactureId = reestr.ManufactureId;
         }
 
         public int Id { get; set; }
@@ -56,11 +57,13 @@ namespace WeigthIndicator.Models.ViewModels
         public int RecipeId { get; set; }
         public int BarrelStorageId { get; set; }
         public int CustomerId { get; set; }
+        public int ManufactureId { get; set; }
         public Recipe Recipe { get; set; }
         public BarrelStorage BarrelStorage { get; set; }
         [Reactive] public Customer Customer { get; set; }
+        [Reactive] public Manufacture Manufacture { get; set; }
         public double Brutto => Net + TareBarrel;
-
+        public System.Drawing.Bitmap QrCode { get; set; }
         public Reestr BuildOut()
         {
             return new Reestr
@@ -79,8 +82,11 @@ namespace WeigthIndicator.Models.ViewModels
                 RecipeId = RecipeId,
                 ReestrState = ReestrState,
                 TareBarrel = TareBarrelWithLid,
-                TareBarrelWithLid = TareBarrelWithLid
+                TareBarrelWithLid = TareBarrelWithLid,
+                Manufacture = Manufacture,
+                ManufactureId = ManufactureId
             };
         }
+
     }
 }

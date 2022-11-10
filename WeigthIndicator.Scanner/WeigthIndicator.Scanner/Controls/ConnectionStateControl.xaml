@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    x:Class="WeigthIndicator.Scanner.Controls.ConnectionStateControl"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="this">
+    <ContentView.Content>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Ellipse
+                x:Name="Elliplse"
+                Margin="10,0,0,0"
+                Fill="Red"
+                HeightRequest="25"
+                VerticalOptions="Center"
+                WidthRequest="25">
+                <Ellipse.Triggers>
+                    <DataTrigger
+                        Binding="{Binding Source={Reference this}, Path=IsConnected}"
+                        TargetType="Ellipse"
+                        Value="true">
+                        <Setter Property="Fill" Value="#3CB371" />
+                    </DataTrigger>
+                </Ellipse.Triggers>
+            </Ellipse>
+
+            <Button
+                x:Name="Reconnect"
+                Grid.Column="1"
+                Command="{Binding Source={Reference this}, Path=ReconnectCommand}"
+                HorizontalOptions="End"
+                IsVisible="false"
+                Text="Переподключиться">
+                <Button.Triggers>
+                    <DataTrigger
+                        Binding="{Binding Source={Reference this}, Path=IsConnected}"
+                        TargetType="Button"
+                        Value="false">
+                        <Setter Property="IsVisible" Value="true" />
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>
+        </Grid>
+    </ContentView.Content>
+</ContentView>

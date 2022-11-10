@@ -1,0 +1,262 @@
+﻿<UserControl
+    x:Class="WeigthIndicator.Views.PrintPreviewView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WeigthIndicator.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Width="576"
+    Height="383.6"
+    FontFamily="Arial">
+    <Grid>
+        <FlowDocumentPageViewer Margin="0">
+            <FlowDocument
+                x:Name="FD"
+                LineHeight="10"
+                PagePadding="5 40 0 0">
+                <FlowDocument.Resources>
+                    <Style TargetType="Run">
+                        <Setter Property="FontSize" Value="12.5" />
+                        <Setter Property="FontWeight" Value="Bold" />
+                        <Setter Property="FontFamily" Value="Arial" />
+                    </Style>
+                </FlowDocument.Resources>
+                <Paragraph FontSize="15" LineHeight="1">
+                    <Run Text="Наименование:" />
+                    <Run
+                        x:Name="NameRu"
+                        FontSize="15"
+                        FontWeight="ExtraBold"
+                        Text="Сок виноградный концентрированный осветленный" />
+                </Paragraph>
+                <Paragraph LineHeight="1">
+                    <Run Text="Өнім атауы:" />
+                    <Run
+                        x:Name="NameKz"
+                        FontSize="15"
+                        FontWeight="ExtraBold" />
+                </Paragraph>
+
+                <Table LineHeight="1">
+                    <Table.Columns>
+                        <TableColumn Width="320" />
+                        <TableColumn Width="90" />
+                        <TableColumn Width="auto" />
+                    </Table.Columns>
+
+                    <TableRowGroup>
+                        <TableRow>
+                            <TableCell>
+                                <Paragraph LineHeight="1">
+                                    <Run Text="Номер партии/Партияның нөмірі:" />
+                                </Paragraph>
+                            </TableCell>
+                            <TableCell TextAlignment="Justify">
+                                <Paragraph LineHeight="1">
+                                    <Run x:Name="BatchNumber" />
+                                </Paragraph>
+                            </TableCell>
+                            <TableCell Padding="0,0,5,0" TextAlignment="Left">
+                                <Paragraph LineHeight="1">
+                                    <Run Text="Брикс/Brix" />
+                                    <Run x:Name="Brix" />
+                                </Paragraph>
+                            </TableCell>
+                        </TableRow>
+                    </TableRowGroup>
+                </Table>
+
+                <Table LineHeight="1">
+                    <Table.Columns>
+                        <TableColumn Width="320" />
+                        <TableColumn Width="90" />
+                        <TableColumn Width="auto" />
+                    </Table.Columns>
+
+                    <TableRowGroup>
+                        <TableRow>
+                            <TableCell>
+                                <Paragraph LineHeight="1">
+                                    <Run Text="Номер бочки/Бөшке нөмірі:" />
+                                </Paragraph>
+                            </TableCell>
+                            <TableCell TextAlignment="Justify">
+                                <Paragraph LineHeight="1">
+                                    <Run
+                                        x:Name="BarrelNumber"
+                                        FontSize="16"
+                                        FontWeight="ExtraBold" />
+                                </Paragraph>
+                            </TableCell>
+                            <TableCell TextAlignment="Left">
+                                <Paragraph LineHeight="1">
+                                    <Run Text="Гост 32102-2013" />
+                                </Paragraph>
+                            </TableCell>
+                        </TableRow>
+                    </TableRowGroup>
+                </Table>
+
+                <Table LineHeight="1">
+                    <Table.Columns>
+                        <TableColumn Width="320" />
+                        <TableColumn Width="90" />
+                        <TableColumn Width="auto" />
+                    </Table.Columns>
+
+                    <TableRowGroup>
+                        <TableRow>
+                            <TableCell>
+                                <Paragraph LineHeight="1">
+                                    <Run Text="Дата производства/Өндіру күні:" />
+                                </Paragraph>
+                            </TableCell>
+                            <TableCell TextAlignment="Justify">
+                                <Paragraph LineHeight="1">
+                                    <Run x:Name="ProductionDate" />
+                                </Paragraph>
+                            </TableCell>
+                            <!--<TableCell
+                                Padding="0,0,25,0"
+                                ColumnSpan="4"
+                                RowSpan="6"
+                                TextAlignment="Right">
+                                <Paragraph>
+                                    <Image
+                                        x:Name="Qr"
+                                        Width="96"
+                                        Height="96" />
+                                </Paragraph>
+                            -->
+                            <!--<Paragraph>
+                                    <Image Height="32" Source="/Resources/logoprint2.png" />
+                                </Paragraph>-->
+                            <!--
+                            </TableCell>-->
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>
+                                <Paragraph LineHeight="1">
+                                    <Run Text="Годен до/Дейін жарамды:" />
+                                </Paragraph>
+                            </TableCell>
+                            <TableCell TextAlignment="Justify">
+                                <Paragraph LineHeight="1">
+                                    <Run x:Name="BeforeDate" />
+                                </Paragraph>
+                            </TableCell>
+
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>
+                                <Paragraph LineHeight="1">
+                                    <Run Text="Условия хранения/Сақтау шарттары:" />
+                                </Paragraph>
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell ColumnSpan="2" TextAlignment="Justify">
+                                <Paragraph LineHeight="1">
+                                    <Run x:Name="StorageCondition" />
+                                </Paragraph>
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>
+                                <Paragraph LineHeight="1">
+                                    <Run Text="Условия транспортировки/Көлік шарттары:" />
+                                </Paragraph>
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell ColumnSpan="2">
+                                <Paragraph LineHeight="1">
+                                    <Run x:Name="TranportationCondition" />
+                                </Paragraph>
+                            </TableCell>
+                        </TableRow>
+
+                    </TableRowGroup>
+                </Table>
+
+
+                <Table LineHeight="1">
+                    <Table.Columns>
+                        <TableColumn Width="195" />
+                        <TableColumn />
+                        <TableColumn />
+                        <TableColumn />
+                    </Table.Columns>
+
+                    <TableRowGroup>
+                        <TableRow>
+                            <TableCell>
+                                <Paragraph>Вес нетто/Нетто салмағы кг:</Paragraph>
+                            </TableCell>
+                            <TableCell TextAlignment="Right">
+                                <Paragraph>
+                                    <Run
+                                        x:Name="Net"
+                                        FontSize="16"
+                                        FontWeight="ExtraBold" />
+                                </Paragraph>
+                            </TableCell>
+                            <TableCell
+                                Padding="0,0,50,0"
+                                RowSpan="2"
+                                TextAlignment="Right">
+                                <Paragraph>
+                                    <Image
+                                        Width="110"
+                                        Height="30"
+                                        Source="/Resources/full.png" />
+                                </Paragraph>
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>
+                                <Paragraph>
+                                    <Run Text="Вес брутто/Брутто салмағы кг:" />
+                                </Paragraph>
+                            </TableCell>
+                            <TableCell Padding="0,0,16,0" TextAlignment="Right">
+                                <Paragraph>
+                                    <Run x:Name="Brutto" />
+                                </Paragraph>
+                            </TableCell>
+                        </TableRow>
+
+                    </TableRowGroup>
+                </Table>
+                <Paragraph LineHeight="1">
+                    <Run
+                        FontSize="14"
+                        FontWeight="ExtraBold"
+                        Text="Производитель/Өндіруші: «AGROMIR» JV LLC/СП ООО «AGROMIR»" />
+                </Paragraph>
+                <Paragraph LineHeight="1">
+                    <Run x:Name="ManufactureIndex" Text="Адрес производства/Өндipic мекенжайы: 140300" />
+                </Paragraph>
+                <Paragraph LineHeight="1">
+                    <Run x:Name="ManufactureAddressKz" Text="Өзбекстан Республикасы, Самарқанд облысы, Самарқанд ауданы, Гүлобод кенті" />
+                </Paragraph>
+                <Paragraph LineHeight="1">
+                    <Run x:Name="ManufactureAddressRu" Text="Республика Узбекистан, Самаркандская область, Самаркандский район, п Гулобод" />
+                </Paragraph>
+                <Paragraph LineHeight="1" />
+                <Paragraph LineHeight="1">
+                    <Run Text="Импортер/Aлушы:" />
+                    <Run x:Name="CustomerShortName" />
+                </Paragraph>
+                <Paragraph LineHeight="1">
+                    <Run x:Name="AddressRu" />
+                </Paragraph>
+                <Paragraph LineHeight="1">
+                    <Run x:Name="AddressKz" />
+                </Paragraph>
+            </FlowDocument>
+        </FlowDocumentPageViewer>
+    </Grid>
+
+
+</UserControl>

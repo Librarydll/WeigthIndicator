@@ -30,6 +30,8 @@ namespace WeigthIndicator.ViewModels
         [Reactive] public bool CustomerView { get; set; }
         [Reactive] public bool ReestrView { get; set; }
         [Reactive] public bool GroupedReestrView { get; set; }
+        [Reactive] public bool OutcomeView { get; set; }
+        [Reactive] public bool ManufactureView { get; set; }
         public NavigationViewModel(
                     NavigationStore navigationStore,
                     IUnityContainer unityContainer)
@@ -64,8 +66,22 @@ namespace WeigthIndicator.ViewModels
             this.WhenAnyValue(x => x.GroupedReestrView)
                .Where(x => GroupedReestrView)
                .Subscribe(x => GoToGropedReestrView());
+
+            this.WhenAnyValue(x => x.OutcomeView)
+                .Where(x => OutcomeView)
+                .Subscribe(x => GoToOutcomeView());
+
+            this.WhenAnyValue(x => x.ManufactureView)
+            .Where(x => ManufactureView)
+            .Subscribe(x => GoToManufactureView());
+
+            GoToStatusView();
         }
 
+        private void GoToManufactureView()
+        {
+            ContentViewModel = _unityContainer.Resolve<ManufactureViewModel>();
+        }
 
         public void GoToStatusView()
         {
@@ -90,6 +106,10 @@ namespace WeigthIndicator.ViewModels
         private void GoToBarrelView()
         {
             ContentViewModel = _unityContainer.Resolve<BarrelViewModel>();
+        }
+        private void GoToOutcomeView()
+        {
+            ContentViewModel = _unityContainer.Resolve<OutcomeViewModel>();
         }
 
         void GoToSettingView()

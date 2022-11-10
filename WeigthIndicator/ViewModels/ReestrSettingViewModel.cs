@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using WeigthIndicator.Dialog;
 using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Domain.Services;
@@ -20,6 +21,7 @@ namespace WeigthIndicator.ViewModels
         private readonly IBarrelStorageDataService _barrelStorageDataService;
         private readonly IReestrSettingDataService _reestrSettingDataService;
         private readonly IRecipeDataService _recipeDataService;
+        private readonly IManufactureDataService _manufactureDataService;
         private readonly ICustomerDataService _customerDataService;
 
         private ObservableCollection<Recipe> _recipesCollection;
@@ -36,8 +38,16 @@ namespace WeigthIndicator.ViewModels
             set { this.RaiseAndSetIfChanged(ref _customers, value); }
         }
 
+        private ObservableCollection<Manufacture> _manufactures;
+        public ObservableCollection<Manufacture> ManufacturesCollection
+        {
+            get { return _manufactures; }
+            set { this.RaiseAndSetIfChanged(ref _manufactures, value); }
+        }
+
         [Reactive] public Recipe SelectedRecipe { get; set; }
         [Reactive] public Customer SelectedCustomer { get; set; }
+        [Reactive] public Manufacture SelectedManufacture { get; set; }
         [Reactive] public string Password { get; set; }
 
         private bool _controlsVisibility = false;
@@ -59,12 +69,14 @@ namespace WeigthIndicator.ViewModels
             IBarrelStorageDataService barrelStorageDataService,
             IReestrSettingDataService reestrSettingDataService,
             IRecipeDataService recipeDataService,
+            IManufactureDataService manufactureDataService,
             ICustomerDataService customerDataService)
         {
             _modalNavigationStore = modalNavigationStore;
             _barrelStorageDataService = barrelStorageDataService;
             _reestrSettingDataService = reestrSettingDataService;
             _recipeDataService = recipeDataService;
+            _manufactureDataService = manufactureDataService;
             _customerDataService = customerDataService;
 
             this.WhenAnyValue(x => x.Password)
@@ -89,6 +101,8 @@ namespace WeigthIndicator.ViewModels
             ReestrSetting.RecipeId = SelectedRecipe.Id;
             ReestrSetting.CurrentRecipe = SelectedRecipe;
             ReestrSetting.Customer = SelectedCustomer;
+            ReestrSetting.ManufactureId = SelectedManufacture.Id;
+            ReestrSetting.Manufacture = SelectedManufacture;
             ReestrSetting.CustomerId = SelectedCustomer.Id;
             if (ReestrSetting.Id == 0)
             {
@@ -110,17 +124,32 @@ namespace WeigthIndicator.ViewModels
 
         private async Task Initialize()
         {
-            var rs = await _reestrSettingDataService.GetReestrSetting();
-            var collection = await _recipeDataService.GetRecipes();
-            var customers = await _customerDataService.GetCustomers();
-            var barrelNumber = await _barrelStorageDataService.GetLastBarrelNumber(rs.CurrentRecipe);
+            try
+            {
+                var rs = await _reestrSettingDataService.GetReestrSetting();
+                var collection = await _recipeDataService.GetRecipes();
+                var customers = await _customerDataService.GetCustomers();
+                var barrelNumber = await _barrelStorageDataService.GetLastBarrelNumber(rs.CurrentRecipe);
+                var manufactures = await _manufactureDataService.GetManufactures();
 
-            RecipesCollection = new ObservableCollection<Recipe>(collection);
-            CustomersCollection = new ObservableCollection<Customer>(customers);
-            ReestrSetting = rs ?? new ReestrSetting();
-            SelectedRecipe = RecipesCollection.FirstOrDefault(x => x.Id == ReestrSetting.RecipeId);
-            SelectedCustomer = CustomersCollection.FirstOrDefault(x => x.Id == ReestrSetting.CustomerId);
-            ReestrSetting.InitialBarrelNumber = barrelNumber + 1;
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    RecipesCollection = new ObservableCollection<Recipe>(collection);
+                    CustomersCollection = new ObservableCollection<Customer>(customers);
+                    ManufacturesCollection = new ObservableCollection<Manufacture>(manufactures);
+                    ReestrSetting = rs ?? new ReestrSetting();
+                    SelectedRecipe = RecipesCollection.FirstOrDefault(x => x.Id == ReestrSetting.RecipeId);
+                    SelectedCustomer = CustomersCollection.FirstOrDefault(x => x.Id == ReestrSetting.CustomerId);
+                    SelectedManufacture = ManufacturesCollection.FirstOrDefault(x => x.Id == ReestrSetting.ManufactureId);
+                    ReestrSetting.InitialBarrelNumber = barrelNumber + 1;
+                });
+               
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         public void PasswordChecker(string psw)

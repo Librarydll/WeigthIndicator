@@ -7,7 +7,7 @@ using WeigthIndicator.Domain.Models.Common;
 
 namespace WeigthIndicator.Domain.Models
 {
-    public class Customer:BaseEntity ,ICloneable
+    public class Customer : BaseEntity, ICloneable
     {
         private string _shortNmae;
         public string ShortName

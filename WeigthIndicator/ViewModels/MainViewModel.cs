@@ -1,6 +1,9 @@
-﻿using ReactiveUI;
+﻿using Prism.Commands;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using System;
+using WebSocketSharp.Server;
+using WeigthIndicator.Services;
 using WeigthIndicator.Store;
 
 namespace WeigthIndicator.ViewModels
@@ -9,18 +12,29 @@ namespace WeigthIndicator.ViewModels
     {
         private readonly NavigationStore _navigationStore;
         private readonly ModalNavigationStore _modalNavigationStore;
+        private readonly IWebsocketServer _webscoketServer;
 
         public ReactiveObject CurrentViewModel => _navigationStore.CurrentViewModel;
         public ReactiveObject CurrentModalViewModel => _modalNavigationStore.CurrentViewModel;
         public bool IsOpen => _modalNavigationStore.IsOpen;
 
-
-        public MainViewModel(NavigationStore navigationStore, ModalNavigationStore modalNavigationStore)
+        public DelegateCommand WindowsLoaded { get; set; }
+        public MainViewModel(
+            NavigationStore navigationStore, 
+            ModalNavigationStore modalNavigationStore,
+            IWebsocketServer webscoketServer)
         {
             _navigationStore = navigationStore;
             _modalNavigationStore = modalNavigationStore;
+            _webscoketServer = webscoketServer;
             _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
             _modalNavigationStore.CurrentViewModelChanged += OnCurrentModalViewModelChanged;
+            WindowsLoaded = new DelegateCommand(ExecuteWindowsLoaded);
+        }
+
+        private void ExecuteWindowsLoaded()
+        {   
+            _webscoketServer.Start();
         }
 
         private void OnCurrentModalViewModelChanged()

@@ -59,10 +59,10 @@ namespace WeigthIndicator.Views
                     v => v.Pagination.ReestrsCollection)
                     .DisposeWith(disposables);
 
-                this.Events().KeyDown
-                         .Where(x => x.Key == Key.I && Keyboard.IsKeyDown(Key.LeftCtrl))
-                         .Select(x => Unit.Default)
-                         .InvokeCommand(this, x => x.ViewModel.Imitation);
+                //this.Events().KeyDown
+                //         .Where(x => x.Key == Key.I && Keyboard.IsKeyDown(Key.LeftCtrl))
+                //         .Select(x => Unit.Default)
+                //         .InvokeCommand(this, x => x.ViewModel.Imitation);
 
                 this.Events().KeyDown
                    .Where(x => x.Key == Key.Enter && (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)))

@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="WeigthIndicator.Scanner.Views.ReestrsListPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="this">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Номер накладной" />
+            <Editor Text="{Binding Title}" />
+            <Label Text="Коментарий" />
+            <Editor Text="{Binding Comment}" />
+
+            <CollectionView ItemsSource="{Binding Reestrs}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame>
+                            <Grid>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="auto" />
+                                    </Grid.RowDefinitions>
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        Text="{Binding ProductionTitle}" />
+
+                                    <Grid Grid.Row="1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto" />
+                                            <RowDefinition Height="auto" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label
+                                            FontAttributes="Bold"
+                                            FontSize="16"
+                                            Text="{Binding BarrelNumber}" />
+                                        <Label
+                                            Grid.Column="1"
+                                            HorizontalOptions="End"
+                                            Text="{Binding ProductionDate}" />
+
+                                        <Label
+                                            Grid.Row="1"
+                                            FontAttributes="Bold"
+                                            FontSize="16"
+                                            Text="{Binding BatchNumber}" />
+                                        <Label
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            HorizontalOptions="End"
+                                            Text="{Binding PackingDate}" />
+
+
+                                    </Grid>
+
+                                    <Button
+                                        Grid.Row="2"
+                                        Command="{Binding Source={x:Reference this}, Path=BindingContext.DeleteCommand}"
+                                        CommandParameter="{Binding}"
+                                        Text="Удалить" />
+                                </Grid>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

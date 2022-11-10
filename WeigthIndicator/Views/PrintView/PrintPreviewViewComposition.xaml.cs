@@ -10,25 +10,22 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Factory;
-using WeigthIndicator.Models;
 using WeigthIndicator.Models.ViewModels;
 
 namespace WeigthIndicator.Views
 {
     /// <summary>
-    /// Interaction logic for PrintPreviewView.xaml
+    /// Interaction logic for PrintPreviewViewComposition.xaml
     /// </summary>
-    public partial class PrintPreviewView : UserControl, IPrintInitialize
+    public partial class PrintPreviewViewComposition : UserControl, IPrintInitialize
     {
-        public PrintPreviewView()
+        public PrintPreviewViewComposition()
         {
             InitializeComponent();
         }
-
 
         public FlowDocument InitializeFlow(ReestrObject reestr)
         {
@@ -39,18 +36,19 @@ namespace WeigthIndicator.Views
             BarrelNumber.Text = reestr.BarrelNumber.ToString();
             ProductionDate.Text = reestr.BarrelStorage.ProductionDate.ToString("dd.MM.yyyy");
             BeforeDate.Text = reestr.BarrelStorage.ProductionDate.AddYears(2).ToString("dd.MM.yyyy");
-          //  PackingDate.Text = reestr.PackingDate.ToString("HH:mm:ss dd.MM.yyyy");
             StorageCondition.Text = reestr.Recipe.StorageCondition;
             TranportationCondition.Text = reestr.Recipe.TransportationCondition;
             Net.Text = reestr.Net.ToString();
             Brutto.Text = (reestr.TareBarrelWithLid + reestr.Net).ToString();
-            CustomerShortName.Text = reestr.Customer.ShortName;
-            AddressRu.Text = reestr.Customer.AddressRu;
-            AddressKz.Text = reestr.Customer.AddressKz;
+            Carbo.Text = reestr.Recipe.Carbohydrates.ToString();
+            VitaminC.Text = reestr.Recipe.VitaminC.ToString();
+            EnergyBalue.Text = reestr.Recipe.EnergyValue.ToString();
+            DryContent.Text = reestr.Recipe.DryContent.ToString();
+            ManufactureIndex.Text = $"Адрес производства/Өндipic мекенжайы: {reestr.Manufacture.Index}";
+            ManufactureAddressKz.Text = reestr.Manufacture.AddressKz;
+            ManufactureAddressRu.Text = reestr.Manufacture.AddressRu;
 
             return this.FD;
         }
-
-      
     }
 }

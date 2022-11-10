@@ -1,5 +1,7 @@
 ﻿using DynamicData;
+using Newtonsoft.Json;
 using Prism.Services.Dialogs;
+using QRCoder;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using System;
@@ -19,6 +21,7 @@ using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Domain.Services;
 using WeigthIndicator.Events;
 using WeigthIndicator.Factory;
+using WeigthIndicator.Mapper;
 using WeigthIndicator.Models.ViewModels;
 using WeigthIndicator.Services;
 using WeigthIndicator.Views;
@@ -168,6 +171,8 @@ namespace WeigthIndicator.ViewModels
                             r.CustomerId = result.CustomerId;
                             r.Net = result.Net;
                             r.Note = result.Note;
+                            r.ManufactureId = result.ManufactureId;
+                            r.Manufacture = result.Manufacture;
                         }
                      });
                  }
@@ -180,10 +185,8 @@ namespace WeigthIndicator.ViewModels
             var printViewType = (PrintViewType)Enum.Parse(typeof(PrintViewType), SelectedPrintViewType.ToString());
             if (printViewType == PrintViewType.NoPrint) return;
             var printInitialize = PrintPreviewFactory.GetPrintView(printViewType);
-
             FlowDocument flowDoc = printInitialize.InitializeFlow(reestr);
             PrintHelper.Prints(flowDoc, reestr.PackingDate.ToString("dd.MM.yyyy"));
-
         }
 
 
@@ -287,6 +290,8 @@ namespace WeigthIndicator.ViewModels
                 PackingDate = DateTime.Now,
                 ReestrState = true,
                 Net = net,
+                ManufactureId = ReestrSetting.ManufactureId,
+                Manufacture = ReestrSetting.Manufacture
             };
 
             reestr.BarrelNumber = ReestrSetting.GetBarrelNumberAndClearIt();

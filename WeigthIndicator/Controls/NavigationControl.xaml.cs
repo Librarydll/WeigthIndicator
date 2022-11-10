@@ -47,15 +47,19 @@ namespace WeigthIndicator.Controls
                 this.Bind(ViewModel, vm => vm.CustomerView, view => view.CustomerView.IsSelected)
                     .DisposeWith(disposables);
 
+                this.Bind(ViewModel, vm => vm.ManufactureView, view => view.ManufactureView.IsSelected)
+                     .DisposeWith(disposables);
+
                 this.Bind(ViewModel, vm => vm.ReestrView, view => view.ReestrView.IsSelected)
                    .DisposeWith(disposables);
 
                 this.Bind(ViewModel, vm => vm.GroupedReestrView, view => view.GropedReestrView.IsSelected)
                  .DisposeWith(disposables);
 
-                this.WhenAnyValue(x => x.ViewModel)
-                   .Subscribe(x => x.GoToStatusView());
 
+
+                this.Bind(ViewModel, vm => vm.OutcomeView, view => view.Outcome.IsSelected)
+                    .DisposeWith(disposables);
             });
         }
     }

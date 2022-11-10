@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="WeigthIndicator.Scanner.Views.LoginPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:control="clr-namespace:WeigthIndicator.Scanner.Controls"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Shell.NavBarIsVisible="False"
+    mc:Ignorable="d">
+    <StackLayout BackgroundColor="#e6e6e6">
+        <Grid>
+            <StackLayout
+                Margin="0"
+                Padding="0"
+                HorizontalOptions="FillAndExpand" />
+            <StackLayout
+                Margin="10,100,10,0"
+                Padding="0"
+                HorizontalOptions="FillAndExpand">
+                <Frame
+                    Margin="0"
+                    Padding="0"
+                    BackgroundColor="White"
+                    HasShadow="True"
+                    HeightRequest="500">
+
+                    <StackLayout>
+                        <StackLayout Margin="10">
+                            <Label
+                                FontAttributes="Bold"
+                                HorizontalOptions="CenterAndExpand"
+                                Text="SIGN IN"
+                                TextColor="Black" />
+                        </StackLayout>
+
+                        <StackLayout Margin="15,10" Padding="0">
+
+                            <Frame
+                                Padding="0"
+                                BackgroundColor="Transparent"
+                                BorderColor="DarkGray"
+                                CornerRadius="30"
+                                HorizontalOptions="FillAndExpand">
+                                <StackLayout Orientation="Horizontal">
+                                    <Frame
+                                        Margin="5"
+                                        Padding="0"
+                                        BackgroundColor="SkyBlue"
+                                        CornerRadius="30"
+                                        HeightRequest="40"
+                                        WidthRequest="40">
+                                        <!--<Image
+                                            Margin="0"
+                                            Aspect="AspectFill"
+                                            Source="https://www.findool.com/images/avatars/avatar.png" />-->
+                                    </Frame>
+
+                                    <control:CustomEntry
+                                        Margin="0,0,20,0"
+                                        FontAttributes="None"
+                                        HorizontalOptions="FillAndExpand"
+                                        Placeholder="Login"
+                                        Text="{Binding Login}"
+                                        TextColor="HotPink" />
+                                </StackLayout>
+                            </Frame>
+
+                            <Frame
+                                Margin="0,15,0,0"
+                                Padding="0"
+                                BackgroundColor="Transparent"
+                                BorderColor="DarkGray"
+                                CornerRadius="30"
+                                HorizontalOptions="FillAndExpand">
+                                <StackLayout Orientation="Horizontal">
+                                    <Frame
+                                        Margin="5"
+                                        Padding="0"
+                                        BackgroundColor="SkyBlue"
+                                        CornerRadius="30"
+                                        HeightRequest="40"
+                                        WidthRequest="40">
+                                        <!--<Image
+                                            Margin="0"
+                                            Aspect="AspectFill"
+                                            Source="https://images.all-free-download.com/images/graphicthumb/lock_icon_6813906.jpg" />-->
+                                    </Frame>
+
+                                    <control:CustomEntry
+                                        Margin="0,0,20,0"
+                                        FontAttributes="None"
+                                        HorizontalOptions="FillAndExpand"
+                                        IsPassword="True"
+                                        Placeholder="Password"
+                                        Text="{Binding Password}"
+                                        TextColor="HotPink" />
+                                </StackLayout>
+                            </Frame>
+
+                            <Frame
+                                Margin="0,15,0,0"
+                                Padding="0"
+                                BackgroundColor="Transparent"
+                                BorderColor="DarkGray"
+                                CornerRadius="30"
+                                HorizontalOptions="FillAndExpand">
+                                <StackLayout Orientation="Horizontal">
+                                    <Frame
+                                        Margin="5"
+                                        Padding="0"
+                                        BackgroundColor="SkyBlue"
+                                        CornerRadius="30"
+                                        HeightRequest="40"
+                                        WidthRequest="40">
+                                        <!--<Image
+                                            Margin="0"
+                                            Aspect="AspectFill"
+                                            Source="https://www.findool.com/images/avatars/avatar.png" />-->
+                                    </Frame>
+
+                                    <control:CustomEntry
+                                        Margin="0,0,20,0"
+                                        FontAttributes="None"
+                                        HorizontalOptions="FillAndExpand"
+                                        Placeholder="Server"
+                                        Text="{Binding Server}"
+                                        TextColor="HotPink" />
+                                    <Button Command="{Binding SaveServerCommand}" Text="Save" />
+                                </StackLayout>
+                            </Frame>
+
+                            <Button
+                                Margin="0,10,0,0"
+                                BackgroundColor="HotPink"
+                                Command="{Binding LoginCommand}"
+                                CornerRadius="30"
+                                Text="SIGN IN"
+                                TextColor="White" />
+
+
+                        </StackLayout>
+
+
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="18"
+                            HorizontalOptions="Center"
+                            IsVisible="{Binding HasError}"
+                            Text="{Binding ErrorMessage}"
+                            TextColor="red" />
+                    </StackLayout>
+
+                </Frame>
+            </StackLayout>
+        </Grid>
+    </StackLayout>
+</ContentPage>

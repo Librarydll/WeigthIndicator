@@ -55,6 +55,11 @@
                     Cursor="Hand"
                     Icon="People" />
 
+                <ui:NavigationViewItem
+                    x:Name="ManufactureView"
+                    Content="Производители"
+                    Cursor="Hand"
+                    Icon="People" />
                 <ui:NavigationViewItem x:Name="ReestrView" Cursor="Hand">
                     <ui:SimpleStackPanel Orientation="Horizontal" Spacing="3">
                         <Image
@@ -77,6 +82,21 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Text="Сгруппированные Реестры" />
+                    </ui:SimpleStackPanel>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem
+                    x:Name="Outcome"
+                    Cursor="Hand"
+                    Visibility="Collapsed">
+                    <ui:SimpleStackPanel Orientation="Horizontal" Spacing="3">
+                        <Image
+                            Width="30"
+                            Height="25"
+                            Source="/Resources/reestr.png" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Text="Отгрузка" />
                     </ui:SimpleStackPanel>
                 </ui:NavigationViewItem>
             </ui:NavigationView.MenuItems>

@@ -4,18 +4,24 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:control="clr-namespace:WeigthIndicator.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:rx="http://reactiveui.net"
     xmlns:ui="http://schemas.modernwpf.com/2019"
     xmlns:viewmodels="clr-namespace:WeigthIndicator.ViewModels"
     xmlns:views="clr-namespace:WeigthIndicator.Views"
-                   d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
-                   Title="MainWindow"
+    Title="MainWindow"
     Width="800"
     Height="450"
+    d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
     x:TypeArguments="viewmodels:MainViewModel"
     WindowState="Maximized"
     mc:Ignorable="d">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding WindowsLoaded}" PassEventArgsToCommand="True" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Grid.Resources>
             <DataTemplate DataType="{x:Type viewmodels:BarrelViewModel}">
@@ -51,9 +57,23 @@
             <DataTemplate DataType="{x:Type viewmodels:SettingViewModel}">
                 <views:SettingView />
             </DataTemplate>
-
+            <DataTemplate DataType="{x:Type viewmodels:OutcomeViewModel}">
+                <views:OutcomeView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:CreateUpdateOutcomeViewModel}">
+                <views:CreateUpdateOutcomeView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:AllReestrsViewModel}">
+                <views:AllReestrsView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:OutcomeWebsocketViewModel}">
+                <views:OutcomeWebsocketView />
+            </DataTemplate>
             <DataTemplate DataType="{x:Type viewmodels:NavigationViewModel}">
                 <control:NavigationControl />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:ManufactureViewModel}">
+                <views:ManufactureView />
             </DataTemplate>
         </Grid.Resources>
         <ContentControl

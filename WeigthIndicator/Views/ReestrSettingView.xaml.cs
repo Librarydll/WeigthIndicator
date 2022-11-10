@@ -73,8 +73,13 @@ namespace WeigthIndicator.Views
                 this.OneWayBind(ViewModel, vm => vm.CustomersCollection, v => v.CustomerCmb.ItemsSource)
                    .DisposeWith(disposables);
 
+                this.OneWayBind(ViewModel, vm => vm.ManufacturesCollection, v => v.ManufactureCmb.ItemsSource)
+                    .DisposeWith(disposables);
+
                 this.Bind(ViewModel, vm => vm.SelectedCustomer, v => v.CustomerCmb.SelectedItem)
                     .DisposeWith(disposables);
+                this.Bind(ViewModel, vm => vm.SelectedManufacture, v => v.ManufactureCmb.SelectedItem)
+                   .DisposeWith(disposables);
 
                 this.Bind(ViewModel, vm => vm.ControlsEnabled, v => v.TarraBarrelWithLid.IsEnabled);
                 this.Bind(ViewModel, vm => vm.ControlsEnabled, v => v.TarraBarrelWithLidTb.IsEnabled);

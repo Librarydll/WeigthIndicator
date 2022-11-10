@@ -18,7 +18,7 @@
         Height="350"
         Background="RosyBrown"
         CornerRadius="5"
-        FocusManager.FocusedElement="{Binding ElementName=login}">
+        FocusManager.FocusedElement="{Binding ElementName=Login}">
         <Grid>
             <Grid.Resources>
                 <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />

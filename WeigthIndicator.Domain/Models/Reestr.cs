@@ -35,12 +35,16 @@ namespace WeigthIndicator.Domain.Models
         public int RecipeId { get; set; }
         public int BarrelStorageId { get; set; }
         public int CustomerId { get; set; }
+        public int ManufactureId { get; set; }
+
         [Computed]
         public Recipe Recipe { get; set; }
         [Computed]
         public BarrelStorage BarrelStorage { get; set; }
         [Computed]
         public Customer Customer { get; set; }
+        [Computed]
+        public Manufacture Manufacture { get; set; }
         [Computed]
         public double Brutto => Net + TareBarrel;
         public object Clone()
@@ -61,16 +65,18 @@ namespace WeigthIndicator.Domain.Models
                 BarrelStorage = (BarrelStorage)BarrelStorage?.Clone(),
                 Recipe = (Recipe)Recipe?.Clone(),
                 Customer = (Customer)Customer?.Clone(),
-                CustomerId = CustomerId
+                CustomerId = CustomerId,
+                ManufactureId =ManufactureId,
+                Manufacture = Manufacture?.Clone()
             };
         }
     }
-
+    [Flags]
     public enum ReestrLocationState
     {
         InWarehouse,
-        Outcomed,
-        RetrunedBack
+        Outcomed = 1,
+        RetrunedBack = 2
     }
 
 

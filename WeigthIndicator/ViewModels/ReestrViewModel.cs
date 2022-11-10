@@ -1,4 +1,6 @@
-﻿using Prism.Services.Dialogs;
+﻿using Newtonsoft.Json;
+using Prism.Services.Dialogs;
+using QRCoder;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using System;
@@ -11,6 +13,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Forms;
 using WeigthIndicator.Core.Excel;
 using WeigthIndicator.Core.Print;
@@ -18,7 +21,9 @@ using WeigthIndicator.Dialog;
 using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Domain.Services;
 using WeigthIndicator.Factory;
+using WeigthIndicator.Mapper;
 using WeigthIndicator.Models;
+using WeigthIndicator.Shared.Services;
 using WeigthIndicator.Views;
 
 namespace WeigthIndicator.ViewModels
@@ -184,10 +189,10 @@ namespace WeigthIndicator.ViewModels
         {
             var printViewType = (PrintViewType)Enum.Parse(typeof(PrintViewType), SelectedPrintViewType.ToString());
             var printInitialize = PrintPreviewFactory.GetPrintView(printViewType);
-
-            var flowDoc = printInitialize.InitializeFlow(new Models.ViewModels.ReestrObject(reestr));
-
+            var robj = new Models.ViewModels.ReestrObject(reestr);
+            FlowDocument flowDoc = printInitialize.InitializeFlow(robj);
             PrintHelper.Prints(flowDoc, reestr.PackingDate.ToString("dd.MM.yyyy"));
+
         }
 
         private async Task ExecuteFilterCommand()
@@ -200,7 +205,7 @@ namespace WeigthIndicator.ViewModels
             }
             else
             {
-                _reestrs = await _reestrDataService.GetReestrsByDate(FilterModel.FromDate, BarrelCode);
+                _reestrs = await _reestrDataService.GetReestrsByDateAndType(FilterModel.FromDate, BarrelCode);
                 _filename = FilterModel.FromDate.ToString("dd.MM.yyyy");
             }
 

@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="WeigthIndicator.Scanner.Views.OutcomePage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:WeigthIndicator.Scanner.Controls"
+    xmlns:zxing="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms">
+    <Shell.TitleView>
+        <controls:ConnectionStateControl IsConnected="{Binding IsConnected}" ReconnectCommand="{Binding ReconnectCommand}" />
+    </Shell.TitleView>
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <Frame Margin="5" Padding="5">
+                <StackLayout>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Количество бочек на разгрузку" />
+                        <Label
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            Text="{Binding ReestrsCount}" />
+                    </Grid>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Общий вес (Нетто)" />
+                        <Label
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            Text="{Binding TotalNet}" />
+                    </Grid>
+                </StackLayout>
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding NavigateReestrsListPageCommand}" />
+                </Frame.GestureRecognizers>
+            </Frame>
+
+            <zxing:ZXingScannerView
+                Grid.Row="1"
+                IsScanning="True"
+                ScanResultCommand="{Binding ScanResultCommand}" />
+
+            <StackLayout
+                Grid.Row="2"
+                HorizontalOptions="Center"
+                Orientation="Horizontal"
+                VerticalOptions="Center">
+                <Button Command="{Binding ResetCommand}" Text="Сбросить" />
+                <Button Command="{Binding CompleteCommand}" Text="Завершить" />
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

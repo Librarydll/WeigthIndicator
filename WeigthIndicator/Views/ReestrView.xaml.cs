@@ -26,9 +26,11 @@ namespace WeigthIndicator.Views
         public ReestrView()
         {
             InitializeComponent();
-            ViewModel = DataContext as ReestrViewModel;
             this.WhenActivated(disposables =>
             {
+                ViewModel = DataContext as ReestrViewModel;
+
+
                 this.OneWayBind(ViewModel,
                     vm => vm.ReestrsCollection,
                     v => v.ReestrsCollection.ItemsSource)
