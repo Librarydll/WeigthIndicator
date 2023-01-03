@@ -10,7 +10,7 @@ namespace WeigthIndicator.Factory
 {
     public interface IPrintInitialize
     {
-        FlowDocument InitializeFlow(Reestr reestr);
+        FlowDocument InitializeFlow(Reestr reestr,string info = null);
     }
 
     public enum PrintViewType
@@ -18,6 +18,7 @@ namespace WeigthIndicator.Factory
         WithAddress,
         WithNutritionValue,
         BuyerInformation,
+        PepsiCo,
         NoPrint
     }
 }

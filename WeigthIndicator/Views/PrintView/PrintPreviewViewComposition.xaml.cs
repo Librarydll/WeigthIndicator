@@ -10,26 +10,23 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Factory;
-using WeigthIndicator.Models;
 
 namespace WeigthIndicator.Views
 {
     /// <summary>
-    /// Interaction logic for PrintPreviewView.xaml
+    /// Interaction logic for PrintPreviewViewComposition.xaml
     /// </summary>
-    public partial class PrintPreviewView : UserControl, IPrintInitialize
+    public partial class PrintPreviewViewComposition : UserControl, IPrintInitialize
     {
-        public PrintPreviewView()
+        public PrintPreviewViewComposition()
         {
             InitializeComponent();
         }
 
-
-        public FlowDocument InitializeFlow(Reestr reestr)
+        public FlowDocument InitializeFlow(Reestr reestr,string data =null)
         {
             NameRu.Text = reestr.Recipe.LongNameRu;
             NameKz.Text = reestr.Recipe.LongNameKz;
@@ -43,13 +40,11 @@ namespace WeigthIndicator.Views
             TranportationCondition.Text = reestr.Recipe.TransportationCondition;
             Net.Text = reestr.Net.ToString();
             Brutto.Text = (reestr.TareBarrelWithLid + reestr.Net).ToString();
-            CustomerShortName.Text = reestr.Customer.ShortName;
-            AddressRu.Text = reestr.Customer.AddressRu;
-            AddressKz.Text = reestr.Customer.AddressKz;
-
+            Carbo.Text = reestr.Recipe.Carbohydrates.ToString();
+            VitaminC.Text = reestr.Recipe.VitaminC.ToString();
+            EnergyBalue.Text = reestr.Recipe.EnergyValue.ToString();
+            DryContent.Text = reestr.Recipe.DryContent.ToString();
             return this.FD;
         }
-
-      
     }
 }

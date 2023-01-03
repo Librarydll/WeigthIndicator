@@ -1,78 +1,111 @@
-﻿<rx:ReactiveUserControl x:Class="WeigthIndicator.Views.ReestrView"
-             x:TypeArguments="local:ReestrViewModel"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WeigthIndicator.ViewModels"
-             xmlns:rx="http://reactiveui.net"
-             xmlns:prism="http://prismlibrary.com/"
-             xmlns:ui="http://schemas.modernwpf.com/2019"
-             prism:ViewModelLocator.AutoWireViewModel="True"
-             mc:Ignorable="d" 
-             x:Name="view"
-             d:DesignHeight="450" d:DesignWidth="800">
+﻿<rx:ReactiveUserControl
+    x:Class="WeigthIndicator.Views.ReestrView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WeigthIndicator.ViewModels"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prism="http://prismlibrary.com/"
+    xmlns:rx="http://reactiveui.net"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    x:Name="view"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    prism:ViewModelLocator.AutoWireViewModel="True"
+    x:TypeArguments="local:ReestrViewModel"
+    mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <ToolBar Grid.Row="0" ToolBarTray.IsLocked="True">
 
 
             <!--<toolKit:DateTimePicker Margin="5" Value="{Binding StartDateTime,UpdateSourceTrigger=PropertyChanged}" Kind="Local" >
             </toolKit:DateTimePicker>-->
-            <DatePicker  Margin="5" x:Name="FromDate">
-
-            </DatePicker>
-            <TextBlock Text="To" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="8"/>
+            <DatePicker x:Name="FromDate" Margin="5" />
+            <TextBlock
+                Padding="8"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Text="To" />
             <!--<toolKit:DateTimePicker Margin="5" Value="{Binding EndDateTime,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Kind="Local">
             </toolKit:DateTimePicker>-->
 
-            <DatePicker  Margin="5" x:Name="ToDate">
-
-            </DatePicker>
-            <StackPanel Margin="5 0 5 0" Orientation="Horizontal" VerticalAlignment="Center">
-                <CheckBox HorizontalContentAlignment="Center" x:Name="IncludeToDate" IsChecked="False">
+            <DatePicker x:Name="ToDate" Margin="5" />
+            <StackPanel
+                Margin="5,0,5,0"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                <CheckBox
+                    x:Name="IncludeToDate"
+                    HorizontalContentAlignment="Center"
+                    IsChecked="False">
                     Включить диапозон
                 </CheckBox>
 
             </StackPanel>
 
-            <Button  x:Name="FilterCommand"  Margin="5 0 0 0" Padding="5">
+            <Button
+                x:Name="FilterCommand"
+                Margin="5,0,0,0"
+                Padding="5">
                 <StackPanel Orientation="Horizontal">
-                    <ui:SymbolIcon Symbol="Filter"/>
-                    <TextBlock Margin="5 0 0 0" Text="Фильтр" VerticalAlignment="Center"/>
+                    <ui:SymbolIcon Symbol="Filter" />
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        Text="Фильтр" />
                 </StackPanel>
             </Button>
-            <ComboBox  x:Name="PrintViewTypeCmb"
-                       Padding="5"
-                           DisplayMemberPath=".">
+            <ComboBox
+                x:Name="PrintViewTypeCmb"
+                Padding="5"
+                DisplayMemberPath=".">
                 <ComboBoxItem>
                     С адрессом
                 </ComboBoxItem>
                 <ComboBoxItem>
                     С пищ ценностью
                 </ComboBoxItem>
+                <ComboBoxItem Visibility="Collapsed">
+                    С пищ ценностью
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    Pepsi co
+                </ComboBoxItem>
             </ComboBox>
         </ToolBar>
         <Grid Grid.Row="1">
 
-            <ToolBar x:Name="toolbar" Grid.Row="1" ToolBarTray.IsLocked="True">
-                <TextBox Width="150"  Margin="5" x:Name="SearchQuery"/>
-                <Button  x:Name="FilterBySearchQueryCommand"  Margin="5 0 0 0" Padding="5">
+            <ToolBar
+                x:Name="toolbar"
+                Grid.Row="1"
+                ToolBarTray.IsLocked="True">
+                <TextBox
+                    x:Name="SearchQuery"
+                    Width="150"
+                    Margin="5" />
+                <Button
+                    x:Name="FilterBySearchQueryCommand"
+                    Margin="5,0,0,0"
+                    Padding="5">
                     <StackPanel Orientation="Horizontal">
-                        <ui:SymbolIcon Symbol="Filter"/>
-                        <TextBlock VerticalAlignment="Center" Margin="5 0 0 0" Text="Фильтр"/>
+                        <ui:SymbolIcon Symbol="Filter" />
+                        <TextBlock
+                            Margin="5,0,0,0"
+                            VerticalAlignment="Center"
+                            Text="Фильтр" />
                     </StackPanel>
                 </Button>
-                <ComboBox 
-                      x:Name="BarrelType"
-                       Margin="5"
-                      FontSize="16"
-                      Width="110">
+                <ComboBox
+                    x:Name="BarrelType"
+                    Width="110"
+                    Margin="5"
+                    FontSize="16">
                     <ComboBoxItem>
                         Все
                     </ComboBoxItem>
@@ -83,40 +116,53 @@
                         Пластик
                     </ComboBoxItem>
                 </ComboBox>
-                <ComboBox DisplayMemberPath="."
-                          x:Name="Materials"
-                          SelectedItem="{Binding SelectedMaterial}"
-                          Margin="5"
-                          FontSize="16"
-                          Width="110">
-                </ComboBox>
-                <ComboBox x:Name="Batches"
-                          SelectedItem="{Binding SelectedBatch}"
-                          DisplayMemberPath="."
-                          Margin="5"
-                          FontSize="16"
-                          Width="110">
-                </ComboBox>
+                <ComboBox
+                    x:Name="Materials"
+                    Width="110"
+                    Margin="5"
+                    DisplayMemberPath="."
+                    FontSize="16"
+                    SelectedItem="{Binding SelectedMaterial}" />
+                <ComboBox
+                    x:Name="Batches"
+                    Width="110"
+                    Margin="5"
+                    DisplayMemberPath="."
+                    FontSize="16"
+                    SelectedItem="{Binding SelectedBatch}" />
 
             </ToolBar>
 
-            <Button x:Name="ExportExcelCommand" Margin="0 0 10 0" Cursor="Hand" HorizontalAlignment="Right" Background="#FFEEF5FD"  BorderBrush="{x:Null}" BorderThickness="0">
-             
+            <Button
+                x:Name="ExportExcelCommand"
+                Margin="0,0,10,0"
+                HorizontalAlignment="Right"
+                Background="#FFEEF5FD"
+                BorderBrush="{x:Null}"
+                BorderThickness="0"
+                Cursor="Hand">
+
                 <StackPanel>
-                    <Image Width="50" Height="50" Source="/Resources/ms-excel.png"/>
+                    <Image
+                        Width="50"
+                        Height="50"
+                        Source="/Resources/ms-excel.png" />
                 </StackPanel>
             </Button>
         </Grid>
-        
-        <ListView x:Name="ReestrsCollection" Grid.Row="2"
-                              Background="Transparent" BorderThickness="0"                  
-                              Margin="0 10 0 0">
+
+        <ListView
+            x:Name="ReestrsCollection"
+            Grid.Row="2"
+            Margin="0,10,0,0"
+            Background="Transparent"
+            BorderThickness="0">
 
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding ReestrState}" Value="False">
-                            <Setter Property="Background" Value="#FFB33434"/>
+                            <Setter Property="Background" Value="#FFB33434" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -127,81 +173,96 @@
                     <GridViewColumn Header="N бочки">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock  FontSize="15" Text="{Binding  Path=BarrelNumber}"/>
+                                <TextBlock FontSize="15" Text="{Binding Path=BarrelNumber}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn   Header="Наименование">
+                    <GridViewColumn Header="Наименование">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock FontSize="15" Text="{Binding Path=Recipe.ShortName}"/>
+                                <TextBlock FontSize="15" Text="{Binding Path=Recipe.ShortName}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn   Header="Номер партии">
+                    <GridViewColumn Header="Номер партии">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock FontSize="15" Text="{Binding Path=BatchNumber}"/>
+                                <TextBlock FontSize="15" Text="{Binding Path=BatchNumber}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn   Header="Дата фасовки">
+                    <GridViewColumn Header="Дата фасовки">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel>
-                                    <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=PackingDate, StringFormat={}{0:dd.MM.y}}"/>
-                                    <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=PackingDate, StringFormat={}{0:HH:mm:ss}}"/>
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        FontSize="15"
+                                        Text="{Binding Path=PackingDate, StringFormat={}{0:dd.MM.y}}" />
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        FontSize="15"
+                                        Text="{Binding Path=PackingDate, StringFormat={}{0:HH:mm:ss}}" />
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn   Header="Дата производства">
+                    <GridViewColumn Header="Дата производства">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel>
-                                    <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=BarrelStorage.ProductionDate, StringFormat={}{0:dd.MM.y}}"/>
-                                    <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=BarrelStorage.ProductionDate, StringFormat={}{0:HH:mm:ss}}"/>
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        FontSize="15"
+                                        Text="{Binding Path=BarrelStorage.ProductionDate, StringFormat={}{0:dd.MM.y}}" />
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        FontSize="15"
+                                        Text="{Binding Path=BarrelStorage.ProductionDate, StringFormat={}{0:HH:mm:ss}}" />
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn   Header="Покупатель">
+                    <GridViewColumn Header="Покупатель">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock FontSize="15" Text="{Binding Path=Customer.ShortName}"/>
+                                <TextBlock FontSize="15" Text="{Binding Path=Customer.ShortName}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn   Header="Вес нетто">
+                    <GridViewColumn Header="Вес нетто">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock FontSize="15" Text="{Binding Path=Net}"/>
+                                <TextBlock FontSize="15" Text="{Binding Path=Net}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn   Header="Вес самой бочки">
+                    <GridViewColumn Header="Вес самой бочки">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock FontSize="15" Text="{Binding Path=TareBarrel}"/>
+                                <TextBlock FontSize="15" Text="{Binding Path=TareBarrel}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn   Header="примечание" Width="150">
+                    <GridViewColumn Width="150" Header="примечание">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock FontSize="15" Width="120" Text="{Binding Path=Note}"/>
+                                <TextBlock
+                                    Width="120"
+                                    FontSize="15"
+                                    Text="{Binding Path=Note}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn   Header="Операции" Width="150">
+                    <GridViewColumn Width="150" Header="Операции">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <ui:SimpleStackPanel Spacing="5" Orientation="Horizontal">
-                                    <Button Command="{Binding Path=ViewModel.PrintCommand,ElementName=view}" CommandParameter="{Binding}">
-                                        <ui:SymbolIcon Symbol="Print"/>
+                                <ui:SimpleStackPanel Orientation="Horizontal" Spacing="5">
+                                    <Button Command="{Binding Path=ViewModel.PrintCommand, ElementName=view}" CommandParameter="{Binding}">
+                                        <ui:SymbolIcon Symbol="Print" />
                                     </Button>
-                                    <Button Command="{Binding Path=ViewModel.EditCommand,ElementName=view}" CommandParameter="{Binding}">
-                                        <ui:SymbolIcon Symbol="Edit"/>
+                                    <Button Command="{Binding Path=ViewModel.EditCommand, ElementName=view}" CommandParameter="{Binding}">
+                                        <ui:SymbolIcon Symbol="Edit" />
                                     </Button>
                                 </ui:SimpleStackPanel>
                             </DataTemplate>
@@ -211,13 +272,22 @@
             </ListView.View>
         </ListView>
 
-        <ui:SimpleStackPanel Orientation="Horizontal" Grid.Row="3" Spacing="5">
-            <TextBlock Padding="5 5 0 5" FontSize="18" FontWeight="DemiBold" >
-                <Run Text="Количество бочек: "/>
+        <ui:SimpleStackPanel
+            Grid.Row="3"
+            Orientation="Horizontal"
+            Spacing="5">
+            <TextBlock
+                Padding="5,5,0,5"
+                FontSize="18"
+                FontWeight="DemiBold">
+                <Run Text="Количество бочек: " />
                 <Run x:Name="ReestrCount" />
             </TextBlock>
-            <TextBlock Padding="5 5 0 5" FontSize="18" FontWeight="DemiBold" >
-                <Run Text="Сумма нетто"/>
+            <TextBlock
+                Padding="5,5,0,5"
+                FontSize="18"
+                FontWeight="DemiBold">
+                <Run Text="Сумма нетто" />
                 <Run x:Name="NetSum" />
             </TextBlock>
         </ui:SimpleStackPanel>

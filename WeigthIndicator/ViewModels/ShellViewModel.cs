@@ -44,6 +44,7 @@ namespace WeigthIndicator.ViewModels
 
         public ReestrSetting ReestrSetting { get; set; }
 
+        public string MaterialGroup { get; set; } = "Группа А";
         [Reactive] public int ProgressValue { get; set; }
         [Reactive] public int MaxProgressValue { get; set; }
         [Reactive] public bool IsAutoMode { get; set; }
@@ -57,7 +58,7 @@ namespace WeigthIndicator.ViewModels
         public ReactiveCommand<Unit, Reestr> SaveCommand { get; set; }
         public ReactiveCommand<Reestr, Unit> EditCommand { get; set; }
         public ReactiveCommand<Reestr, Unit> PrintCommand { get; set; }
-
+        public ReactiveCommand<Unit, Unit> Imitation { get; set; }
         private readonly ObservableAsPropertyHelper<int> _reestrCount;
         public int ReestrCount => _reestrCount.Value;
 
@@ -106,6 +107,7 @@ namespace WeigthIndicator.ViewModels
                 .Select(x => ReestrsCollection.Sum(z => z.Net))
                 .ToProperty(this, x => x.NetTotal);
 
+            Imitation = ReactiveCommand.CreateFromTask(ExecuteImitation);
 
             _itemWeight = parsedValue.Select(x => x)
                                      .ObserveOn(RxApp.MainThreadScheduler)
@@ -134,7 +136,17 @@ namespace WeigthIndicator.ViewModels
             ExecuteOpenReestrSettingCommand();
 
         }
+        private async Task<Unit> ExecuteImitation()
+        {
+            _comPortProvider.ComPortConnector.ParsedValue = 0;
+            for (int i = 1; i <= 10; i++)
+            {
+                await Task.Delay(500);
+                _comPortProvider.ComPortConnector.ParsedValue = i * 25;
+            }
 
+            return Unit.Default;
+        }
         private void ExecuteEditViewCommand(Reestr reestr)
         {
             var param = new DialogParameters();
@@ -177,9 +189,8 @@ namespace WeigthIndicator.ViewModels
             if (printViewType == PrintViewType.NoPrint) return;
             var printInitialize = PrintPreviewFactory.GetPrintView(printViewType);
 
-            FlowDocument flowDoc = printInitialize.InitializeFlow(reestr);
+            FlowDocument flowDoc = printInitialize.InitializeFlow(reestr, MaterialGroup);
             PrintHelper.Prints(flowDoc, reestr.PackingDate.ToString("dd.MM.yyyy"));
-
         }
 
 

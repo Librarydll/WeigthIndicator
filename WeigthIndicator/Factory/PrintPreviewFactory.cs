@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WeigthIndicator.Views;
+using WeigthIndicator.Views.PrintView;
 
 namespace WeigthIndicator.Factory
 {
@@ -20,6 +21,8 @@ namespace WeigthIndicator.Factory
                     return new PrintPreviewViewComposition();
                 case PrintViewType.BuyerInformation:
                     return new PrintPreviewViewCustomer();
+                case PrintViewType.PepsiCo:
+                    return new PrintViewPepsiCo();
                 default:
                     throw new ArgumentException("printViewType");
             }

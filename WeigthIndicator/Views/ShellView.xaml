@@ -1,42 +1,43 @@
-﻿<rx:ReactiveUserControl 
-             x:Class="WeigthIndicator.Views.ShellView"
-             x:TypeArguments="viewmodels:ShellViewModel"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:viewmodels="clr-namespace:WeigthIndicator.ViewModels"
-             xmlns:ui="http://schemas.modernwpf.com/2019"
-             xmlns:rx="http://reactiveui.net"
-             xmlns:prism="http://prismlibrary.com/"
-             prism:ViewModelLocator.AutoWireViewModel="True"
-             xmlns:enum="clr-namespace:WeigthIndicator.Domain.Models;assembly=WeigthIndicator.Domain"
-             xmlns:controls="clr-namespace:WeigthIndicator.Controls"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="1000">
+﻿<rx:ReactiveUserControl
+    x:Class="WeigthIndicator.Views.ShellView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:WeigthIndicator.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:enum="clr-namespace:WeigthIndicator.Domain.Models;assembly=WeigthIndicator.Domain"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prism="http://prismlibrary.com/"
+    xmlns:rx="http://reactiveui.net"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    xmlns:viewmodels="clr-namespace:WeigthIndicator.ViewModels"
+    d:DesignHeight="450"
+    d:DesignWidth="1000"
+    prism:ViewModelLocator.AutoWireViewModel="True"
+    x:TypeArguments="viewmodels:ShellViewModel"
+    mc:Ignorable="d">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
-            <Button HorizontalAlignment="Center" VerticalAlignment="Top"
-                    x:Name="ReestrSetting"
-                    Content="Настройки" 
-                    FontSize="22" 
-                    Margin="10">
-                
-            </Button>
+            <Button
+                x:Name="ReestrSetting"
+                Margin="10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Content="Настройки"
+                FontSize="22" />
             <!--<ui:SimpleStackPanel Spacing="2">
-                <TextBlock Text="Выберите рецепт" 
-                           FontSize="16" 
+                <TextBlock Text="Выберите рецепт"
+                           FontSize="16"
                            Margin="10"
                            HorizontalAlignment="Center"
                            Style="{StaticResource HeaderTextBlockStyle}"/>
@@ -49,89 +50,107 @@
                 </ComboBox>
             </ui:SimpleStackPanel>-->
 
-            <ui:SimpleStackPanel Grid.Row="1"
-                                 Width="407"
-                                 HorizontalAlignment="Center" VerticalAlignment="Center"
-                                 Margin="10 0">
-              
-                <TextBlock 
-                    HorizontalAlignment="Center" VerticalAlignment="Center"
+            <ui:SimpleStackPanel
+                Grid.Row="1"
+                Width="407"
+                Margin="10,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
                     FontSize="50"
-                    Text="Вес"/>
-                <TextBlock Grid.Column="1" 
-                           x:Name="ItemWeigth"
-                           HorizontalAlignment="Center" VerticalAlignment="Center"
-                           FontSize="180"/>
+                    Text="Вес" />
+                <TextBlock
+                    x:Name="ItemWeigth"
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="180" />
 
-                <ui:ProgressBar  x:Name="ProgressBar" HorizontalAlignment="Center" Width="200" Height="50"> 
-                    
-                </ui:ProgressBar>
+                <ui:ProgressBar
+                    x:Name="ProgressBar"
+                    Width="200"
+                    Height="50"
+                    HorizontalAlignment="Center" />
 
-             
-        
+
+
             </ui:SimpleStackPanel>
 
-            <ui:SimpleStackPanel Spacing="2"  Grid.Row="2" HorizontalAlignment="Center"  VerticalAlignment="Bottom">
-                <Button Content="Записать" HorizontalAlignment="Center"
-                        x:Name="SaveBtn"
-                    FontSize="22" 
-                    Margin="10">
-                    
-                </Button>
-                <TextBlock Text="Автоматический режим" 
-                           FontSize="40" 
-                           Margin="10"
-                           HorizontalAlignment="Center"
-                          
-                           Style="{StaticResource HeaderTextBlockStyle}"/>
-                <ui:ToggleSwitch x:Name="switch" FontSize="30" IsOn="True"   HorizontalAlignment="Center">
-
-                </ui:ToggleSwitch>
+            <ui:SimpleStackPanel
+                Grid.Row="2"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Spacing="2">
+                <Button
+                    x:Name="SaveBtn"
+                    Margin="10"
+                    HorizontalAlignment="Center"
+                    Content="Записать"
+                    FontSize="22" />
+                <TextBlock
+                    Margin="10"
+                    HorizontalAlignment="Center"
+                    FontSize="40"
+                    Style="{StaticResource HeaderTextBlockStyle}"
+                    Text="Автоматический режим" />
+                <ui:ToggleSwitch
+                    x:Name="switch"
+                    HorizontalAlignment="Center"
+                    FontSize="30"
+                    IsOn="True" />
             </ui:SimpleStackPanel>
 
 
-         
+
         </Grid>
-    
+
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
-            
+
             <Grid Visibility="Hidden">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0" x:Name="col1"/>
-                <Grid Grid.Column="1" x:Name="col2"/>
-                <Grid Grid.Column="2" x:Name="col3"/>
-                <Grid Grid.Column="3" x:Name="col4"/>
-                <Grid Grid.Column="4" x:Name="col5"/>
-                <Grid Grid.Column="5" x:Name="col6"/>
+                <Grid x:Name="col1" Grid.Column="0" />
+                <Grid x:Name="col2" Grid.Column="1" />
+                <Grid x:Name="col3" Grid.Column="2" />
+                <Grid x:Name="col4" Grid.Column="3" />
+                <Grid x:Name="col5" Grid.Column="4" />
+                <Grid x:Name="col6" Grid.Column="5" />
             </Grid>
 
-            <ui:SimpleStackPanel Margin="5 5 0 5" Orientation="Horizontal" Spacing="5">
+            <ui:SimpleStackPanel
+                Margin="5,5,0,5"
+                Orientation="Horizontal"
+                Spacing="5">
                 <Button x:Name="EditCommand">
-                    <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal">
+                    <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10">
                         <ui:SymbolIcon Symbol="Edit" />
-                        <TextBlock Text="Изменить"/>
+                        <TextBlock Text="Изменить" />
                     </ui:SimpleStackPanel>
                 </Button>
                 <Button x:Name="PrintCommand">
-                    <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal">
+                    <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10">
                         <ui:SymbolIcon Symbol="Print" />
-                        <TextBlock Text="Печатать"/>
+                        <TextBlock Text="Печатать" />
                     </ui:SimpleStackPanel>
                 </Button>
-                <ComboBox  x:Name="PrintViewTypeCmb"
-                           DisplayMemberPath=".">
+                <ComboBox
+                    x:Name="PrintViewTypeCmb"
+                    DisplayMemberPath="."
+                    SelectionChanged="PrintViewTypeCmb_SelectionChanged">
                     <ComboBoxItem>
                         С адрессом
                     </ComboBoxItem>
@@ -142,21 +161,36 @@
                         С пищ ценностью
                     </ComboBoxItem>
                     <ComboBoxItem>
+                        Pepsi co
+                    </ComboBoxItem>
+                    <ComboBoxItem>
                         Не печатать
                     </ComboBoxItem>
                 </ComboBox>
+                <TextBlock
+                    x:Name="MaterailGroupTextBlock"
+                    VerticalAlignment="Center"
+                    Text="Группа сырья :"
+                    Visibility="{Binding ElementName=PrintViewTypeCmb}" />
+                <TextBox
+                    x:Name="MaterialGroup"
+                    MinWidth="60"
+                    VerticalAlignment="Center" />
             </ui:SimpleStackPanel>
 
-            <ListView x:Name="ReestrsCollection" Grid.Row="1" 
-                              Background="Transparent" BorderThickness="0"                  
-                              Margin="10 0 0 5">
-            
-                
+            <ListView
+                x:Name="ReestrsCollection"
+                Grid.Row="1"
+                Margin="10,0,0,5"
+                Background="Transparent"
+                BorderThickness="0">
+
+
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ReestrState}" Value="False">
-                                <Setter Property="Background" Value="#FFB33434"/>
+                                <Setter Property="Background" Value="#FFB33434" />
                             </DataTrigger>
                         </Style.Triggers>
                         <!--<Style.Triggers>
@@ -191,96 +225,121 @@
                         </Style.Triggers>-->
                     </Style>
                 </ListView.ItemContainerStyle>
-                
+
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="N бочки">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock  FontSize="15" Text="{Binding  Path=BarrelNumber}"/>
+                                    <TextBlock FontSize="15" Text="{Binding Path=BarrelNumber}" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn   Header="Наименование">
+                        <GridViewColumn Header="Наименование">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="15" Text="{Binding Path=Recipe.ShortName}"/>
+                                    <TextBlock FontSize="15" Text="{Binding Path=Recipe.ShortName}" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn   Header="Вес нетто">
+                        <GridViewColumn Header="Вес нетто">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="15" Text="{Binding Path=Net}"/>
+                                    <TextBlock FontSize="15" Text="{Binding Path=Net}" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn   Header="Номер партии">
+                        <GridViewColumn Header="Номер партии">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="15" Text="{Binding Path=BatchNumber}"/>
+                                    <TextBlock FontSize="15" Text="{Binding Path=BatchNumber}" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn   Header="Дата фасовки">
+                        <GridViewColumn Header="Дата фасовки">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel>
-                                        <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=PackingDate, StringFormat={}{0:dd.MM.y}}"/>
-                                        <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=PackingDate, StringFormat={}{0:HH:mm:ss}}"/>
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            FontSize="15"
+                                            Text="{Binding Path=PackingDate, StringFormat={}{0:dd.MM.y}}" />
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            FontSize="15"
+                                            Text="{Binding Path=PackingDate, StringFormat={}{0:HH:mm:ss}}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn   Header="Дата производства">
+                        <GridViewColumn Header="Дата производства">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel>
-                                        <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=BarrelStorage.ProductionDate, StringFormat={}{0:dd.MM.y}}"/>
-                                        <TextBlock HorizontalAlignment="Center" FontSize="15" Text="{Binding Path=BarrelStorage.ProductionDate, StringFormat={}{0:HH:mm:ss}}"/>
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            FontSize="15"
+                                            Text="{Binding Path=BarrelStorage.ProductionDate, StringFormat={}{0:dd.MM.y}}" />
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            FontSize="15"
+                                            Text="{Binding Path=BarrelStorage.ProductionDate, StringFormat={}{0:HH:mm:ss}}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn   Header="Покупатель">
+                        <GridViewColumn Header="Покупатель">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="15" Text="{Binding Path=Customer.ShortName}"/>
+                                    <TextBlock FontSize="15" Text="{Binding Path=Customer.ShortName}" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                      
-                        <GridViewColumn   Header="Вес самой бочки">
+
+                        <GridViewColumn Header="Вес самой бочки">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="15" Text="{Binding Path=TareBarrel}"/>
+                                    <TextBlock FontSize="15" Text="{Binding Path=TareBarrel}" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn   Header="примечание" Width="150">
+                        <GridViewColumn Width="150" Header="примечание">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontSize="15" Width="120" Text="{Binding Path=Note}"/>
+                                    <TextBlock
+                                        Width="120"
+                                        FontSize="15"
+                                        Text="{Binding Path=Note}" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>
-            <controls:PaginateController Grid.Row="2" x:Name="Pagination" ItemsPerPage="10">
-                
-            </controls:PaginateController>
-            <ui:SimpleStackPanel Orientation="Horizontal" Grid.Row="3" Spacing="5">
-                <TextBlock Padding="5 5 0 5" FontSize="18" FontWeight="DemiBold" >
-                <Run Text="Количество бочек: "/>
-                <Run x:Name="ReestrCount" />
+            <controls:PaginateController
+                x:Name="Pagination"
+                Grid.Row="2"
+                ItemsPerPage="10" />
+            <ui:SimpleStackPanel
+                Grid.Row="3"
+                Orientation="Horizontal"
+                Spacing="5">
+                <TextBlock
+                    Padding="5,5,0,5"
+                    FontSize="18"
+                    FontWeight="DemiBold">
+                    <Run Text="Количество бочек: " />
+                    <Run x:Name="ReestrCount" />
                 </TextBlock>
-                <TextBlock Padding="5 5 0 5" FontSize="18" FontWeight="DemiBold" >
-                <Run Text="Сумма нетто"/>
-                <Run x:Name="NetSum" />
+                <TextBlock
+                    Padding="5,5,0,5"
+                    FontSize="18"
+                    FontWeight="DemiBold">
+                    <Run Text="Сумма нетто" />
+                    <Run x:Name="NetSum" />
                 </TextBlock>
             </ui:SimpleStackPanel>
-           
+
         </Grid>
     </Grid>
 </rx:ReactiveUserControl>

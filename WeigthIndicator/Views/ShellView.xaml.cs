@@ -4,6 +4,8 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using WeigthIndicator.Factory;
@@ -28,7 +30,7 @@ namespace WeigthIndicator.Views
                     v => v.ReestrsCollection.ItemsSource)
                     .DisposeWith(disposables);
 
-
+                this.Bind(ViewModel, vm => vm.MaterialGroup, v => v.MaterialGroup.Text);
                 this.Bind(ViewModel, vm => vm.ItemWeigth, v => v.ItemWeigth.Text);
                 this.Bind(ViewModel, vm => vm.ProgressValue, v => v.ProgressBar.Value);
                 this.Bind(ViewModel, vm => vm.MaxProgressValue, v => v.ProgressBar.Maximum);
@@ -40,14 +42,15 @@ namespace WeigthIndicator.Views
 
                 this.Bind(ViewModel, vm => vm.SelectedReestr, v => v.ReestrsCollection.SelectedItem);
                 this.Bind(ViewModel, vm => vm.ReestrCount, v => v.ReestrCount.Text);
-                this.OneWayBind(ViewModel, 
+                this.OneWayBind(ViewModel,
                     vm => vm.NetTotal,
                     v => v.NetSum.Text,
-                   x=>x.ToString("N") );
+                   x => x.ToString("N"));
 
 
                 this.Bind(ViewModel, vm => vm.SelectedPrintViewType, v => v.PrintViewTypeCmb.SelectedIndex)
                     .DisposeWith(disposables);
+
 
 
                 this.OneWayBind(ViewModel,
@@ -56,10 +59,15 @@ namespace WeigthIndicator.Views
                     .DisposeWith(disposables);
 
             });
+       
+            this.Events().KeyDown
+                        .Where(x => x.Key == Key.I && Keyboard.IsKeyDown(Key.LeftCtrl))
+                        .Select(x => Unit.Default)
+                        .InvokeCommand(this, x => x.ViewModel.Imitation);
 
             this.Events().KeyDown
                          .Where(x => x.Key == Key.Enter && (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)))
-                         .Select(x=>Unit.Default)
+                         .Select(x => Unit.Default)
                          .InvokeCommand(ViewModel, x => x.SaveCommand);
 
             this.WhenAnyValue(x => x.ViewModel)
@@ -67,6 +75,18 @@ namespace WeigthIndicator.Views
                      .Subscribe(x => ViewModel.FillCollection(x));
         }
 
-
+        private void PrintViewTypeCmb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(PrintViewTypeCmb.SelectedIndex == 3)
+            {
+                MaterailGroupTextBlock.Visibility = Visibility.Visible;
+                MaterialGroup.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                MaterailGroupTextBlock.Visibility = Visibility.Collapsed;
+                MaterialGroup.Visibility = Visibility.Collapsed;
+            }
+        }
     }
 }

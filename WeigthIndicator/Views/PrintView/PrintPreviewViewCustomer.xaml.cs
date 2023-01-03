@@ -26,7 +26,7 @@ namespace WeigthIndicator.Views
             InitializeComponent();
         }
 
-        public FlowDocument InitializeFlow(Reestr reestr)
+        public FlowDocument InitializeFlow(Reestr reestr,string data =null)
         {
             for (int i = 0; i < 5; i++)
             {

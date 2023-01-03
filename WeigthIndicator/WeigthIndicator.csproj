@@ -128,14 +128,17 @@
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\PrintPreviewView.xaml.cs">
+    <Compile Include="Views\PrintView\PrintPreviewView.xaml.cs">
       <DependentUpon>PrintPreviewView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\PrintPreviewViewComposition.xaml.cs">
+    <Compile Include="Views\PrintView\PrintPreviewViewComposition.xaml.cs">
       <DependentUpon>PrintPreviewViewComposition.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\PrintPreviewViewCustomer.xaml.cs">
+    <Compile Include="Views\PrintView\PrintPreviewViewCustomer.xaml.cs">
       <DependentUpon>PrintPreviewViewCustomer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PrintView\PrintViewPepsiCo.xaml.cs">
+      <DependentUpon>PrintViewPepsiCo.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\RecipeView.xaml.cs">
       <DependentUpon>RecipeView.xaml</DependentUpon>
@@ -214,15 +217,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\PrintPreviewView.xaml">
+    <Page Include="Views\PrintView\PrintPreviewView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\PrintPreviewViewComposition.xaml">
+    <Page Include="Views\PrintView\PrintPreviewViewComposition.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\PrintPreviewViewCustomer.xaml">
+    <Page Include="Views\PrintView\PrintPreviewViewCustomer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PrintView\PrintViewPepsiCo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -329,6 +336,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\logoprint2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\pepsico.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\pepsico2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
