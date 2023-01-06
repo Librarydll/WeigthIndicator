@@ -7,6 +7,7 @@ using WeigthIndicator.Dapper;
 using WeigthIndicator.Dapper.Services;
 using WeigthIndicator.Dialogs;
 using WeigthIndicator.Domain.Services;
+using WeigthIndicator.Models;
 using WeigthIndicator.Services;
 using WeigthIndicator.ViewModels;
 using WeigthIndicator.Views;
@@ -23,7 +24,7 @@ namespace WeigthIndicator
         public App()
         {
             Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
-
+            ManufactureProvider.ManufactureType = "Agromir";
         }
 
         private void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)

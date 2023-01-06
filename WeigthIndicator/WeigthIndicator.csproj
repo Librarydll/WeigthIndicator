@@ -103,6 +103,7 @@
     <Compile Include="Models\ComPortConnector.cs" />
     <Compile Include="Models\ComPortConnectorSetting.cs" />
     <Compile Include="Models\FilterModel.cs" />
+    <Compile Include="Models\Manufacture.cs" />
     <Compile Include="Models\PrintModel.cs" />
     <Compile Include="Models\RecipeReminder.cs" />
     <Compile Include="Services\ComPortProvider.cs" />

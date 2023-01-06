@@ -212,16 +212,22 @@
                     <Run
                         FontSize="14"
                         FontWeight="ExtraBold"
-                        Text="Производитель/Өндіруші: «AGROMIR» JV LLC/СП ООО «AGROMIR»" />
+                        Text="Производитель/Өндіруші:" />
+                    <Run
+                        x:Name="ManufactureName"
+                        FontSize="14"
+                        FontWeight="ExtraBold"
+                        Text="«AGROMIR» LLC/ООО «AGROMIR»" />
                 </Paragraph>
                 <Paragraph LineHeight="1">
-                    <Run Text="Адрес производства/Өндipic мекенжайы: 140300" />
+                    <Run Text="Адрес производства/Өндipic мекенжайы:" />
+                    <Run x:Name="Index" Text="140300" />
                 </Paragraph>
                 <Paragraph LineHeight="1">
-                    <Run Text="Өзбекстан Республикасы, Самарқанд облысы, Самарқанд ауданы, Гүлобод кенті" />
+                    <Run x:Name="ManufactureAddressKz" Text="Өзбекстан Республикасы, Самарқанд облысы, Самарқанд ауданы, Гүлобод кенті" />
                 </Paragraph>
                 <Paragraph LineHeight="1">
-                    <Run Text="Республика Узбекистан, Самаркандская область, Самаркандский район, п Гулобод" />
+                    <Run x:Name="ManufactureAddressRu" Text="Республика Узбекистан, Самаркандская область, Самаркандский район, п Гулобод" />
                 </Paragraph>
                 <Paragraph LineHeight="1" />
                 <Paragraph LineHeight="1">

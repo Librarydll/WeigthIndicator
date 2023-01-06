@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Factory;
+using WeigthIndicator.Models;
 
 namespace WeigthIndicator.Views
 {
@@ -28,6 +29,7 @@ namespace WeigthIndicator.Views
 
         public FlowDocument InitializeFlow(Reestr reestr,string data =null)
         {
+            var manufacture = ManufactureProvider.GetManufacture();
             NameRu.Text = reestr.Recipe.LongNameRu;
             NameKz.Text = reestr.Recipe.LongNameKz;
             BatchNumber.Text = reestr.BatchNumber;
@@ -44,6 +46,10 @@ namespace WeigthIndicator.Views
             VitaminC.Text = reestr.Recipe.VitaminC.ToString();
             EnergyBalue.Text = reestr.Recipe.EnergyValue.ToString();
             DryContent.Text = reestr.Recipe.DryContent.ToString();
+            Index.Text = manufacture.Index;
+            ManufactureName.Text = manufacture.ManufactureName;
+            ManufactureAddressKz.Text = manufacture.AddressKz;
+            ManufactureAddressRu.Text = manufacture.AddressRu;
             return this.FD;
         }
     }

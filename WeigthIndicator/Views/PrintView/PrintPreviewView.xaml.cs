@@ -31,6 +31,8 @@ namespace WeigthIndicator.Views
 
         public FlowDocument InitializeFlow(Reestr reestr,string data =null)
         {
+            var manufacture = ManufactureProvider.GetManufacture();
+
             NameRu.Text = reestr.Recipe.LongNameRu;
             NameKz.Text = reestr.Recipe.LongNameKz;
             BatchNumber.Text = reestr.BatchNumber;
@@ -46,7 +48,10 @@ namespace WeigthIndicator.Views
             CustomerShortName.Text = reestr.Customer.ShortName;
             AddressRu.Text = reestr.Customer.AddressRu;
             AddressKz.Text = reestr.Customer.AddressKz;
-
+            Index.Text = manufacture.Index;
+            ManufactureAddressKz.Text = manufacture.AddressKz;
+            ManufactureAddressRu.Text = manufacture.AddressRu;
+            ManufactureName.Text = manufacture.ManufactureName;
             return this.FD;
         }
       
