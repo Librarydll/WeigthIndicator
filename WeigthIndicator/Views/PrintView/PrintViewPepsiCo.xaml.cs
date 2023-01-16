@@ -40,6 +40,8 @@ namespace WeigthIndicator.Views.PrintView
             Manufacture.Text = manufacture.ManufactureName;
             ProductionDate.Text = reestr.BarrelStorage.ProductionDate.ToString("dd.MM.yyyy");
             ImporterSub.Text = "ООО “ПепсиКо Холдингс”\n";
+            StorageCondition.Text = reestr.Recipe.StorageCondition;
+            TranportationCondition.Text = reestr.Recipe.TransportationCondition;
             ProductionDate.Text = reestr.BarrelStorage.ProductionDate.ToString("dd.MM.yyyy");
             ExpiredDate.Text = reestr.BarrelStorage.ProductionDate.AddYears(2).ToString("dd.MM.yyyy");
             Net.Text = reestr.Net.ToString() + " кг";
