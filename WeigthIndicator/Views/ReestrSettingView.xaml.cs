@@ -31,6 +31,12 @@ namespace WeigthIndicator.Views
                 this.Bind(ViewModel, vm => vm.Password, v => v.Password.Password)
                     .DisposeWith(disposables);
 
+                this.Bind(ViewModel, vm => vm.SelectedManufacture, v => v.ManufacturesCmb.SelectedItem)
+                    .DisposeWith(disposables);
+
+                this.OneWayBind(ViewModel, vm => vm.Manufactures, v => v.ManufacturesCmb.ItemsSource)
+                  .DisposeWith(disposables);
+
                 this.Bind(ViewModel,
                     vm => vm.ReestrSetting.MinDefaultWeigth,
                     v => v.DefaultWeight.Text,
@@ -87,6 +93,7 @@ namespace WeigthIndicator.Views
                 this.Bind(ViewModel, vm => vm.ControlsEnabled, v => v.TarraBarrelWithLid.IsEnabled);
                 this.Bind(ViewModel, vm => vm.ControlsEnabled, v => v.TarraBarrelWithLidTb.IsEnabled);
                 this.Bind(ViewModel, vm => vm.ControlsEnabled, v => v.TarraBarrelWithLidTb2.IsEnabled);
+                this.Bind(ViewModel, vm => vm.ControlsEnabled, v => v.ManufacturesCmb.IsEnabled);
             });
         }
 

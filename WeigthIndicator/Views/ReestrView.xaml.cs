@@ -52,6 +52,12 @@ namespace WeigthIndicator.Views
                                 v => v.NetSum.Text,
                                 x => x.ToString("N"));
 
+                this.Bind(ViewModel, vm => vm.SelectedManufacture, v => v.ManufacturesCmb.SelectedItem)
+               .DisposeWith(disposables);
+
+                this.OneWayBind(ViewModel, vm => vm.Manufactures, v => v.ManufacturesCmb.ItemsSource)
+                  .DisposeWith(disposables);
+
                 this.OneWayBind(ViewModel, vm => vm.Batches, v => v.Batches.ItemsSource);
                 this.OneWayBind(ViewModel, vm => vm.Materials, v => v.Materials.ItemsSource);
 

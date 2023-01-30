@@ -149,24 +149,9 @@
                 </Button>
                 <ComboBox
                     x:Name="PrintViewTypeCmb"
-                    DisplayMemberPath="."
-                    SelectionChanged="PrintViewTypeCmb_SelectionChanged">
-                    <ComboBoxItem>
-                        С адрессом
-                    </ComboBoxItem>
-                    <ComboBoxItem>
-                        С пищ ценностью
-                    </ComboBoxItem>
-                    <ComboBoxItem Visibility="Collapsed">
-                        С пищ ценностью
-                    </ComboBoxItem>
-                    <ComboBoxItem>
-                        Pepsi co
-                    </ComboBoxItem>
-                    <ComboBoxItem>
-                        Не печатать
-                    </ComboBoxItem>
-                </ComboBox>
+                    DisplayMemberPath="Title"
+                    SelectedIndex="3"
+                    SelectionChanged="PrintViewTypeCmb_SelectionChanged" />
                 <TextBlock
                     x:Name="MaterailGroupTextBlock"
                     VerticalAlignment="Center"

@@ -179,7 +179,7 @@
                     Height="60"
                     Margin="0,0,30,0"
                     HorizontalAlignment="Right"
-                    Source="/Resources/pepsico2.png" />
+                    Source="/Resources/pepsico.png" />
 
             </Grid>
         </BlockUIContainer>

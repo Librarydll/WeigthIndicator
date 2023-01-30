@@ -78,6 +78,11 @@
                     Pepsi co
                 </ComboBoxItem>
             </ComboBox>
+
+            <ComboBox
+                x:Name="ManufacturesCmb"
+                Padding="5"
+                DisplayMemberPath="Title" />
         </ToolBar>
         <Grid Grid.Row="1">
 

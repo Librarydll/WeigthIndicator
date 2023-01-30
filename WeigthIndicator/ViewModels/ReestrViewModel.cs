@@ -55,6 +55,11 @@ namespace WeigthIndicator.ViewModels
             set { this.RaiseAndSetIfChanged(ref _batches, value); }
         }
 
+        [Reactive] public ManufactureTitle SelectedManufacture { get; set; }
+        [Reactive] public IEnumerable<ManufactureTitle> Manufactures { get; set; }
+
+
+
         private string _selectedBatch;
         public string SelectedBatch
         {
@@ -128,6 +133,23 @@ namespace WeigthIndicator.ViewModels
             PrintCommand = ReactiveCommand.Create<Reestr>(ExecutePrintCommand);
             EditCommand = ReactiveCommand.Create<Reestr>(ExecuteEditCommand);
             ExportExcelCommand = ReactiveCommand.Create(ExecuteExportExcelCommand);
+
+            Manufactures = new List<ManufactureTitle>
+            {
+                new ManufactureTitle("Agromir"),
+                new ManufactureTitle("Gazalkent")
+            };
+
+            SelectedManufacture = Manufactures.FirstOrDefault(x => x.Title == ManufactureProvider.ManufactureType);
+
+            this.WhenAnyValue(x => x.SelectedManufacture)
+                .Subscribe(s =>
+                {
+                    if (s != null)
+                    {
+                        ManufactureProvider.ManufactureType = SelectedManufacture.Title;
+                    }
+                });
         }
 
         private async Task<Unit> FilterCollectionByBarrelType(int key)

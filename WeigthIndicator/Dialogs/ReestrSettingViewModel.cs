@@ -39,6 +39,13 @@ namespace WeigthIndicator.Dialogs
             set { this.RaiseAndSetIfChanged(ref _customers, value); }
         }
 
+        private ObservableCollection<ManufactureTitle> _manufactures;
+        public ObservableCollection<ManufactureTitle> Manufactures
+        {
+            get => _manufactures;
+            set { this.RaiseAndSetIfChanged(ref _manufactures, value); }
+        }
+        [Reactive] public ManufactureTitle SelectedManufacture { get; set; }
         [Reactive] public Recipe SelectedRecipe { get; set; }
         [Reactive] public Customer SelectedCustomer { get; set; }
         [Reactive] public string Password { get; set; }
@@ -66,7 +73,7 @@ namespace WeigthIndicator.Dialogs
             _customerDataService = customerDataService;
 
             this.WhenAnyValue(x => x.Password)
-                .Throttle(TimeSpan.FromSeconds(1))
+                .Throttle(TimeSpan.FromSeconds(0.5))
                 .Where(x => !string.IsNullOrWhiteSpace(x))
                 .ObserveOnDispatcher()
                 .Subscribe(PasswordChecker);
@@ -75,9 +82,19 @@ namespace WeigthIndicator.Dialogs
                 .Skip(1)
                 .SelectMany(async (x) => await _barrelStorageDataService.GetLastBarrelNumber(x))
                 .ObserveOnDispatcher()
-                .Subscribe(number => ReestrSetting.InitialBarrelNumber = number+1);
+                .Subscribe(number => ReestrSetting.InitialBarrelNumber = number + 1);
+        
+            Manufactures = new ObservableCollection<ManufactureTitle>
+            {
+                new ManufactureTitle("Agromir"),
+                new ManufactureTitle("Gazalkent")
+            };
+
+            SelectedManufacture = Manufactures.FirstOrDefault(x => x.Title == ManufactureProvider.ManufactureType);
+
+        
         }
-       
+
 
         public void PasswordChecker(string psw)
         {
@@ -126,7 +143,7 @@ namespace WeigthIndicator.Dialogs
             {
                 await _reestrSettingDataService.UpdateReestrSetting(ReestrSetting);
             }
-
+            ManufactureProvider.ManufactureType = SelectedManufacture.Title;
             parameters = new DialogParameters
             {
                 { "model", (ReestrSetting)ReestrSetting.Clone() }

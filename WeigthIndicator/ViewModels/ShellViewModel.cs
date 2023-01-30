@@ -18,6 +18,7 @@ using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Domain.Services;
 using WeigthIndicator.Events;
 using WeigthIndicator.Factory;
+using WeigthIndicator.Models;
 using WeigthIndicator.Services;
 using WeigthIndicator.Views;
 
@@ -49,7 +50,8 @@ namespace WeigthIndicator.ViewModels
         [Reactive] public int MaxProgressValue { get; set; }
         [Reactive] public bool IsAutoMode { get; set; }
         [Reactive] public Reestr SelectedReestr { get; set; }
-        [Reactive] public int SelectedPrintViewType { get; set; }
+        [Reactive] public PrintViewRepresent SelectedPrintViewType { get; set; }
+        [Reactive] public IEnumerable<PrintViewRepresent> PrinterViewTypes { get; set; }
 
         private readonly ObservableAsPropertyHelper<double> _itemWeight;
         public double ItemWeigth => _itemWeight.Value;
@@ -135,6 +137,8 @@ namespace WeigthIndicator.ViewModels
             PrintCommand = ReactiveCommand.Create<Reestr>(ExecutePrintViewCommand, canEditAndCanPrint);
             ExecuteOpenReestrSettingCommand();
 
+            PrinterViewTypes = PrintViewRepresent.GetPrintViewRepresents();
+            SelectedPrintViewType = PrinterViewTypes.FirstOrDefault(x => x.PrintViewType == PrintViewType.NoPrint);
         }
         private async Task<Unit> ExecuteImitation()
         {
@@ -185,9 +189,9 @@ namespace WeigthIndicator.ViewModels
 
         private void ExecutePrintViewCommand(Reestr reestr)
         {
-            var printViewType = (PrintViewType)Enum.Parse(typeof(PrintViewType), SelectedPrintViewType.ToString());
-            if (printViewType == PrintViewType.NoPrint) return;
-            var printInitialize = PrintPreviewFactory.GetPrintView(printViewType);
+            if (SelectedPrintViewType == null) return;
+            if (SelectedPrintViewType.PrintViewType == PrintViewType.NoPrint) return;
+            var printInitialize = PrintPreviewFactory.GetPrintView(SelectedPrintViewType.PrintViewType);
 
             FlowDocument flowDoc = printInitialize.InitializeFlow(reestr, MaterialGroup);
             PrintHelper.Prints(flowDoc, reestr.PackingDate.ToString("dd.MM.yyyy"));

@@ -1,5 +1,6 @@
 ﻿using ReactiveUI;
 using System;
+using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -8,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
+using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Factory;
 using WeigthIndicator.ViewModels;
 
@@ -48,15 +50,21 @@ namespace WeigthIndicator.Views
                    x => x.ToString("N"));
 
 
-                this.Bind(ViewModel, vm => vm.SelectedPrintViewType, v => v.PrintViewTypeCmb.SelectedIndex)
+                this.Bind(ViewModel, vm => vm.SelectedPrintViewType, v => v.PrintViewTypeCmb.SelectedItem)
                     .DisposeWith(disposables);
 
 
+                this.OneWayBind(ViewModel,
+                    vm => vm.PrinterViewTypes,
+                    v => v.PrintViewTypeCmb.ItemsSource)
+                    .DisposeWith(disposables);
 
                 this.OneWayBind(ViewModel,
                     vm => vm.ReestrsCollection,
                     v => v.Pagination.ReestrsCollection)
                     .DisposeWith(disposables);
+
+                
 
             });
        
@@ -73,19 +81,36 @@ namespace WeigthIndicator.Views
             this.WhenAnyValue(x => x.ViewModel)
                      .SelectMany(x => x.Initialize())
                      .Subscribe(x => ViewModel.FillCollection(x));
+
+            ReestrsCollection.Items.CurrentChanged += Items_CurrentChanged;
+        }
+
+        private void Items_CurrentChanged(object sender, EventArgs e)
+        {
+            (ReestrsCollection.ItemsSource as ObservableCollection<Reestr>).CollectionChanged -= ShellView_CollectionChanged;
+            (ReestrsCollection.ItemsSource as ObservableCollection<Reestr>).CollectionChanged += ShellView_CollectionChanged;
+        }
+
+        private void ShellView_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (ReestrsCollection.Items.Count > 0)
+                ReestrsCollection.ScrollIntoView(ReestrsCollection.Items[0]);
         }
 
         private void PrintViewTypeCmb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(PrintViewTypeCmb.SelectedIndex == 3)
+            if (MaterailGroupTextBlock != null)
             {
-                MaterailGroupTextBlock.Visibility = Visibility.Visible;
-                MaterialGroup.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                MaterailGroupTextBlock.Visibility = Visibility.Collapsed;
-                MaterialGroup.Visibility = Visibility.Collapsed;
+                if (PrintViewTypeCmb.SelectedIndex == 2)
+                {
+                    MaterailGroupTextBlock.Visibility = Visibility.Visible;
+                    MaterialGroup.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    MaterailGroupTextBlock.Visibility = Visibility.Collapsed;
+                    MaterialGroup.Visibility = Visibility.Collapsed;
+                }
             }
         }
     }
