@@ -11,6 +11,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Forms;
 using WeigthIndicator.Core.Excel;
 using WeigthIndicator.Core.Print;
@@ -55,11 +56,6 @@ namespace WeigthIndicator.ViewModels
             set { this.RaiseAndSetIfChanged(ref _batches, value); }
         }
 
-        [Reactive] public ManufactureTitle SelectedManufacture { get; set; }
-        [Reactive] public IEnumerable<ManufactureTitle> Manufactures { get; set; }
-
-
-
         private string _selectedBatch;
         public string SelectedBatch
         {
@@ -85,10 +81,10 @@ namespace WeigthIndicator.ViewModels
             }
         }
 
-     
-
-        [Reactive] public int SelectedPrintViewType { get; set; }
+        [Reactive] public string MaterialGroup { get; set; }
         [Reactive] public int SelectedBarrelType { get; set; }
+        [Reactive] public PrintViewRepresent SelectedPrintViewType { get; set; }
+        [Reactive] public IEnumerable<PrintViewRepresent> PrinterViewTypes { get; set; }
         public int BarrelCode => SelectedBarrelType - 1;
 
         public ReactiveCommand<Unit, Unit> FilterCommad { get; }
@@ -133,23 +129,9 @@ namespace WeigthIndicator.ViewModels
             PrintCommand = ReactiveCommand.Create<Reestr>(ExecutePrintCommand);
             EditCommand = ReactiveCommand.Create<Reestr>(ExecuteEditCommand);
             ExportExcelCommand = ReactiveCommand.Create(ExecuteExportExcelCommand);
-
-            Manufactures = new List<ManufactureTitle>
-            {
-                new ManufactureTitle("Agromir"),
-                new ManufactureTitle("Gazalkent")
-            };
-
-            SelectedManufacture = Manufactures.FirstOrDefault(x => x.Title == ManufactureProvider.ManufactureType);
-
-            this.WhenAnyValue(x => x.SelectedManufacture)
-                .Subscribe(s =>
-                {
-                    if (s != null)
-                    {
-                        ManufactureProvider.ManufactureType = SelectedManufacture.Title;
-                    }
-                });
+            PrinterViewTypes = PrintViewRepresent.GetPrintViewRepresents();
+            SelectedPrintViewType = PrinterViewTypes.FirstOrDefault(x => x.PrintViewType == PrintViewType.NoPrint);
+            
         }
 
         private async Task<Unit> FilterCollectionByBarrelType(int key)
@@ -209,11 +191,11 @@ namespace WeigthIndicator.ViewModels
 
         private void ExecutePrintCommand(Reestr reestr)
         {
-            var printViewType = (PrintViewType)Enum.Parse(typeof(PrintViewType), SelectedPrintViewType.ToString());
-            var printInitialize = PrintPreviewFactory.GetPrintView(printViewType);
+            if (SelectedPrintViewType == null) return;
+            if (SelectedPrintViewType.PrintViewType == PrintViewType.NoPrint) return;
+            var printInitialize = PrintPreviewFactory.GetPrintView(SelectedPrintViewType.PrintViewType);
 
-            var flowDoc = printInitialize.InitializeFlow(reestr);
-
+            FlowDocument flowDoc = printInitialize.InitializeFlow(reestr, MaterialGroup);
             PrintHelper.Prints(flowDoc, reestr.PackingDate.ToString("dd.MM.yyyy"));
         }
 

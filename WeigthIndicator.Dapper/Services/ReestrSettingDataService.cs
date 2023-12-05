@@ -26,7 +26,15 @@ namespace WeigthIndicator.Dapper.Services
                 return reestr;
             }
         }
-
+        public string OpenConnection()
+		{
+            using (var connection = _applicationContextFactory.CreateConnection())
+            {
+                connection.Open();
+                connection.Query("SHOW VARIABLES LIKE 'version';");
+                return connection.ConnectionString;
+            }
+		}
         public async Task<ReestrSetting> GetReestrSetting()
         {
             using (var connection = _applicationContextFactory.CreateConnection())

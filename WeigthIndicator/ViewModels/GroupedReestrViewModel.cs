@@ -27,7 +27,6 @@ namespace WeigthIndicator.ViewModels
         private readonly IDialogService _dialogService;
         private IEnumerable<GroupedReestr> _reestrs;
         //0-filterbydate;1-filterbystring
-        private int _lastSelectedFilter = -1;
         public FilterModel FilterModel { get; set; }
 
         private ObservableCollection<GroupedReestr> _reestrsCollection;
@@ -97,7 +96,6 @@ namespace WeigthIndicator.ViewModels
             }
 
             ReestrsCollection = new ObservableCollection<GroupedReestr>(_reestrs);
-            _lastSelectedFilter = 0;
         }
       
     }

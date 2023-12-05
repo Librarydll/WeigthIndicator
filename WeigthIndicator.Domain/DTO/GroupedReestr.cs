@@ -12,5 +12,10 @@ namespace WeigthIndicator.Domain.DTO
         public string RecipeName { get; set; }
         public int BarrelsCount { get; set; }
         public double TotalNet { get; set; }
-    }
+
+		public int MinBarrelNumber { get; set; }
+		public int MaxBarrelNumber { get; set; }
+		public DateTime MinPackingDate { get; set; }
+		public DateTime MaxPackingDate { get; set; }
+	}
 }

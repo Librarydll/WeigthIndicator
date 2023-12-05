@@ -63,26 +63,23 @@
             </Button>
             <ComboBox
                 x:Name="PrintViewTypeCmb"
-                Padding="5"
-                DisplayMemberPath=".">
-                <ComboBoxItem>
-                    С адрессом
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    С пищ ценностью
-                </ComboBoxItem>
-                <ComboBoxItem Visibility="Collapsed">
-                    С пищ ценностью
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    Pepsi co
-                </ComboBoxItem>
-            </ComboBox>
+                DisplayMemberPath="Title"
+                SelectedIndex="3"
+                SelectionChanged="PrintViewTypeCmb_SelectionChanged" />
+            <TextBlock
+                x:Name="MaterailGroupTextBlock"
+                VerticalAlignment="Center"
+                Text="Группа сырья :"
+                Visibility="{Binding ElementName=PrintViewTypeCmb}" />
+            <TextBox
+                x:Name="MaterialGroup"
+                MinWidth="60"
+                VerticalAlignment="Center" />
+            <!--<ComboBox
 
-            <ComboBox
                 x:Name="ManufacturesCmb"
                 Padding="5"
-                DisplayMemberPath="Title" />
+                DisplayMemberPath="Title" />-->
         </ToolBar>
         <Grid Grid.Row="1">
 

@@ -38,10 +38,7 @@ namespace WeigthIndicator.Views
                 this.Bind(ViewModel, vm => vm.FilterModel.ToDate, v => v.ToDate.SelectedDate);
                 this.Bind(ViewModel, vm => vm.FilterModel.IsToDateInclude, v => v.IncludeToDate.IsChecked);
                 this.Bind(ViewModel, vm => vm.FilterModel.SearchQuery, v => v.SearchQuery.Text);
-
-                this.Bind(ViewModel, vm => vm.SelectedPrintViewType, v => v.PrintViewTypeCmb.SelectedIndex)
-                    .DisposeWith(disposables);
-
+                this.Bind(ViewModel, vm => vm.MaterialGroup, v => v.MaterialGroup.Text);
 
                 this.Bind(ViewModel, vm => vm.SelectedBarrelType, v => v.BarrelType.SelectedIndex)
                     .DisposeWith(disposables);
@@ -52,11 +49,15 @@ namespace WeigthIndicator.Views
                                 v => v.NetSum.Text,
                                 x => x.ToString("N"));
 
-                this.Bind(ViewModel, vm => vm.SelectedManufacture, v => v.ManufacturesCmb.SelectedItem)
-               .DisposeWith(disposables);
 
-                this.OneWayBind(ViewModel, vm => vm.Manufactures, v => v.ManufacturesCmb.ItemsSource)
-                  .DisposeWith(disposables);
+                this.Bind(ViewModel, vm => vm.SelectedPrintViewType, v => v.PrintViewTypeCmb.SelectedItem)
+                    .DisposeWith(disposables);
+
+
+                this.OneWayBind(ViewModel,
+                    vm => vm.PrinterViewTypes,
+                    v => v.PrintViewTypeCmb.ItemsSource)
+                    .DisposeWith(disposables);
 
                 this.OneWayBind(ViewModel, vm => vm.Batches, v => v.Batches.ItemsSource);
                 this.OneWayBind(ViewModel, vm => vm.Materials, v => v.Materials.ItemsSource);
@@ -66,6 +67,23 @@ namespace WeigthIndicator.Views
                 this.BindCommand(ViewModel, vm => vm.FilterBySearchQueryCommand, v => v.FilterBySearchQueryCommand);
                 this.BindCommand(ViewModel, vm => vm.ExportExcelCommand, v => v.ExportExcelCommand);
             });
+        }
+
+        private void PrintViewTypeCmb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (MaterailGroupTextBlock != null)
+            {
+                if (PrintViewTypeCmb.SelectedIndex == 2)
+                {
+                    MaterailGroupTextBlock.Visibility = Visibility.Visible;
+                    MaterialGroup.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    MaterailGroupTextBlock.Visibility = Visibility.Collapsed;
+                    MaterialGroup.Visibility = Visibility.Collapsed;
+                }
+            }
         }
     }
 }

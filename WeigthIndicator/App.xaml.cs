@@ -29,7 +29,7 @@ namespace WeigthIndicator
 
         private void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-           MessageBox.Show(e.Exception.Message);
+           MessageBox.Show(e.Exception?.ToString());
            MessageBox.Show(e.Exception.InnerException?.Message);
         }
 

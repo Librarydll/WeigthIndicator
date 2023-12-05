@@ -27,7 +27,7 @@ namespace WeigthIndicator.Views.PrintView
         public PrintViewPepsiCo()
         {
             InitializeComponent();
-}
+        }
         public FlowDocument InitializeFlow(Reestr reestr,string group)
         {
             var manufacture = ManufactureProvider.GetManufacturePepsiCo();
@@ -39,7 +39,8 @@ namespace WeigthIndicator.Views.PrintView
             StorangeAndTransportContidition.Text = "Условия хранения и\nсрок годности";
             Manufacture.Text = manufacture.ManufactureName;
             ProductionDate.Text = reestr.BarrelStorage.ProductionDate.ToString("dd.MM.yyyy");
-            ImporterSub.Text = "ООО “ПепсиКо Холдингс”\n";
+            ImporterSub.Text = reestr.Customer.ShortName;// "ООО “ПепсиКо Холдингс”\n";
+            ImporterAddress.Text = reestr.Customer.AddressRu;// "ООО “ПепсиКо Холдингс”\n";
             StorageCondition.Text = reestr.Recipe.StorageCondition;
             TranportationCondition.Text = reestr.Recipe.TransportationCondition;
             ProductionDate.Text = reestr.BarrelStorage.ProductionDate.ToString("dd.MM.yyyy");

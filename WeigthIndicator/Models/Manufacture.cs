@@ -30,14 +30,14 @@ namespace WeigthIndicator.Models
         };
         private static Manufacture Agromir => new Manufacture
         {
-            ManufactureName = "«AGROMIR» JV LLC/СП ООО «AGROMIR»",
+            ManufactureName = "«AGROMIR» LLC/ООО «AGROMIR»",
             Index = "140300",
             AddressKz = "Өзбекстан Республикасы, Самарқанд облысы, Самарқанд ауданы, Гүлобод кенті",
             AddressRu = "Республика Узбекистан, Самаркандская область, Самаркандский район, п Гулобод"
         };
         public static Manufacture AgromirPepsiCo => new Manufacture
         {
-            ManufactureName = "СП ООО \"AGROMIR\"",
+            ManufactureName = "ООО \"AGROMIR\"",
             AddressRu = "140300 Республика Узбекистан, Самаркандская область, Самаркандский район, п Гулобод"
         };
         public static Manufacture GazalkentPepsiCo => new Manufacture

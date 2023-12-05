@@ -139,6 +139,8 @@ namespace WeigthIndicator.ViewModels
 
             PrinterViewTypes = PrintViewRepresent.GetPrintViewRepresents();
             SelectedPrintViewType = PrinterViewTypes.FirstOrDefault(x => x.PrintViewType == PrintViewType.NoPrint);
+
+           
         }
         private async Task<Unit> ExecuteImitation()
         {

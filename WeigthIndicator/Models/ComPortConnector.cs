@@ -65,16 +65,16 @@ namespace WeigthIndicator.Models
             {
                MessageBox.Show(ex.Message);
             }
-            //Task.Run(async () =>
-            //{
-            //    await Imitation(20);
-            //    await Task.Delay(5000);
-            //    await Imitation(20);
-            //    await Task.Delay(5000);
-            //    await Imitation(20);
-            //    await Imitation(20);
-            //});
-        }
+			//Task.Run(async () =>
+			//{
+			//	await Imitation(20);
+			//	//await Task.Delay(5000);
+			//	//await Imitation(20);
+			//	//await Task.Delay(5000);
+			//	//await Imitation(20);
+			//	//await Imitation(20);
+			//});
+		}
 
         private async Task Imitation(int z)
         {
@@ -96,8 +96,9 @@ namespace WeigthIndicator.Models
             CurrentValue = _serialPort.ReadLine();
             if (!string.IsNullOrWhiteSpace(CurrentValue))
             {
-                ParsedValue = ParseSerialPortData(CurrentValue.Trim('\r'));
-            }
+				System.Windows.Forms.MessageBox.Show(CurrentValue);
+				//ParsedValue = ParseSerialPortData(CurrentValue.Trim('\r'));
+			}
         }
 
         public double ParseSerialPortData(string data)

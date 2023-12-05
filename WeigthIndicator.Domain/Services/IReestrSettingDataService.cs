@@ -13,5 +13,6 @@ namespace WeigthIndicator.Domain.Services
         Task<bool> UpdateReestrSetting(ReestrSetting reestr);
         Task<bool> UpdateReestrSettingBarrelColumn(ReestrSetting reestrSetting);
         Task<ReestrSetting> GetReestrSetting();
-    }
+		string OpenConnection();
+	}
 }
