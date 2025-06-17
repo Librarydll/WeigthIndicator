@@ -96,8 +96,7 @@ namespace WeigthIndicator.Models
             CurrentValue = _serialPort.ReadLine();
             if (!string.IsNullOrWhiteSpace(CurrentValue))
             {
-				System.Windows.Forms.MessageBox.Show(CurrentValue);
-				//ParsedValue = ParseSerialPortData(CurrentValue.Trim('\r'));
+				ParsedValue = ParseSerialPortData(CurrentValue.Trim('\r'));
 			}
         }
 

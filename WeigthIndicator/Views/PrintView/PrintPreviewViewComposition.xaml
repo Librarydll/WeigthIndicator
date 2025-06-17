@@ -214,7 +214,7 @@
                         x:Name="ManufactureName"
                         FontSize="14"
                         FontWeight="ExtraBold"
-                        Text="«AGROMIR» LLC/ООО «AGROMIR»" />
+                        Text="«AGROMIR» JV LLC/ООО СП «Агромир»" />
                 </Paragraph>
                 <Paragraph LineHeight="1">
                     <Run Text="Адрес производства/Өндipic мекенжайы:" />
@@ -227,7 +227,7 @@
                     <Run x:Name="ManufactureAddressRu" Text="Республика Узбекистан, Самаркандская область, Самаркандский район, п Гулобод" />
                 </Paragraph>
                 <Paragraph LineHeight="1" TextAlignment="Center">
-                    <Run Text="Пищевая ценность" />
+                    <Run Text="Пищевая ценность 100г" />
                 </Paragraph>
                 <Table
                     CellSpacing="1"

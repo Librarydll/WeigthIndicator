@@ -217,7 +217,7 @@
                         x:Name="ManufactureName"
                         FontSize="14"
                         FontWeight="ExtraBold"
-                        Text="«AGROMIR» LLC/ООО «AGROMIR»" />
+                        Text="«AGROMIR» JV LLC/ООО СП «Агромир»" />
                 </Paragraph>
                 <Paragraph LineHeight="1">
                     <Run Text="Адрес производства/Өндipic мекенжайы:" />

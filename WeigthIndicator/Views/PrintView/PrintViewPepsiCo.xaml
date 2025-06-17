@@ -11,7 +11,7 @@
     <FlowDocument
         x:Name="FD"
         LineHeight="10"
-        PagePadding="5 25 0 0">
+        PagePadding="5 40 0 0">
         <FlowDocument.Resources>
             <Style TargetType="Run">
                 <Setter Property="FontSize" Value="12" />

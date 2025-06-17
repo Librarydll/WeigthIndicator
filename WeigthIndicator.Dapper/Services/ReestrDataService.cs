@@ -283,16 +283,16 @@ namespace WeigthIndicator.Dapper.Services
 				string query = @"SELECT reestr.BatchNumber,recipe.ShortName as RecipeName,Count(recipe.id) as barrelscount,
 Sum(reestr.Net) as totalnet ,
 (Select Min(innnerReestr.BarrelNumber) from Reestrs innnerReestr where reestr.BatchNumber =innnerReestr.BatchNumber
-and (date(reestr.packingDate) >= @fromDate and date(reestr.packingDate) <= @toDate)) as minBarrelNumber,
+and (date(innnerReestr.packingDate) >= @fromDate and date(innnerReestr.packingDate) <= @toDate)) as minBarrelNumber,
 
 (Select Max(innnerReestr.BarrelNumber) from Reestrs innnerReestr where reestr.BatchNumber =innnerReestr.BatchNumber
-and (date(reestr.packingDate) >= @fromDate and date(reestr.packingDate) <= @toDate)) as maxBarrelNumber,
+and (date(innnerReestr.packingDate) >= @fromDate and date(innnerReestr.packingDate) <= @toDate)) as maxBarrelNumber,
 
 (Select Min(innnerReestr.packingDate) from Reestrs innnerReestr where reestr.BatchNumber =innnerReestr.BatchNumber
-and (date(reestr.packingDate) >= @fromDate and date(reestr.packingDate) <= @toDate)) as minPackingDate,
+and (date(innnerReestr.packingDate) >= @fromDate and date(innnerReestr.packingDate) <= @toDate)) as minPackingDate,
 
 (Select Max(innnerReestr.packingDate) from Reestrs innnerReestr where reestr.BatchNumber =innnerReestr.BatchNumber
-and (date(reestr.packingDate) >= @fromDate and date(reestr.packingDate) <= @toDate)) as maxPackingDate
+and (date(innnerReestr.packingDate) >= @fromDate and date(innnerReestr.packingDate) <= @toDate)) as maxPackingDate
 
 FROM Reestrs as reestr 
 Left join Recipes as recipe
