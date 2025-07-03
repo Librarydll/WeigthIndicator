@@ -1,6 +1,7 @@
 ﻿using ReactiveUI;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -49,6 +50,11 @@ namespace WeigthIndicator.Views
                     v => v.NetSum.Text,
                    x => x.ToString("N"));
 
+                this.Bind(ViewModel, vm => vm.SelectedMonth, v => v.MonthComboBox.SelectedItem)
+                    .DisposeWith(disposables);
+
+                this.Bind(ViewModel, vm => vm.SelectedYear, v => v.YearComboBox.SelectedItem)
+                    .DisposeWith(disposables);
 
                 this.Bind(ViewModel, vm => vm.SelectedPrintViewType, v => v.PrintViewTypeCmb.SelectedItem)
                     .DisposeWith(disposables);
@@ -83,6 +89,16 @@ namespace WeigthIndicator.Views
                      .Subscribe(x => ViewModel.FillCollection(x));
 
             ReestrsCollection.Items.CurrentChanged += Items_CurrentChanged;
+
+            MonthComboBox.ItemsSource = System.Globalization.CultureInfo
+                          .GetCultureInfo("en-US")
+                          .DateTimeFormat
+                          .MonthNames
+                          .Where(m => !string.IsNullOrEmpty(m))
+                          .ToList();
+
+            YearComboBox.ItemsSource = Enumerable.Range(2015, 20).Select(y => y.ToString())
+                                     .ToList();
         }
 
         private void Items_CurrentChanged(object sender, EventArgs e)
@@ -101,15 +117,21 @@ namespace WeigthIndicator.Views
         {
             if (MaterailGroupTextBlock != null)
             {
+                MaterailGroupTextBlock.Visibility = Visibility.Collapsed;
+                MaterialGroup.Visibility = Visibility.Collapsed;
+                MonthComboBox.Visibility = Visibility.Collapsed;
+                YearComboBox.Visibility = Visibility.Collapsed;
+
                 if (PrintViewTypeCmb.SelectedIndex == 2)
                 {
                     MaterailGroupTextBlock.Visibility = Visibility.Visible;
                     MaterialGroup.Visibility = Visibility.Visible;
                 }
-                else
+
+                if (PrintViewTypeCmb.SelectedIndex == 3)
                 {
-                    MaterailGroupTextBlock.Visibility = Visibility.Collapsed;
-                    MaterialGroup.Visibility = Visibility.Collapsed;
+                    MonthComboBox.Visibility = Visibility.Visible;
+                    YearComboBox.Visibility = Visibility.Visible;
                 }
             }
         }

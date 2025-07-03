@@ -16,7 +16,13 @@ namespace WeigthIndicator.Domain.Models
         private Customer customer;
 
         public int BarrelNumber { get; set; }
-        public string BatchNumber { get; set; }
+
+        private string _batchNumber;
+        public string BatchNumber
+        {
+            get => _batchNumber;
+            set => SetProperty(ref _batchNumber, value);
+        }
         public DateTime PackingDate { get; set; }
         /// <summary>
         /// 0-грузить,1-не грузить
@@ -39,8 +45,14 @@ namespace WeigthIndicator.Domain.Models
         public int RecipeId { get; set; }
         public int BarrelStorageId { get; set; }
         public int CustomerId { get; set; }
+
+        private Recipe _recipe;
         [Computed]
-        public Recipe Recipe { get; set; }
+        public Recipe Recipe
+        {
+            get => _recipe;
+            set => SetProperty(ref _recipe, value);
+        }
         [Computed]
         public BarrelStorage BarrelStorage { get; set; }
         [Computed]

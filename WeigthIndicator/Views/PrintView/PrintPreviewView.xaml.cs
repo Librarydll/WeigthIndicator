@@ -29,7 +29,7 @@ namespace WeigthIndicator.Views
         }
 
 
-        public FlowDocument InitializeFlow(Reestr reestr,string data =null)
+        public FlowDocument InitializeFlow(Reestr reestr,string data =null, PolandData polandData = null)
         {
             var manufacture = ManufactureProvider.GetManufacture();
 

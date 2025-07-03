@@ -44,13 +44,19 @@ namespace WeigthIndicator.Views
                     x => ConvertToDouble(x))
                     .DisposeWith(disposables);
 
+                this.OneWayBind(ViewModel, vm => vm.Recipes, v => v.Recipes.ItemsSource);
+                this.Bind(ViewModel, vm => vm.SelectedRecipe, v => v.Recipes.SelectedItem);
+                
 
                 this.OneWayBind(ViewModel, vm => vm.CustomersCollection, v => v.CustomerCmb.ItemsSource)
                    .DisposeWith(disposables);
 
                 this.Bind(ViewModel, vm => vm.SelectedCustomer, v => v.CustomerCmb.SelectedItem)
                     .DisposeWith(disposables);
+                this.Bind(ViewModel, vm => vm.BatchNumber, v => v.BatchNumber.Text)
+                    .DisposeWith(disposables);
 
+                
 
                 this.WhenAnyValue(x => x.ViewModel)
                     .SelectMany(x => x.GetAsync())

@@ -130,6 +130,9 @@
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\PrintView\PrintPreviewViewPoland.xaml.cs">
+      <DependentUpon>PrintPreviewViewPoland.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\PrintView\PrintPreviewView.xaml.cs">
       <DependentUpon>PrintPreviewView.xaml</DependentUpon>
     </Compile>
@@ -218,6 +221,10 @@
     <Page Include="Views\MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PrintView\PrintPreviewViewPoland.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\PrintView\PrintPreviewView.xaml">
       <SubType>Designer</SubType>

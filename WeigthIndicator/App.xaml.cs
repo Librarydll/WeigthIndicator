@@ -20,7 +20,6 @@ namespace WeigthIndicator
     public partial class App : PrismApplication
     {
 
-        
         public App()
         {
             Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;

@@ -20,6 +20,7 @@ namespace WeigthIndicator.Models
 
         public static Manufacture GetManufacture() => ManufactureType == "Gazalkent" ? Gazalkent : Agromir;
         public static Manufacture GetManufacturePepsiCo() => ManufactureType == "Gazalkent" ? GazalkentPepsiCo : AgromirPepsiCo;
+        public static Manufacture GetManufacturePoland() => Poland;
 
         private static Manufacture Gazalkent => new Manufacture
         {
@@ -44,6 +45,13 @@ namespace WeigthIndicator.Models
         {
             ManufactureName = "ООО \"Gazalkent Meva\"",
             AddressRu = "110700 Адрес.Республика Узбекистан Ташкентская область г.Газалкент ул А.Темура 49"
+        };
+        public static Manufacture Poland => new Manufacture
+        {
+            ManufactureName = "«AGROMIR» JV LLC/ООО СП «Агромир»",
+            Index = "140300",
+            AddressKz = "Өзбекстан Республикасы, Самарқанд облысы, Самарқанд ауданы, Гүлобод кенті",
+            AddressRu = "Республика Узбекистан, Самаркандская область, Самаркандский район, п Гулобод"
         };
     }
 

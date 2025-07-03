@@ -10,7 +10,12 @@ namespace WeigthIndicator.Factory
 {
     public interface IPrintInitialize
     {
-        FlowDocument InitializeFlow(Reestr reestr,string info = null);
+        FlowDocument InitializeFlow(Reestr reestr,string info = null, PolandData polandData = null);
+    }
+    public class PolandData
+    {
+        public string Month { get; set; }
+        public string Year { get; set; }
     }
 
     public enum PrintViewType
@@ -19,6 +24,7 @@ namespace WeigthIndicator.Factory
         WithNutritionValue,
         BuyerInformation,
         PepsiCo,
+        Polad,
         NoPrint
     }
 }

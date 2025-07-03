@@ -69,17 +69,23 @@
             <TextBlock
                 x:Name="MaterailGroupTextBlock"
                 VerticalAlignment="Center"
-                Text="Группа сырья :"
-                Visibility="{Binding ElementName=PrintViewTypeCmb}" />
+                Text="Группа сырья :" />
             <TextBox
                 x:Name="MaterialGroup"
                 MinWidth="60"
                 VerticalAlignment="Center" />
-            <!--<ComboBox
 
-                x:Name="ManufacturesCmb"
-                Padding="5"
-                DisplayMemberPath="Title" />-->
+            <Grid Width="5" Background="Black" />
+            <ComboBox
+                x:Name="MonthComboBox"
+                MinWidth="60"
+                Margin="5,0,0,0" />
+
+            <ComboBox
+                x:Name="YearComboBox"
+                MinWidth="60"
+                Margin="5,0,0,0" />
+
         </ToolBar>
         <Grid Grid.Row="1">
 

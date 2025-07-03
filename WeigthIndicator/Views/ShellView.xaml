@@ -131,17 +131,14 @@
                 <Grid x:Name="col6" Grid.Column="5" />
             </Grid>
 
-            <ui:SimpleStackPanel
-                Margin="5,5,0,5"
-                Orientation="Horizontal"
-                Spacing="5">
-                <Button x:Name="EditCommand">
+            <WrapPanel Margin="5,5,0,5" Orientation="Horizontal">
+                <Button x:Name="EditCommand" Margin="0,0,5,0">
                     <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10">
                         <ui:SymbolIcon Symbol="Edit" />
                         <TextBlock Text="Изменить" />
                     </ui:SimpleStackPanel>
                 </Button>
-                <Button x:Name="PrintCommand">
+                <Button x:Name="PrintCommand" Margin="0,0,5,0">
                     <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10">
                         <ui:SymbolIcon Symbol="Print" />
                         <TextBlock Text="Печатать" />
@@ -149,19 +146,33 @@
                 </Button>
                 <ComboBox
                     x:Name="PrintViewTypeCmb"
+                    Margin="0,0,5,0"
                     DisplayMemberPath="Title"
-                    SelectedIndex="3"
+                    SelectedIndex="4"
                     SelectionChanged="PrintViewTypeCmb_SelectionChanged" />
                 <TextBlock
                     x:Name="MaterailGroupTextBlock"
+                    Margin="0,0,5,0"
                     VerticalAlignment="Center"
-                    Text="Группа сырья :"
-                    Visibility="{Binding ElementName=PrintViewTypeCmb}" />
+                    Text="Группа сырья :" />
                 <TextBox
                     x:Name="MaterialGroup"
                     MinWidth="60"
+                    Margin="0,0,5,0"
                     VerticalAlignment="Center" />
-            </ui:SimpleStackPanel>
+
+
+                <ComboBox
+                    x:Name="MonthComboBox"
+                    MinWidth="60"
+                    Margin="0,0,5,0" />
+
+                <ComboBox
+                    x:Name="YearComboBox"
+                    MinWidth="60"
+                    Margin="0,0,0,0" />
+
+            </WrapPanel>
 
             <ListView
                 x:Name="ReestrsCollection"

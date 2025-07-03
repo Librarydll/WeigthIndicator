@@ -19,6 +19,7 @@ namespace WeigthIndicator.Models
             yield return new PrintViewRepresent(PrintViewType.WithAddress, "С адрессом");
             yield return new PrintViewRepresent(PrintViewType.WithNutritionValue, " С пищ ценностью");
             yield return new PrintViewRepresent(PrintViewType.PepsiCo, "Pepsi co");
+            yield return new PrintViewRepresent(PrintViewType.Polad, "Польский");
             yield return new PrintViewRepresent(PrintViewType.NoPrint, "Не печатать");
         }
     }

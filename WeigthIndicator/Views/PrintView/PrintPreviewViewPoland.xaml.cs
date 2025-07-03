@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WeigthIndicator.Domain.Models;
 using WeigthIndicator.Factory;
@@ -18,39 +20,43 @@ using WeigthIndicator.Models;
 namespace WeigthIndicator.Views
 {
     /// <summary>
-    /// Interaction logic for PrintPreviewViewComposition.xaml
+    /// Interaction logic for PrintPreviewView.xaml
     /// </summary>
-    public partial class PrintPreviewViewComposition : UserControl, IPrintInitialize
+    public partial class PrintPreviewViewPoland : UserControl, IPrintInitialize
     {
-        public PrintPreviewViewComposition()
+        public PrintPreviewViewPoland()
         {
             InitializeComponent();
         }
 
-        public FlowDocument InitializeFlow(Reestr reestr,string data =null, PolandData polandData = null)
+
+        public FlowDocument InitializeFlow(Reestr reestr,string data =null ,PolandData polandData = null)
         {
             var manufacture = ManufactureProvider.GetManufacture();
+
+            var months = CultureInfo.GetCultureInfo("en-US").DateTimeFormat.MonthNames;
+            int monthNumber = Array.IndexOf(months, polandData.Month) + 1;
+
+
             NameRu.Text = reestr.Recipe.LongNameRu;
             NameKz.Text = reestr.Recipe.LongNameKz;
             BatchNumber.Text = reestr.BatchNumber;
             Brix.Text = reestr.Recipe.Brix.ToString();
             BarrelNumber.Text = reestr.BarrelNumber.ToString();
-            ProductionDate.Text = reestr.BarrelStorage.ProductionDate.ToString("dd.MM.yyyy");
-            BeforeDate.Text = reestr.BarrelStorage.ProductionDate.AddYears(2).ToString("dd.MM.yyyy");
-          //  PackingDate.Text = reestr.PackingDate.ToString("HH:mm:ss dd.MM.yyyy");
+
+            ProductionDate.Text = polandData.Month +" " + polandData.Year;
+
+            BeforeDate.Text = polandData.Month + " " + (int.Parse(polandData.Year) + 2);
+
             StorageCondition.Text = reestr.Recipe.StorageCondition;
             TranportationCondition.Text = reestr.Recipe.TransportationCondition;
-            Net.Text = reestr.Net.ToString();
-            Brutto.Text = (reestr.TareBarrelWithLid + reestr.Net).ToString();
-            Carbo.Text = reestr.Recipe.Carbohydrates.ToString();
-            VitaminC.Text = reestr.Recipe.VitaminC.ToString();
-            EnergyBalue.Text = reestr.Recipe.EnergyValue.ToString();
-            DryContent.Text = reestr.Recipe.DryContent.ToString();
+            Net.Text = reestr.Net.ToString() + " kg";
+            Brutto.Text = (reestr.TareBarrelWithLid + reestr.Net).ToString() +" kg";
             Index.Text = manufacture.Index;
+            polandAddressName.Text = "140300, Republic of Uzbekistan, Samarkand district, Samarkand region, Village \"Gulobod\"/140300";
             ManufactureName.Text = manufacture.ManufactureName;
-            ManufactureAddressKz.Text = manufacture.AddressKz;
-            ManufactureAddressRu.Text = manufacture.AddressRu;
             return this.FD;
         }
+      
     }
 }

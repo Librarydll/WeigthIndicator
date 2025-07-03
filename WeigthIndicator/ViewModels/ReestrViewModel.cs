@@ -85,6 +85,8 @@ namespace WeigthIndicator.ViewModels
         [Reactive] public int SelectedBarrelType { get; set; }
         [Reactive] public PrintViewRepresent SelectedPrintViewType { get; set; }
         [Reactive] public IEnumerable<PrintViewRepresent> PrinterViewTypes { get; set; }
+        [Reactive] public string SelectedMonth { get; set; } = "June";
+        [Reactive] public string SelectedYear { get; set; } = DateTime.Now.ToString("yyyy");
         public int BarrelCode => SelectedBarrelType - 1;
 
         public ReactiveCommand<Unit, Unit> FilterCommad { get; }
@@ -183,6 +185,9 @@ namespace WeigthIndicator.ViewModels
                         r.CustomerId = updated.CustomerId;
                         r.Net = updated.Net;
                         r.Note = updated.Note;
+                        r.BatchNumber = updated.BatchNumber;
+                        r.RecipeId = updated.RecipeId;
+                        r.Recipe = updated.Recipe;
                     }
                 });
 
@@ -194,8 +199,12 @@ namespace WeigthIndicator.ViewModels
             if (SelectedPrintViewType == null) return;
             if (SelectedPrintViewType.PrintViewType == PrintViewType.NoPrint) return;
             var printInitialize = PrintPreviewFactory.GetPrintView(SelectedPrintViewType.PrintViewType);
-
-            FlowDocument flowDoc = printInitialize.InitializeFlow(reestr, MaterialGroup);
+            var polandData = new PolandData
+            {
+                Month = SelectedMonth,
+                Year = SelectedYear
+            };
+            FlowDocument flowDoc = printInitialize.InitializeFlow(reestr, MaterialGroup, polandData);
             PrintHelper.Prints(flowDoc, reestr.PackingDate.ToString("dd.MM.yyyy"));
         }
 

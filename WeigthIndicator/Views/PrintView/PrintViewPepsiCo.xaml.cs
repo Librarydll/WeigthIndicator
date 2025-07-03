@@ -28,7 +28,7 @@ namespace WeigthIndicator.Views.PrintView
         {
             InitializeComponent();
         }
-        public FlowDocument InitializeFlow(Reestr reestr,string group)
+        public FlowDocument InitializeFlow(Reestr reestr,string group, PolandData polandData = null)
         {
             var manufacture = ManufactureProvider.GetManufacturePepsiCo();
             ProductName.Text = reestr.Recipe.LongNameRu;

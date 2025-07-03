@@ -52,6 +52,8 @@ namespace WeigthIndicator.ViewModels
         [Reactive] public Reestr SelectedReestr { get; set; }
         [Reactive] public PrintViewRepresent SelectedPrintViewType { get; set; }
         [Reactive] public IEnumerable<PrintViewRepresent> PrinterViewTypes { get; set; }
+        [Reactive] public string SelectedMonth { get; set; } = "June";
+        [Reactive] public string SelectedYear { get; set; } = DateTime.Now.ToString("yyyy");
 
         private readonly ObservableAsPropertyHelper<double> _itemWeight;
         public double ItemWeigth => _itemWeight.Value;
@@ -194,8 +196,12 @@ namespace WeigthIndicator.ViewModels
             if (SelectedPrintViewType == null) return;
             if (SelectedPrintViewType.PrintViewType == PrintViewType.NoPrint) return;
             var printInitialize = PrintPreviewFactory.GetPrintView(SelectedPrintViewType.PrintViewType);
-
-            FlowDocument flowDoc = printInitialize.InitializeFlow(reestr, MaterialGroup);
+            var polandData = new PolandData
+            {
+                Month = SelectedMonth,
+                Year = SelectedYear
+            };
+            FlowDocument flowDoc = printInitialize.InitializeFlow(reestr, MaterialGroup, polandData);
             PrintHelper.Prints(flowDoc, reestr.PackingDate.ToString("dd.MM.yyyy"));
         }
 

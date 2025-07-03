@@ -53,6 +53,11 @@ namespace WeigthIndicator.Views
                 this.Bind(ViewModel, vm => vm.SelectedPrintViewType, v => v.PrintViewTypeCmb.SelectedItem)
                     .DisposeWith(disposables);
 
+                this.Bind(ViewModel, vm => vm.SelectedMonth, v => v.MonthComboBox.SelectedItem)
+                    .DisposeWith(disposables);
+
+                this.Bind(ViewModel, vm => vm.SelectedYear, v => v.YearComboBox.SelectedItem)
+                    .DisposeWith(disposables);
 
                 this.OneWayBind(ViewModel,
                     vm => vm.PrinterViewTypes,
@@ -66,7 +71,19 @@ namespace WeigthIndicator.Views
                 this.BindCommand(ViewModel, vm => vm.FilterCommad, v => v.FilterCommand);
                 this.BindCommand(ViewModel, vm => vm.FilterBySearchQueryCommand, v => v.FilterBySearchQueryCommand);
                 this.BindCommand(ViewModel, vm => vm.ExportExcelCommand, v => v.ExportExcelCommand);
+
+
             });
+
+            MonthComboBox.ItemsSource = System.Globalization.CultureInfo
+                            .GetCultureInfo("en-US")
+                            .DateTimeFormat
+                            .MonthNames
+                            .Where(m => !string.IsNullOrEmpty(m))
+                            .ToList();
+
+            YearComboBox.ItemsSource = Enumerable.Range(2015, 20).Select(y => y.ToString())
+                                     .ToList();
         }
 
         private void PrintViewTypeCmb_SelectionChanged(object sender, SelectionChangedEventArgs e)
