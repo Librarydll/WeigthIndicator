@@ -74,5 +74,7 @@ namespace WeigthIndicator.Views
 
             return 0;
         }
+
+
     }
 }

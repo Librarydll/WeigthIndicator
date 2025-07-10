@@ -90,15 +90,21 @@ namespace WeigthIndicator.Views
         {
             if (MaterailGroupTextBlock != null)
             {
+                MaterailGroupTextBlock.Visibility = Visibility.Collapsed;
+                MaterialGroup.Visibility = Visibility.Collapsed;
+                MonthComboBox.Visibility = Visibility.Collapsed;
+                YearComboBox.Visibility = Visibility.Collapsed;
+
                 if (PrintViewTypeCmb.SelectedIndex == 2)
                 {
                     MaterailGroupTextBlock.Visibility = Visibility.Visible;
                     MaterialGroup.Visibility = Visibility.Visible;
                 }
-                else
+
+                if (PrintViewTypeCmb.SelectedIndex == 3)
                 {
-                    MaterailGroupTextBlock.Visibility = Visibility.Collapsed;
-                    MaterialGroup.Visibility = Visibility.Collapsed;
+                    MonthComboBox.Visibility = Visibility.Visible;
+                    YearComboBox.Visibility = Visibility.Visible;
                 }
             }
         }

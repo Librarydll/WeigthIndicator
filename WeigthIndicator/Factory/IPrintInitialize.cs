@@ -24,7 +24,8 @@ namespace WeigthIndicator.Factory
         WithNutritionValue,
         BuyerInformation,
         PepsiCo,
-        Polad,
+        Poland,
+        English,
         NoPrint
     }
 }

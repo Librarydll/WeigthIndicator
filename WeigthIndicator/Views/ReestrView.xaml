@@ -75,7 +75,6 @@
                 MinWidth="60"
                 VerticalAlignment="Center" />
 
-            <Grid Width="5" Background="Black" />
             <ComboBox
                 x:Name="MonthComboBox"
                 MinWidth="60"

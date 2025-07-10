@@ -23,8 +23,10 @@ namespace WeigthIndicator.Factory
                     return new PrintPreviewViewCustomer();
                 case PrintViewType.PepsiCo:
                     return new PrintViewPepsiCo();
-                case PrintViewType.Polad:
+                case PrintViewType.Poland:
                     return new PrintPreviewViewPoland();
+                case PrintViewType.English:
+                    return new PrintPreviewViewEng();
                 default:
                     throw new ArgumentException("printViewType");
             }
