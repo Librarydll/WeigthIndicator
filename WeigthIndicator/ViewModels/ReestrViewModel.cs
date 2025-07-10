@@ -204,8 +204,15 @@ namespace WeigthIndicator.ViewModels
                 Month = SelectedMonth,
                 Year = SelectedYear
             };
-            FlowDocument flowDoc = printInitialize.InitializeFlow(reestr, MaterialGroup, polandData);
-            PrintHelper.Prints(flowDoc, reestr.PackingDate.ToString("dd.MM.yyyy"));
+            try
+            {
+                FlowDocument flowDoc = printInitialize.InitializeFlow(reestr, MaterialGroup, polandData);
+                PrintHelper.Prints(flowDoc, reestr.PackingDate.ToString("dd.MM.yyyy"));
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show(ex.ToString());
+            }
         }
 
         private async Task ExecuteFilterCommand()

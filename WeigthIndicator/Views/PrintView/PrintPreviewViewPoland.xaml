@@ -6,14 +6,14 @@
     xmlns:local="clr-namespace:WeigthIndicator.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Width="540"
-    Height="383.6"
+    Height="500"
     FontFamily="Arial">
     <Grid Background="White">
         <FlowDocumentPageViewer Margin="0">
             <FlowDocument
                 x:Name="FD"
                 LineHeight="10"
-                PagePadding="5 40 0 0">
+                PagePadding="5 20 0 0">
                 <FlowDocument.Resources>
                     <Style TargetType="Run">
                         <Setter Property="FontSize" Value="12.5" />
@@ -157,7 +157,12 @@
                     <Run Text="Условия хранения/Warunki przechowywania:" />
                 </Paragraph>
                 <Paragraph LineHeight="1">
-                    <Run x:Name="StorageCondition" />
+                    <TextBlock
+                        x:Name="StorageCondition"
+                        FontFamily="Arial"
+                        FontSize="12.5"
+                        FontWeight="Bold"
+                        TextWrapping="Wrap" />
                 </Paragraph>
                 <Paragraph LineHeight="1">
                     <Run Text="Условия транспортировки/Warunki transportu:" />
@@ -238,10 +243,13 @@
                     <Run Text="Страна происхождения/Kraj pochodzenia: Узбекистан/ Uzbekistan" />
                 </Paragraph>
 
-                <!--<Paragraph LineHeight="1" />
                 <Paragraph LineHeight="1">
-                    <Run x:Name="AddressRu" />
+                    <Run Text="Buyer/Kupujący:" />
+                    <Run x:Name="Buyer" />
                 </Paragraph>
+
+                <!--<Paragraph LineHeight="1" />
+
                 <Paragraph LineHeight="1">
                     <Run x:Name="AddressKz" />
                 </Paragraph>-->

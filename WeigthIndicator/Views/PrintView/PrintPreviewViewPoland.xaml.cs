@@ -55,6 +55,9 @@ namespace WeigthIndicator.Views
             Index.Text = manufacture.Index;
             polandAddressName.Text = "140300, Republic of Uzbekistan, Samarkand district, Samarkand region, Village \"Gulobod\"/140300";
             ManufactureName.Text = manufacture.ManufactureName;
+
+            Buyer.Text = reestr.Customer.ShortName;
+
             return this.FD;
         }
       
